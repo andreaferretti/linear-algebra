@@ -9,11 +9,12 @@ when defined(mkl):
     {.passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" .}
     static: echo "--USING MKL SEQUENTIAL--"
 else:
-  {.passl: "-lcblas".}
   when defined(atlas):
+    {.passl: "-lcblas".}
     const header = "atlas/cblas.h"
     static: echo "--USING ATLAS--"
   else:
+    {.passl: "-lblas".}
     const header = "cblas.h"
     static: echo "--USING DEFAULT BLAS--"
 
@@ -114,44 +115,44 @@ when isMainModule:
   import math, times
 
   var
-    xs = [1.0, 2.0, 3.5]
-    ys = [2.0, 3.0, 3.5]
-    m = [
-      [1.2, 3.4],
-      [1.1, 2.1],
-      [0.6, -3.1]
-    ]
+    # xs = [1.0, 2.0, 3.5]
+    # ys = [2.0, 3.0, 3.5]
+    # m = [
+    #   [1.2, 3.4],
+    #   [1.1, 2.1],
+    #   [0.6, -3.1]
+    # ]
     mat1 = makeMatrix(1000, 987, proc(i, j: int): float64 = random(1.0))
     mat2 = makeMatrix(987, 876, proc(i, j: int): float64 = random(1.0))
-    vec= makeVect(987, proc(i: int): float64 = random(1.0))
+    # vec= makeVect(987, proc(i: int): float64 = random(1.0))
 
-  let startTime = epochTime()
-  for i in 0 .. 100:
-    discard mat1 * vec
-  let endTime = epochTime()
-  echo "We have required ", endTime - startTime, " seconds to do 100 multiplications."
+  # let startTime = epochTime()
+  # for i in 0 .. 100:
+  #   discard mat1 * vec
+  # let endTime = epochTime()
+  # echo "We have required ", endTime - startTime, " seconds to do 100 multiplications."
 
   let startTime1 = epochTime()
-  for i in 0 .. 10:
+  for i in 0 .. < 100:
     discard mat1 * mat2
   let endTime1 = epochTime()
   echo "We have required ", endTime1 - startTime1, " seconds to do multiply matrices 10 times."
 
-  echo((mat1 * vec)[1..10])
-  echo(xs * 5.3)
-  echo(5.3 * xs)
-  xs *= 5.3
-  echo(xs)
-  echo(xs * ys)
-  echo(xs * xs)
-  echo(l_2(xs))
-  echo(l_1(xs))
-  echo(m * ys)
+  # echo((mat1 * vec)[1..10])
+  # echo(xs * 5.3)
+  # echo(5.3 * xs)
+  # xs *= 5.3
+  # echo(xs)
+  # echo(xs * ys)
+  # echo(xs * xs)
+  # echo(l_2(xs))
+  # echo(l_1(xs))
+  # echo(m * ys)
 
-  template optMul{`*`(a, 2)}(a: int): int =
-    echo "hi"
-    a*3
+  # template optMul{`*`(a, 2)}(a: int): int =
+  #   echo "hi"
+  #   a*3
 
-  let b = 55
+  # let b = 55
 
-  echo b * 2
+  # echo b * 2
