@@ -112,7 +112,7 @@ proc `*`*[M, N, K: static[int]](a: var Matrix64[M, K], b: var Matrix64[K, N]): M
   dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.asPtr, M, b.asPtr, K, 0, result.asPtr, M)
 
 when isMainModule:
-  import math, times, nimprof
+  import math, times
 
   var
     # xs = [1.0, 2.0, 3.5]
@@ -133,7 +133,7 @@ when isMainModule:
   # echo "We have required ", endTime - startTime, " seconds to do 100 multiplications."
 
   let startTime1 = epochTime()
-  for i in 0 .. < 100:
+  for i in 0 .. < 10:
     discard mat1 * mat2
   let endTime1 = epochTime()
   echo "We have required ", endTime1 - startTime1, " seconds to do multiply matrices 10 times."

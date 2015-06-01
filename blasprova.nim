@@ -70,16 +70,16 @@ proc makeVect(N: static[int], f: proc (i: int): float64): Vect64[N] =
   for i in 0 .. < N:
     result[i] = f(i)
 
-proc initMatrix[M, N: static[int]](m: var Matrix[M, N]) =
+proc initMatrix*[M, N: static[int]](m: var Matrix[M, N]) =
   new m
   m.p = mkl_malloc(M * N * sizeof(float64), 64)
 
-proc makeMatrix(M, N: static[int], f: proc (i, j: int): float64): Matrix[M, N] =
+proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64): Matrix[M, N] =
   initMatrix(result)
+  var m = cast[ptr Matrix64[M, N]](result.p)
   for i in 0 .. < N:
     for j in 0 .. < M:
-      var foo = result.p + (i * M + j)
-      foo[] = f(i, j)
+      m[i][j] = f(i, j)
 
 # Public API - Display
 
@@ -89,7 +89,7 @@ proc `$`*(v: Vect64): string =
 
 proc `$`*(m: Matrix64): string = $(@(m))
 
-# proc `$`*(m: Matrix): string = $(cast[ptr Matrix64](m.p)[])
+proc `$`*(m: Matrix): string = $(cast[ptr Matrix64](m.p)[])
 
 # Public API - Iterators
 
@@ -126,12 +126,6 @@ proc `*`*[M, N: static[int]](a: var Matrix64[M, N], v: var Vect64[N]): Vect64[M]
 
 proc `*`*[M, N, K: static[int]](a: Matrix[M, K], b: Matrix[K, N]): Matrix[M, N] {. inline .} =
   initMatrix(result)
-  # echo "a ", cast[int](a.p)
-  # echo "b ", cast[int](b.p)
-  # echo "c ", cast[int](result.p)
-  # echo "M ", M
-  # echo "K ", K
-  # echo "N ", N
   dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.p, M, b.p, K, 0, result.p, M)
 
 proc main() =
@@ -146,7 +140,10 @@ proc main() =
     # ]
     mat1 = makeMatrix(1000, 987, proc(i, j: int): float64 = random(1.0))
     mat2 = makeMatrix(987, 876, proc(i, j: int): float64 = random(1.0))
+    mat3 = makeMatrix(4, 4, proc(i, j: int): float64 = random(1.0))
     # vec= makeVect(987, proc(i: int): float64 = random(1.0))
+
+  # echo mat3
 
   # echo(cast[ptr Matrix64[4, 4]](mat1.p)[])
   # echo(cast[ptr Matrix64[4, 4]](mat2.p)[])
