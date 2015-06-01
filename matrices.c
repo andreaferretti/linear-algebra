@@ -24,6 +24,9 @@ int main()
     A = (double *)mkl_malloc( m*k*sizeof( double ), 64 );
     B = (double *)mkl_malloc( k*n*sizeof( double ), 64 );
     C = (double *)mkl_malloc( m*n*sizeof( double ), 64 );
+    // A = (double *)malloc( m*k*sizeof( double ));
+    // B = (double *)malloc( k*n*sizeof( double ));
+    // C = (double *)malloc( m*n*sizeof( double ));
     if (A == NULL || B == NULL || C == NULL) {
       printf( "\n ERROR: Can't allocate memory for matrices. Aborting... \n\n");
       mkl_free(A);
@@ -46,7 +49,7 @@ int main()
     }
 
     printf (" Computing matrix product using Intel(R) MKL dgemm function via CBLAS interface \n\n");
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 100; i++) {
       cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 
                 m, n, k, alpha, A, k, B, n, beta, C, n);
     }

@@ -18,6 +18,7 @@ else:
     const header = "cblas.h"
     static: echo "--USING DEFAULT BLAS--"
 
+import math, times
 
 type
   Vect32*[N: static[int]] = array[N, float32]
@@ -25,7 +26,8 @@ type
   Vect*[N: static[int]] = Vect64[N]
   Matrix32*[M, N: static[int]] = array[N, array[M, float32]]
   Matrix64*[M, N: static[int]] = array[N, array[M, float64]]
-  Matrix*[M, N: static[int]] = Matrix64[M, N]
+  Matrix*[M, N: static[int]] = ref object
+    p: ptr float64
   TransposeType = enum
     noTranspose = 111, transpose = 112, conjTranspose = 113
   OrderType = enum
@@ -49,12 +51,18 @@ proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A:
 proc dgemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float64,
   A: ptr float64, LDA: int, B: ptr float64, LDB: int, BETA: float64, C: ptr float64, LDC: int)
   {. header: header, importc: "cblas_dgemm" .}
+proc mkl_malloc(size, align: int): ptr float64
+  {. header: header, importc: "mkl_malloc" .}
 
 # Internal functions
 
-template asPtr[N: static[int]](v: Vect64[N]): ptr float64 = cast[ptr float64](v.addr)
+# template asPtr[N: static[int]](v: Vect64[N]): ptr float64 = cast[ptr float64](v.addr)
 
-template asPtr[M, N: static[int]](a: Matrix64[M, N]): ptr float64 = cast[ptr float64](a.addr)
+# template asPtr[M, N: static[int]](a: Matrix64[M, N]): ptr float64 = cast[ptr float64](a.addr)
+
+# template asPtr[M, N: static[int]](a: Matrix[M, N]): ptr float64 = cast[ptr float64](a.p)
+
+proc `+`[A](p: ptr A, x: int): ptr A = cast[ptr[A]](cast[int](p) + x * sizeof(A))
 
 # Public API - Initialization
 
@@ -62,10 +70,16 @@ proc makeVect(N: static[int], f: proc (i: int): float64): Vect64[N] =
   for i in 0 .. < N:
     result[i] = f(i)
 
-proc makeMatrix(M, N: static[int], f: proc (i, j: int): float64): Matrix64[M, N] =
+proc initMatrix[M, N: static[int]](m: var Matrix[M, N]) =
+  new m
+  m.p = mkl_malloc(M * N * sizeof(float64), 64)
+
+proc makeMatrix(M, N: static[int], f: proc (i, j: int): float64): Matrix[M, N] =
+  initMatrix(result)
   for i in 0 .. < N:
     for j in 0 .. < M:
-      result[i][j] = f(i, j)
+      var foo = result.p + (i * M + j)
+      foo[] = f(i, j)
 
 # Public API - Display
 
@@ -74,6 +88,8 @@ proc `$`*(v: Vect64): string =
   return s[1 .. high(s)]
 
 proc `$`*(m: Matrix64): string = $(@(m))
+
+# proc `$`*(m: Matrix): string = $(cast[ptr Matrix64](m.p)[])
 
 # Public API - Iterators
 
@@ -106,13 +122,19 @@ proc l_2*[N: static[int]](v: var Vect64[N]): float64 {. inline .} = dnrm2(N, v.a
 proc l_1*[N: static[int]](v: var Vect64[N]): float64 {. inline .} = dasum(N, v.asPtr, 1)
 
 proc `*`*[M, N: static[int]](a: var Matrix64[M, N], v: var Vect64[N]): Vect64[M]  {. inline .} =
-  dgemv(colMajor, noTranspose, M, N, 1, a.asPtr, M, v.asPtr, 1, 0, result.asPtr, 1)
+  dgemv(colMajor, noTranspose, M, N, 1, a.p, M, v.p, 1, 0, result.p, 1)
 
-proc `*`*[M, N, K: static[int]](a: var Matrix64[M, K], b: var Matrix64[K, N]): Matrix64[M, N] {. inline .} =
-  dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.asPtr, M, b.asPtr, K, 0, result.asPtr, M)
+proc `*`*[M, N, K: static[int]](a: Matrix[M, K], b: Matrix[K, N]): Matrix[M, N] {. inline .} =
+  initMatrix(result)
+  # echo "a ", cast[int](a.p)
+  # echo "b ", cast[int](b.p)
+  # echo "c ", cast[int](result.p)
+  # echo "M ", M
+  # echo "K ", K
+  # echo "N ", N
+  dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.p, M, b.p, K, 0, result.p, M)
 
-when isMainModule:
-  import math, times, nimprof
+proc main() =
 
   var
     # xs = [1.0, 2.0, 3.5]
@@ -125,6 +147,10 @@ when isMainModule:
     mat1 = makeMatrix(1000, 987, proc(i, j: int): float64 = random(1.0))
     mat2 = makeMatrix(987, 876, proc(i, j: int): float64 = random(1.0))
     # vec= makeVect(987, proc(i: int): float64 = random(1.0))
+
+  # echo(cast[ptr Matrix64[4, 4]](mat1.p)[])
+  # echo(cast[ptr Matrix64[4, 4]](mat2.p)[])
+  # echo(cast[ptr Matrix64[4, 4]]((mat1 * mat2).p)[])
 
   # let startTime = epochTime()
   # for i in 0 .. 100:
@@ -156,3 +182,6 @@ when isMainModule:
   # let b = 55
 
   # echo b * 2
+
+when isMainModule:
+  main()
