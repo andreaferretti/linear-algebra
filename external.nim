@@ -1,7 +1,7 @@
 when defined(mkl):
   const header = "mkl.h"
   when defined(threaded):
-    {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" .}
+    {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" passl: "-lm" .}
   # {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_intel_thread" passl: "-lmpi" .}
     static: echo "--USING MKL THREADED--"
   else:
