@@ -17,6 +17,6 @@ proc l_1*[N: static[int]](v: var Vect64[N]): float64 {. inline .} = dasum(N, v.a
 proc `*`*[M, N: static[int]](a: var Matrix64[M, N], v: var Vect64[N]): Vect64[M]  {. inline .} =
   dgemv(colMajor, noTranspose, M, N, 1, a.p, M, v.p, 1, 0, result.p, 1)
 
-proc `*`*[M, N, K: static[int]](a: Matrix[M, K], b: Matrix[K, N]): Matrix[M, N] {. inline .} =
+proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   initMatrix(result)
   dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)

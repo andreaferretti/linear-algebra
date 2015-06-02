@@ -20,5 +20,3 @@ proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A:
 proc dgemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float64,
   A: ptr float64, LDA: int, B: ptr float64, LDB: int, BETA: float64, C: ptr float64, LDC: int)
   {. header: header, importc: "cblas_dgemm" .}
-proc mkl_malloc(size, align: int): ptr float64
-  {. header: header, importc: "mkl_malloc" .}

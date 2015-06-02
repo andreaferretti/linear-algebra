@@ -28,7 +28,7 @@ proc main() =
   # echo "We have required ", endTime - startTime, " seconds to do 100 multiplications."
 
   let startTime1 = epochTime()
-  for i in 0 .. < 100:
+  for i in 0 .. < 10:
     discard mat1 * mat2
   let endTime1 = epochTime()
   echo "We have required ", endTime1 - startTime1, " seconds to do multiply matrices 10 times."
