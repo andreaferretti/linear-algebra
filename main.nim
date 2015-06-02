@@ -1,58 +1,8 @@
-#http://www.netlib.org/blas/#_blas_routines
-when defined(mkl):
-  const header = "mkl.h"
-  when defined(threaded):
-    {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" .}
-  # {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_intel_thread" passl: "-lmpi" .}
-    static: echo "--USING MKL THREADED--"
-  else:
-    {.passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" .}
-    static: echo "--USING MKL SEQUENTIAL--"
-else:
-  when defined(atlas):
-    {.passl: "-lcblas".}
-    const header = "atlas/cblas.h"
-    static: echo "--USING ATLAS--"
-  else:
-    {.passl: "-lblas".}
-    const header = "cblas.h"
-    static: echo "--USING DEFAULT BLAS--"
+include external
+include blas
+include types
 
 import math, times
-
-type
-  Vect32*[N: static[int]] = array[N, float32]
-  Vect64*[N: static[int]] = array[N, float64]
-  Vect*[N: static[int]] = Vect64[N]
-  Matrix32*[M, N: static[int]] = array[N, array[M, float32]]
-  Matrix64*[M, N: static[int]] = array[N, array[M, float64]]
-  Matrix*[M, N: static[int]] = ref object
-    p: ptr float64
-  TransposeType = enum
-    noTranspose = 111, transpose = 112, conjTranspose = 113
-  OrderType = enum
-    rowMajor = 101, colMajor = 102
-
-# Raw BLAS operations
-
-proc dscal(N: int, ALPHA: float64, X: ptr float64, INCX: int)
-  {. header: header, importc: "cblas_dscal" .}
-proc dcopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
-  {. header: header, importc: "cblas_dcopy" .}
-proc ddot(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int): float64
-  {. header: header, importc: "cblas_ddot" .}
-proc dnrm2(N: int, X: ptr float64, INCX: int): float64
-  {. header: header, importc: "cblas_dnrm2" .}
-proc dasum(N: int, X: ptr float64, INCX: int): float64
-  {. header: header, importc: "cblas_dasum" .}
-proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A: ptr float64,
-  LDA: int, X: ptr float64, INCX: int, BETA: float64, Y: ptr float64, INCY: int)
-  {. header: header, importc: "cblas_dgemv" .}
-proc dgemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float64,
-  A: ptr float64, LDA: int, B: ptr float64, LDB: int, BETA: float64, C: ptr float64, LDC: int)
-  {. header: header, importc: "cblas_dgemm" .}
-proc mkl_malloc(size, align: int): ptr float64
-  {. header: header, importc: "mkl_malloc" .}
 
 # Internal functions
 
