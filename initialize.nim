@@ -28,7 +28,7 @@ proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64): Matrix64[M, N
       result.p[i][j] = f(i, j)
 
 proc constant*(M, N: static[int], x: float64): Matrix64[M, N] =
-  initVector(result)
+  initMatrix(result)
   for i in 0 .. < N:
     for j in 0 .. < M:
       result.p[i][j] = x
@@ -38,7 +38,7 @@ proc zeros*(M, N: static[int]): Matrix64[M, N] = constant(M, N, 0)
 proc ones*(M, N: static[int]): Matrix64[M, N] = constant(M, N, 1)
 
 proc eye*(N: static[int]): Matrix64[N, N] =
-  initVector(result)
+  initMatrix(result)
   for i in 0 .. < N:
     for j in 0 .. < N:
       result.p[i][j] = if i == j: 1 else: 0

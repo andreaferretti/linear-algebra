@@ -39,6 +39,13 @@ proc main() =
 
   echo mat3
 
+  var v1 = zeros(5)
+  v1[3] = 2
+  echo v1
+  var mat4 = eye(4)
+  mat4[1, 1] = 3.0
+  echo mat4
+
   # echo((mat1 * vec)[1..10])
   # echo(xs * 5.3)
   # echo(5.3 * xs)
