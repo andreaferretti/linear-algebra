@@ -41,8 +41,11 @@ proc main() =
 
   let v1 = makeVector(10, proc(i: int): float64 = random(1.0))
   echo "v1 = ", v1
+  echo "2 * v1 = ", 2 * v1
+  echo "id * v1 = ", eye(10) * v1
   echo "l_1(v1) = ", l_1(v1)
   echo "l_2(v1) = ", l_2(v1)
+  echo "l_2(v1)^2 = ", v1 * v1
   var mat4 = eye(4)
   mat4[1, 1] = 3.0
   echo mat4
