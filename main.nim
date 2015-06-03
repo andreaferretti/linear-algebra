@@ -37,10 +37,7 @@ proc main() =
   for c in columns(mat3):
     echo c
 
-  for r in rows(mat3):
-    echo r
-
-  echo mat3[1, 1]
+  echo mat3
 
   # echo((mat1 * vec)[1..10])
   # echo(xs * 5.3)
