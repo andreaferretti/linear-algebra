@@ -31,4 +31,3 @@ proc main() =
 when isMainModule:
   main()
   GC_fullCollect()
-  echo "done"

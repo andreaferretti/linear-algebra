@@ -9,8 +9,8 @@ when defined(mkl):
     static: echo "--USING MKL SEQUENTIAL--"
 
   proc mkl_malloc(size, align: int): ptr float64 {. header: header, importc: "mkl_malloc" .}
-  proc free(p: ptr float64) {. header: header, importc: "mkl_free" .}
-  template malloc(n: int): ptr float64 = mkl_malloc(n, 64)
+  proc la_free(p: ptr float64) {. header: header, importc: "mkl_free" .}
+  template la_malloc(n: int): ptr float64 = mkl_malloc(n, 64)
 else:
   when defined(atlas):
     {.passl: "-lcblas".}
@@ -20,5 +20,5 @@ else:
     {.passl: "-lblas".}
     const header = "cblas.h"
     static: echo "--USING DEFAULT BLAS--"
-  proc malloc(size: int): ptr float64 {. header: "stdlib.h", importc: "malloc" .}
-  proc free(p: ptr float64) {. header: "stdlib.h", importc: "free" .}
+  proc la_malloc(size: int): ptr float64 {. header: "stdlib.h", importc: "malloc" .}
+  proc la_free(p: ptr float64) {. header: "stdlib.h", importc: "free" .}

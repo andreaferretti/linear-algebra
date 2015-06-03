@@ -13,19 +13,17 @@ type
     p: ptr array[N, array[M, float64]]
   Matrix64*[M, N: static[int]] = ref IMatrix64[M, N]
 
-proc finalizeVector64[N: static[int]](v: Vector64[N]) {. nimcall .} =
-  if v.p != nil:
-    free(v.p)
-    v.p = nil
-
-proc finalizeMatrix64[M, N: static[int]](m: Matrix64[M, N]) {. nimcall .} =
-  echo "finalizing ", M, "x", N, "; pointer is ", cast[int](m.p)
-  if m.p != nil:
-    free(m.p)
-    m.p = nil
-
-proc `+`[A](p: ptr A, x: int): ptr A = cast[ptr[A]](cast[int](p) + x * sizeof(A))
-
 template fp(v: Vector64): ptr float64 = cast[ptr float64](v.p)
 
 template fp(m: Matrix64): ptr float64 = cast[ptr float64](m.p)
+
+proc finalizeVector64[N: static[int]](v: Vector64[N]) {. nimcall .} =
+  if v.p != nil:
+    la_free(v.fp)
+    v.p = nil
+
+proc finalizeMatrix64[M, N: static[int]](m: Matrix64[M, N]) {. nimcall .} =
+  echo "finalizing ", M, "x", N
+  if m.p != nil:
+    la_free(m.fp)
+    m.p = nil
