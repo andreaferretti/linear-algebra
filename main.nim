@@ -2,7 +2,7 @@ import math, times, linalg
 
 proc main() =
 
-  var
+  let
     # xs = [1.0, 2.0, 3.5]
     # ys = [2.0, 3.0, 3.5]
     # m = [
@@ -28,10 +28,19 @@ proc main() =
   # echo "We have required ", endTime - startTime, " seconds to do 100 multiplications."
 
   let startTime1 = epochTime()
-  for i in 0 .. < 10:
-    discard mat1 * mat2
+  # for i in 0 .. < 10:
+  #   discard mat1 * mat2
+  let m4 = mat1 * mat2
   let endTime1 = epochTime()
   echo "We have required ", endTime1 - startTime1, " seconds to do multiply matrices 10 times."
+
+  for c in columns(mat3):
+    echo c
+
+  for r in rows(mat3):
+    echo r
+
+  echo mat3
 
   # echo((mat1 * vec)[1..10])
   # echo(xs * 5.3)
@@ -54,3 +63,5 @@ proc main() =
 
 when isMainModule:
   main()
+  GC_fullCollect()
+  echo "done"

@@ -1,5 +1,3 @@
-proc `$`*(v: Vect64): string =
-  let s = $(@(v))
-  return s[1 .. high(s)]
+proc `$`*(v: Vector64): string = repr(v.p[])
 
-proc `$`*(m: Matrix64): string = $(@(cast[ptr Matrix64](m.p)[]))
+proc `$`*(m: Matrix64): string = repr(m.p[])
