@@ -5,7 +5,7 @@ when defined(mkl):
   # {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_intel_thread" passl: "-lmpi" .}
     static: echo "--USING MKL THREADED--"
   else:
-    {.passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" .}
+    {.passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" passl: "-lm" .}
     static: echo "--USING MKL SEQUENTIAL--"
 
   proc mkl_malloc(size, align: int): ptr float64 {. header: header, importc: "mkl_malloc" .}
