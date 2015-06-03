@@ -7,6 +7,9 @@ proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] =
   for i in 0 .. < N:
     result.p[i] = f(i)
 
+proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
+  makeVector(N, proc(i: int): float64 = random(max))
+
 proc constant*(N: static[int], x: float64): Vector64[N] =
   initVector(result)
   for i in 0 .. < N:
@@ -26,6 +29,9 @@ proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64): Matrix64[M, N
   for i in 0 .. < N:
     for j in 0 .. < M:
       result.p[i][j] = f(i, j)
+
+proc randomMatrix*(M, N: static[int], max: float64 = 1): Matrix64[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float64 = random(max))
 
 proc constant*(M, N: static[int], x: float64): Matrix64[M, N] =
   initMatrix(result)

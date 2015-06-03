@@ -1,24 +1,23 @@
-import math, times, linalg
+import times, linalg
 
 proc main() =
-
   let
-    mat1 = makeMatrix(1000, 987, proc(i, j: int): float64 = random(1.0))
-    mat2 = makeMatrix(987, 876, proc(i, j: int): float64 = random(1.0))
-    mat3 = makeMatrix(4, 4, proc(i, j: int): float64 = random(1.0))
+    mat1 = randomMatrix(1000, 987)
+    mat2 = randomMatrix(987, 876)
+    mat3 = randomMatrix(4, 4)
+    v1 = randomVector(10)
 
-  let startTime1 = epochTime()
+  let startTime = epochTime()
   for i in 0 .. < 10:
     discard mat1 * mat2
-  let endTime1 = epochTime()
-  echo "We have required ", endTime1 - startTime1, " seconds to multiply matrices 10 times."
+  let endTime = epochTime()
+  echo "We have required ", endTime - startTime, " seconds to multiply matrices 10 times."
 
   for c in columns(mat3):
     echo c
 
   echo mat3
 
-  let v1 = makeVector(10, proc(i: int): float64 = random(1.0))
   echo "v1 = ", v1
   echo "2 * v1 = ", 2 * v1
   echo "id * v1 = ", eye(10) * v1

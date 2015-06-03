@@ -1,3 +1,5 @@
+from math import random
+
 include external
 include blas
 include types
