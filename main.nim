@@ -39,9 +39,10 @@ proc main() =
 
   echo mat3
 
-  var v1 = zeros(5)
-  v1[3] = 2
-  echo v1
+  let v1 = makeVector(10, proc(i: int): float64 = random(1.0))
+  echo "v1 = ", v1
+  echo "l_1(v1) = ", l_1(v1)
+  echo "l_2(v1) = ", l_2(v1)
   var mat4 = eye(4)
   mat4[1, 1] = 3.0
   echo mat4

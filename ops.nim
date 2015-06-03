@@ -10,9 +10,9 @@
 # proc `*`*[N: static[int]](v, w: var Vect64[N]): float64 {. inline .} =
 #   ddot(N, v.asPtr, 1, w.asPtr, 1)
 
-# proc l_2*[N: static[int]](v: var Vect64[N]): float64 {. inline .} = dnrm2(N, v.asPtr, 1)
+proc l_2*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dnrm2(N, v.fp, 1)
 
-# proc l_1*[N: static[int]](v: var Vect64[N]): float64 {. inline .} = dasum(N, v.asPtr, 1)
+proc l_1*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dasum(N, v.fp, 1)
 
 # proc `*`*[M, N: static[int]](a: var Matrix64[M, N], v: var Vect64[N]): Vect64[M]  {. inline .} =
 #   dgemv(colMajor, noTranspose, M, N, 1, a.p, M, v.p, 1, 0, result.p, 1)
