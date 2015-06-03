@@ -1,12 +1,16 @@
 # I types are for internal use
 type
-  IVector32[N: static[int]] = tuple[p: ptr array[N, float32]]
+  IVector32[N: static[int]] = object
+    p: ptr array[N, float32]
   Vector32*[N: static[int]] = ref IVector32[N]
-  IVector64[N: static[int]] = tuple[p: ptr array[N, float64]]
+  IVector64[N: static[int]] = object
+    p: ptr array[N, float64]
   Vector64*[N: static[int]] = ref IVector64[N]
-  IMatrix32[M, N: static[int]] = tuple[p: ptr array[N, array[M, float32]]]
+  IMatrix32[M, N: static[int]] = object
+    p: ptr array[N, array[M, float32]]
   Matrix32*[M, N: static[int]] = ref IMatrix32[M, N]
-  IMatrix64[M, N: static[int]] = tuple[p: ptr array[N, array[M, float64]]]
+  IMatrix64[M, N: static[int]] = object
+    p: ptr array[N, array[M, float64]]
   Matrix64*[M, N: static[int]] = ref IMatrix64[M, N]
 
 proc finalizeVector64[N: static[int]](v: Vector64[N]) {. nimcall .} =
