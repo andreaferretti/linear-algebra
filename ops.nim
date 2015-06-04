@@ -15,8 +15,20 @@ proc l_1*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dasum(N, v.fp,
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
-  dgemv(colMajor, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
+  dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
-  new result
-  dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  new result.data
+  if a.order == b.order:
+    result.order = a.order
+    dgemm(a.order, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  elif a.order == colMajor and b.order == rowMajor:
+    result.order = colMajor
+    dgemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
+  else:
+    result.order = colMajor
+    dgemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+
+proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data

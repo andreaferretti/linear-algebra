@@ -15,27 +15,45 @@ proc zeros*(N: static[int]): Vector64[N] = constant(N, 0)
 
 proc ones*(N: static[int]): Vector64[N] = constant(N, 1)
 
-proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64): Matrix64[M, N] =
-  new result
-  for i in 0 .. < N:
-    for j in 0 .. < M:
-      result[i][j] = f(i, j)
+proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
+  new result.data
+  result.order = order
+  if order == colMajor:
+    var data = cast[ref array[N, array[M, float64]]](result.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        data[j][i] = f(i, j)
+  else:
+    var data = cast[ref array[M, array[N, float64]]](result.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        data[i][j] = f(i, j)
 
-proc randomMatrix*(M, N: static[int], max: float64 = 1): Matrix64[M, N] =
-  makeMatrix(M, N, proc(i, j: int): float64 = random(max))
+proc randomMatrix*(M, N: static[int], max: float64 = 1, order: OrderType = colMajor): Matrix64[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)
 
-proc constant*(M, N: static[int], x: float64): Matrix64[M, N] =
-  new result
-  for i in 0 .. < N:
-    for j in 0 .. < M:
-      result[i][j] = x
+proc constant*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
+  new result.data
+  result.order = order
+  if order == colMajor:
+    var data = cast[ref array[N, array[M, float64]]](result.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        data[j][i] = x
+  else:
+    var data = cast[ref array[M, array[N, float64]]](result.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        data[i][j] = x
 
-proc zeros*(M, N: static[int]): Matrix64[M, N] = constant(M, N, 0)
+proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constant(M, N, 0, order)
 
-proc ones*(M, N: static[int]): Matrix64[M, N] = constant(M, N, 1)
+proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constant(M, N, 1, order)
 
-proc eye*(N: static[int]): Matrix64[N, N] =
-  new result
+proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
+  new result.data
+  result.order = order
+  var data = cast[ref array[N, array[N, float64]]](result.data)
   for i in 0 .. < N:
     for j in 0 .. < N:
-      result[i][j] = if i == j: 1 else: 0
+      data[i][j] = if i == j: 1 else: 0
