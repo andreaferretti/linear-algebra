@@ -1,5 +1,4 @@
 type
-  anyFloat = float32 or float64
   Vector32*[N: static[int]] = ref array[N, float32]
   Vector64*[N: static[int]] = ref array[N, float64]
   Matrix32*[M, N: static[int]] = object
