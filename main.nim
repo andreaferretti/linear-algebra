@@ -18,6 +18,7 @@ proc main() =
 
   echo mat3
 
+  for x in v1: echo x
   echo "v1 = ", v1
   echo "2 * v1 = ", 2 * v1
   echo "id * v1 = ", eye(10) * v1
