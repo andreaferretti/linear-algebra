@@ -32,6 +32,12 @@ proc main() =
   echo mat5 + mat5.t
   echo mat5 - mat5.t
 
+  let v2 = randomVector(10)
+  let v3 = v + 3.4 * v2
+  echo v3
+  var v4 = randomVector(10)
+  v4 += 2 * v2
+
 when isMainModule:
   main()
   GC_fullCollect()

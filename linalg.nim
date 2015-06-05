@@ -8,3 +8,4 @@ include access
 include iterators
 include display
 include ops
+include rewrite
