@@ -85,7 +85,11 @@ A few linear algebra operations are available, wrapping BLAS:
 
     echo 3.5 * v6
     v6 *= 2.3
+    echo v1 + v3
+    echo v1 - v3
     echo v1 * v3 # dot product
+    v1 += v3
+    v1 -= v3
     echo l_1(v1) # l_1 norm
     echo l_2(v1) # l_2 norm
     echo m3 * v3 # matrix-vector product
@@ -107,9 +111,14 @@ TODO
 * More operations
 * Add support for `float32`
 * Add support for matrices and vectors whose size is only known at runtime
+* Add support for matrices and vector on the stack, since dimensions are known at compile time anyway
 * Use rewrite rules to optimize complex operations into a single BLAS call
+* Move vectors and matrix to/from the GPU
+* Run on the GPU via cuBLAS
 * Add some tests
 * Add operations from LAPACK
+* Support slicing/nonconstant steps
+* Make `row` and `column` operations non-copying
 * Add a fallback Nim implementation of most operations, that is valid over other rings
 * Try on more platforms/configurations
 * Make a proper benchmark

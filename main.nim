@@ -19,6 +19,7 @@ proc main() =
 
   echo "v = ", v
   echo "2 * v = ", 2 * v
+  echo "v - v = ", v - v
   echo "id * v = ", eye(10) * v
   echo "l_1(v) = ", l_1(v)
   echo "l_2(v) = ", l_2(v)

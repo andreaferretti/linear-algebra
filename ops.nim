@@ -5,6 +5,22 @@ proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .}
   dcopy(N, v.fp, 1, result.fp, 1)
   dscal(N, k, result.fp, 1)
 
+proc `+=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
+  daxpy(N, 1, w.fp, 1, v.fp, 1)
+
+proc `+`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
+  new result
+  dcopy(N, v.fp, 1, result.fp, 1)
+  daxpy(N, 1, w.fp, 1, result.fp, 1)
+
+proc `-=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
+  daxpy(N, -1, w.fp, 1, v.fp, 1)
+
+proc `-`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
+  new result
+  dcopy(N, v.fp, 1, result.fp, 1)
+  daxpy(N, -1, w.fp, 1, result.fp, 1)
+
 template `*`*[N: static[int]](k: float64, v: Vector64[N]): expr = v * k
 
 proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = ddot(N, v.fp, 1, w.fp, 1)

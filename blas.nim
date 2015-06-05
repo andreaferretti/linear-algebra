@@ -8,6 +8,8 @@ proc dscal(N: int, ALPHA: float64, X: ptr float64, INCX: int)
   {. header: header, importc: "cblas_dscal" .}
 proc dcopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_dcopy" .}
+proc daxpy(N: int, ALPHA: float64, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
+  {. header: header, importc: "cblas_daxpy" .}
 proc ddot(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int): float64
   {. header: header, importc: "cblas_ddot" .}
 proc dnrm2(N: int, X: ptr float64, INCX: int): float64
