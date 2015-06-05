@@ -29,6 +29,30 @@ proc l_2*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dnrm2(N, v.fp,
 
 proc l_1*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dasum(N, v.fp, 1)
 
+proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val > m:
+      j = i
+      m = val
+  return (j, m)
+
+template max*(v: Vector64): float64 = maxIndex(v).val
+
+proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val < m:
+      j = i
+      m = val
+  return (j, m)
+
+template min*(v: Vector64): float64 = minIndex(v).val
+
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
@@ -80,6 +104,10 @@ proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .}
   result.order = a.order
   dcopy(M * N, a.fp, 1, result.fp, 1)
   result -= b
+
+template max*(m: Matrix64): float64 = max(m.data)
+
+template min*(m: Matrix64): float64 = min(m.data)
 
 proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   new result.data

@@ -94,6 +94,8 @@ A few linear algebra operations are available, wrapping BLAS:
     echo m4 * m1 # matrix-matrix product
     echo m4.t # transpose, done in constant time without copying
     echo m1 + m4.t
+    echo max(m1)
+    echo min(v3)
 
 Rewrite rules
 -------------
