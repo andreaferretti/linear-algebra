@@ -6,6 +6,7 @@ proc main() =
     mat2 = randomMatrix(987, 876)
     mat3 = randomMatrix(4, 3)
     mat4 = randomMatrix(4, 3)
+    mat5 = randomMatrix(3, 3)
     v = randomVector(10)
 
   let startTime = epochTime()
@@ -27,6 +28,9 @@ proc main() =
 
   echo mat3 * mat4.t
   echo mat3.t * mat4
+  echo mat3 + mat4
+  echo mat5 + mat5.t
+  echo mat5 - mat5.t
 
 when isMainModule:
   main()
