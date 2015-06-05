@@ -19,7 +19,7 @@ define whether to store the matrix in row-major or column-major order (default: 
       v3: Vector64[5] = constant(5, 3.5)
       v4: Vector64[8] = zeros(8)
       v5: Vector64[9] = ones(9)
-      m1: Matrix[6, 4] = makeMatrix(6, 4, proc(i, j: int): float64 = (i + j).float64)
+      m1: Matrix[6, 3] = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
       m2: Matrix[2, 8] = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
       m3: Matrix[3, 5] = constant(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
       m4: Matrix[3, 6] = ones(3, 6)
@@ -88,13 +88,12 @@ A few linear algebra operations are available, wrapping BLAS:
     echo v1 + v3
     echo v1 - v3
     echo v1 * v3 # dot product
-    v1 += v3
-    v1 -= v3
     echo l_1(v1) # l_1 norm
     echo l_2(v1) # l_2 norm
     echo m3 * v3 # matrix-vector product
     echo m4 * m1 # matrix-matrix product
     echo m4.t # transpose, done in constant time without copying
+    echo m1 + m4.t
 
 Linking BLAS implementations
 ----------------------------
