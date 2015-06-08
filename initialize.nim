@@ -20,8 +20,10 @@ type Array[N: static[int], A] = array[N, A]
 proc vector*[N: static[int]](xs: Array[N, float64]): Vector64[N] =
   new result
   for i in 0 .. < N:
-    echo xs[i]
-    result[i] = xs[i].float64
+    result[i] = xs[i]
+
+proc dvector*(N: static[int], xs: seq[float64]): Vector64[N] =
+  makeVector(N, proc(i: int): float64 = xs[i])
 
 proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
   new result.data
@@ -65,3 +67,6 @@ proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
   for i in 0 .. < N:
     for j in 0 .. < N:
       data[i][j] = if i == j: 1 else: 0
+
+proc dmatrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
