@@ -19,33 +19,45 @@ define whether to store the matrix in row-major or column-major order (default: 
       v3: Vector64[5] = constant(5, 3.5)
       v4: Vector64[8] = zeros(8)
       v5: Vector64[9] = ones(9)
-      m1: Matrix[6, 3] = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
-      m2: Matrix[2, 8] = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
-      m3: Matrix[3, 5] = constant(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
-      m4: Matrix[3, 6] = ones(3, 6)
-      m5: Matrix[5, 2] = zeros(5, 2)
-      m6: Matrix[7, 7] = eye(7)
+      v6: Vector64[5] = vector([1.0, 2.0, 3.0, 4.0, 5.0]) # initialize from an array...
+      v7: Vector64[4] = dvector(4, @[1.0, 2.0, 3.0, 4.0]) # ...or from a seq
+      m1: Matrix64[6, 3] = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
+      m2: Matrix64[2, 8] = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
+      m3: Matrix64[3, 5] = constant(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
+      m4: Matrix64[3, 6] = ones(3, 6)
+      m5: Matrix64[5, 2] = zeros(5, 2)
+      m6: Matrix64[7, 7] = eye(7)
+      m7: Matrix64[2, 3] = dmatrix(2, 3, @[
+        @[1.2, 3.5, 4.3],
+        @[1.1, 4.2, 1.7]
+      ])
+
+For some reason that has to do with type inference, there is no `matrix` constructor that
+takes an array of arrays. The `dmatrix` constructor (d stand for dynamic) that requires
+statically passing the dimensions has to be used. All constructors that take as input an
+existing array or seq (such as `vector`, `dvector` and `dmatrix`) perform a copy of the data
+for memory safety.
 
 Accessors
 ---------
 
 Vectors can be accessed as expected
 
-    var v6 = randomVector(6)
-    v6[4] = 1.2
-    echo v6[3]
+    var v8 = randomVector(6)
+    v8[4] = 1.2
+    echo v8[3]
 
 Same for matrices, where `m[i, j]` denotes the item on row `i` and column `j`, regardless of the matrix order
 
-    var m7 = randomMatrix(3, 7)
-    m7[1, 3] = 0.8
-    echo m7[2, 2]
+    var m8 = randomMatrix(3, 7)
+    m8[1, 3] = 0.8
+    echo m8[2, 2]
 
 Also one can see rows and columns as vectors
 
     let
-      r2: Vector64[7] = m7.row(2)
-      c5: Vector64[3] = m7.column(5)
+      r2: Vector64[7] = m8.row(2)
+      c5: Vector64[3] = m8.column(5)
 
 For memory safety, this performs a **copy** of the row or column values, at least for now.
 
@@ -54,15 +66,15 @@ Iterators
 
 One can iterate over vector or matrix elements, as well as over rows and columns
 
-    for x in v6: echo x
-    for i, x in v6: echo i, x
-    for x in m7: echo x
-    for t, x in m7:
+    for x in v8: echo x
+    for i, x in v8: echo i, x
+    for x in m8: echo x
+    for t, x in m8:
       let (i, j) = t
       echo i, j, x
-    for row in m7.rows:
+    for row in m8.rows:
       echo row[0]
-    for column in m7.columns:
+    for column in m8.columns:
       echo column[1]
 
 Pretty-print
@@ -70,7 +82,7 @@ Pretty-print
 
 Both vectors and matrix have a pretty-print operation, so one can do
 
-    echo m7
+    echo m8
 
 and get something like
 
@@ -83,8 +95,8 @@ Operations
 
 A few linear algebra operations are available, wrapping BLAS:
 
-    echo 3.5 * v6
-    v6 *= 2.3
+    echo 3.5 * v8
+    v8 *= 2.3
     echo v1 + v3
     echo v1 - v3
     echo v1 * v3 # dot product
