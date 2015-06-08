@@ -15,6 +15,14 @@ proc zeros*(N: static[int]): Vector64[N] = constant(N, 0)
 
 proc ones*(N: static[int]): Vector64[N] = constant(N, 1)
 
+type Array[N: static[int], A] = array[N, A]
+
+proc vector*[N: static[int]](xs: Array[N, float64]): Vector64[N] =
+  new result
+  for i in 0 .. < N:
+    echo xs[i]
+    result[i] = xs[i].float64
+
 proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
   new result.data
   result.order = order

@@ -5,7 +5,8 @@ proc main() =
     mat1 = randomMatrix(1000, 987)
     mat2 = randomMatrix(987, 876)
     mat3 = randomMatrix(3, 3)
-    v = randomVector(10)
+    v1 = randomVector(10)
+    v2 = vector([1.0, 2.0, 3.0, 4.0, 2.0, 3.0, 4.0, 5.0, 2.0, 5.0])
 
   let startTime = epochTime()
   for i in 0 .. < 10:
@@ -13,11 +14,9 @@ proc main() =
   let endTime = epochTime()
   echo "We have required ", endTime - startTime, " seconds to multiply matrices 10 times."
 
-  echo v
-  echo maxIndex(v)
-  echo min(v)
-  echo mat3
-  echo min(mat3)
+  echo "v1 = ", v1
+  echo "v2 = ", v2
+  echo "v1 * v2 = ", v1 * v2
 
 when isMainModule:
   main()
