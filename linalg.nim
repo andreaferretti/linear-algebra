@@ -1,11 +1,11 @@
 from math import random
 
-include external
-include blas
-include types
-include initialize
-include access
-include iterators
-include display
-include ops
-include rewrite
+include private/external
+include private/blas
+include private/types
+include private/initialize
+include private/access
+include private/iterators
+include private/display
+include private/ops
+include private/rewrite
