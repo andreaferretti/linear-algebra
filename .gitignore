@@ -3,3 +3,4 @@ nimcache
 /a.out
 /main
 bench/matrix_matrix_mult
+tests/all
