@@ -16,14 +16,14 @@ define whether to store the matrix in row-major or column-major order (default: 
     let
       v1: Vector64[5] = makeVector(5, proc(i: int): float64 = (i * i).float64)
       v2: Vector64[7] = randomVector(7, max = 3) # max is optional, default 1
-      v3: Vector64[5] = constant(5, 3.5)
+      v3: Vector64[5] = constantVector(5, 3.5)
       v4: Vector64[8] = zeros(8)
       v5: Vector64[9] = ones(9)
       v6: Vector64[5] = vector([1.0, 2.0, 3.0, 4.0, 5.0]) # initialize from an array...
       v7: Vector64[4] = dvector(4, @[1.0, 2.0, 3.0, 4.0]) # ...or from a seq
       m1: Matrix64[6, 3] = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
       m2: Matrix64[2, 8] = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
-      m3: Matrix64[3, 5] = constant(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
+      m3: Matrix64[3, 5] = constantMatrix(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
       m4: Matrix64[3, 6] = ones(3, 6)
       m5: Matrix64[5, 2] = zeros(5, 2)
       m6: Matrix64[7, 7] = eye(7)
