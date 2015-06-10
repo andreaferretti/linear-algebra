@@ -33,7 +33,7 @@ proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
   if m.order == colMajor:
     let
       mData = cast[ref array[N, array[M, float64]]](m.data)
-      nData = cast[ref array[M, array[N, float64]]](m.data)
+      nData = cast[ref array[M, array[N, float64]]](n.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         if mData[j][i] != nData[i][j]:
