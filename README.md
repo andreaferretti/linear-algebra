@@ -162,7 +162,6 @@ A few compile flags are available to link specific BLAS implementations
 TODO
 ----
 
-* More operations
 * Add support for `float32`
 * Add support for matrices and vectors whose size is only known at runtime
 * Add support for matrices and vector on the stack, since dimensions are known at compile time anyway
@@ -170,6 +169,7 @@ TODO
 * Move vectors and matrix to/from the GPU
 * Run on the GPU via cuBLAS
 * Finish testing (in particular, row-major and mixed order operations)
+* More specialized BLAS operations
 * Add operations from LAPACK
 * Support slicing/nonconstant steps
 * Make `row` and `column` operations non-copying
