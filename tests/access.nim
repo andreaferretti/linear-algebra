@@ -44,11 +44,11 @@ suite "matrix accessors":
     check m[1, 0] == 3.0
     check m[1, 1] == 1.0
   test "writing matrix elements":
-    var v = zeros(3, 3)
-    v[0, 2] = -2.1
-    v[1, 1] = 1.0
-    check v[0, 2] == -2.1
-    check v[1, 1] == 1.0
+    var m = zeros(3, 3)
+    m[0, 2] = -2.1
+    m[1, 1] = 1.0
+    check m[0, 2] == -2.1
+    check m[1, 1] == 1.0
   test "reading matrix rows":
     let
       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
