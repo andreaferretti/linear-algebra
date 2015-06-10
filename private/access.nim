@@ -14,7 +14,7 @@
 
 proc len*[N: static[int]](v: Vector64[N]): int = N
 
-proc at*[M, N: static[int]](m: Matrix64[M, N], i: range[0 .. M], j: range[0 .. N]): float64 {. inline .} =
+proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} =
   if m.order == colMajor:
     let data = cast[ref array[N, array[M, float64]]](m.data)
     data[j][i]
