@@ -169,7 +169,7 @@ TODO
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * Move vectors and matrix to/from the GPU
 * Run on the GPU via cuBLAS
-* Add some tests
+* Finish testing (in particular, row-major and mixed order operations)
 * Add operations from LAPACK
 * Support slicing/nonconstant steps
 * Make `row` and `column` operations non-copying
