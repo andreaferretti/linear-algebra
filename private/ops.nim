@@ -75,8 +75,6 @@ proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
     dNorm = l_2(v - w)
   return (dNorm / (vNorm + wNorm)) < epsilon
 
-template `~!=`*(v, w: Vector64): bool = not (v ~= w)
-
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
@@ -128,6 +126,20 @@ proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .}
   result.order = a.order
   dcopy(M * N, a.fp, 1, result.fp, 1)
   result -= b
+
+proc l_2*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = dnrm2(M * N, m.fp, 1)
+
+proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = dasum(M * N, m.fp, 1)
+
+proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool =
+  const epsilon = 0.000001
+  let
+    mNorm = l_2(m)
+    nNorm = l_2(n)
+    dNorm = l_2(m - n)
+  return (dNorm / (mNorm + nNorm)) < epsilon
+
+template `~!=`*(v, w: Vector64 or Matrix64): bool = not (v ~= w)
 
 template max*(m: Matrix64): float64 = max(m.data)
 

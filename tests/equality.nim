@@ -38,4 +38,17 @@ suite "vector and matrix equality":
       z = vector([1.0, 3.0, 3.0, 4.0])
     check u ~= v
     check v ~= w
+    check v != w
     check w ~!= z
+  test "approximate matrix equality":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
+      n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
+      q = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
+    var p = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
+    p[2, 2] = p[2, 2] - 0.000000001
+    p[1, 3] = p[1, 3] + 0.000000001
+    check m ~= n
+    check n ~= p
+    check n != p
+    check p ~!= q
