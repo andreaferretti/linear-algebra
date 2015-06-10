@@ -16,7 +16,7 @@ import unittest, linalg
 
 
 suite "iterators on vectors":
-  test "item vector iterators":
+  test "items vector iterator":
     let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     var
       sum = 0.0
@@ -26,7 +26,7 @@ suite "iterators on vectors":
       count += 1
     check sum == 12.0
     check count == 5
-  test "pairs vector iterators":
+  test "pairs vector iterator":
     let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     var
       sum = 0.0
@@ -36,3 +36,26 @@ suite "iterators on vectors":
       sumI += i
     check sum == 12.0
     check sumI == 10
+
+suite "iterators on matrices":
+  test "items matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64)
+    var
+      sum = 0.0
+      count = 0
+    for x in m:
+      sum += x
+      count += 1
+    check sum == 18.0
+    check count == 6
+  test "pairs matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64)
+    var
+      sum = 0.0
+      sumI = 0
+    for t, x in m:
+      let (i, j) = t
+      sum += x
+      sumI += (i + j)
+    check sum == 18.0
+    check sumI == 9

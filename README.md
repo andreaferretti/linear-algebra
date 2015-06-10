@@ -141,6 +141,7 @@ TODO
 * Add operations from LAPACK
 * Support slicing/nonconstant steps
 * Make `row` and `column` operations non-copying
+* Better types to avoid out of bounds exceptions when statically checkable
 * Add a fallback Nim implementation of most operations, that is valid over other rings
 * Try on more platforms/configurations
 * Make a proper benchmark
