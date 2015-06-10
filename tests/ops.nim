@@ -12,4 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, iterators, ops
+import unittest, linalg
+
+
+suite "vector-vector operations":
+  test "vector sum":
+    let
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    check((v + w) == vector([3.0, 2.0, 4.0, 8.0, 2.0]))
