@@ -148,3 +148,40 @@ suite "matrix operations":
       ])
     m1 -= m2
     check m1 == m3
+  test "matrix ℓ² norm":
+    let m = dmatrix(2, 3, @[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0]
+    ])
+    check l_2(m) == 8.0
+  test "matrix ℓ¹ norm":
+    let m = dmatrix(3, 3, @[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0],
+      @[2.5, 3.1, -1.4]
+    ])
+    check l_1(m) == 21.0
+  test "max and min of matrices":
+    let m = dmatrix(2, 3, @[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0]
+    ])
+    check max(m) == 3.0
+    check min(m) == -7.0
+  test "matrix multiplication":
+    let
+      m1 = dmatrix(2, 4, @[
+        @[1.0, 1.0, 2.0, -3.0],
+        @[3.0, 0.0, -7.0, 2.0]
+      ])
+      m2 = dmatrix(4, 3, @[
+        @[1.0, 1.0, 2.0],
+        @[3.0, 1.0, -5.0],
+        @[-1.0, -1.0, 2.0],
+        @[4.0, 2.0, 3.0]
+      ])
+      m3 = dmatrix(2, 3, @[
+        @[-10.0, -6.0, -8.0],
+        @[18.0, 14.0, -2.0]
+      ])
+    check(m1 * m2 == m3)
