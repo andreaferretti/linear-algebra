@@ -70,9 +70,9 @@ template min*(v: Vector64): float64 = minIndex(v).val
 proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
   const epsilon = 0.000001
   let
-    vNorm = l_2(v)
-    wNorm = l_2(w)
-    dNorm = l_2(v - w)
+    vNorm = l_1(v)
+    wNorm = l_1(w)
+    dNorm = l_1(v - w)
   return (dNorm / (vNorm + wNorm)) < epsilon
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
@@ -134,9 +134,9 @@ proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = dasum(M 
 proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool =
   const epsilon = 0.000001
   let
-    mNorm = l_2(m)
-    nNorm = l_2(n)
-    dNorm = l_2(m - n)
+    mNorm = l_1(m)
+    nNorm = l_1(n)
+    dNorm = l_1(m - n)
   return (dNorm / (mNorm + nNorm)) < epsilon
 
 template `~!=`*(v, w: Vector64 or Matrix64): bool = not (v ~= w)
