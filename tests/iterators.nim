@@ -59,3 +59,23 @@ suite "iterators on matrices":
       sumI += (i + j)
     check sum == 18.0
     check sumI == 9
+  test "rows matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64)
+    var
+      sum = 0.0
+      count = 0
+    for r in m.rows:
+      sum += (r[0] + r[1])
+      count += 1
+    check sum == 18.0
+    check count == 3
+  test "columns matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64)
+    var
+      sum = 0.0
+      count = 0
+    for c in m.columns:
+      sum += (c[0] + c[1] + c[2])
+      count += 1
+    check sum == 18.0
+    check count == 2
