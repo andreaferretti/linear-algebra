@@ -55,3 +55,9 @@ suite "vector operations":
   test "ℓ¹ norm":
     let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
     check l_1(v) == 14.0
+  test "max and min of vectors":
+    let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    check max(v) == 8.0
+    check maxIndex(v) == (3, 8.0)
+    check min(v) == -2.0
+    check minIndex(v) == (4, -2.0)
