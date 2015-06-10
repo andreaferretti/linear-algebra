@@ -16,8 +16,21 @@ import unittest, linalg
 
 
 suite "vector-vector operations":
+  test "scalar multiplication":
+    let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    check((v * 2.0) == vector([2.0, 6.0, 4.0, 16.0, -4.0]))
+    check((-1.0 * v) == vector([-1.0, -3.0, -2.0, -8.0, 2.0]))
+  test "mutating scalar multiplication":
+    var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    v *= 2.0
+    check v == vector([2.0, 6.0, 4.0, 16.0, -4.0])
   test "vector sum":
     let
       v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
       w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     check((v + w) == vector([3.0, 2.0, 4.0, 8.0, 2.0]))
+  test "mutating vector sum":
+    var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    v += w
+    check v == vector([3.0, 2.0, 4.0, 8.0, 2.0])
