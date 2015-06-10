@@ -30,3 +30,21 @@ suite "trivial operations":
         @[0.0, 3.0, 4.0]
       ])
     check m1.reshape(4, 3) == m2
+  test "turn vectors into matrices":
+    let
+      v = vector([1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0])
+      m = dmatrix(3, 4, @[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ])
+    check v.asMatrix(3, 4) == m
+  test "turn matrices into vectors":
+    let
+      v = vector([1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0])
+      m = dmatrix(3, 4, @[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ])
+    check m.asVector == v

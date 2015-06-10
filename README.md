@@ -125,10 +125,22 @@ A few linear algebra operations are available, wrapping BLAS:
     echo l_2(v1) # l_2 norm
     echo m3 * v3 # matrix-vector product
     echo m4 * m1 # matrix-matrix product
-    echo m4.t # transpose, done in constant time without copying
-    echo m1 + m4.t
     echo max(m1)
     echo min(v3)
+
+Trivial operations
+------------------
+
+The following operations do not change the underlying memory layout of matrices and vectors.
+This means they run in very little time even on big matrices, but you have to pay attention
+when mutating matrices and vectors produced in this way, since the underyling data is shared.
+
+    echo m4.t # transpose, done in constant time without copying
+    echo m1 + m4.t
+    let m9: Matrix64[5, 3] = m3.reshape(5, 3)
+    let m10: Matrix64[3, 3] = v5.asMatrix(3, 3)
+    let v9: Vector64[15] = m3.asVector
+
 
 Rewrite rules
 -------------

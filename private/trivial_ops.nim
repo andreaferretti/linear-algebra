@@ -20,3 +20,10 @@ proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = m.order
   result.data = m.data
+
+proc asMatrix*[N: static[int]](v: Vector64[N], A, B: static[int], order: OrderType = colMajor): Matrix64[A, B] =
+  static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = order
+  result.data = v
+
+proc asVector*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M * N] = m.data
