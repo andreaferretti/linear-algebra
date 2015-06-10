@@ -12,4 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, iterators, trivial_ops, ops
+proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data
+
+proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64[A, B] =
+  static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = m.order
+  result.data = m.data

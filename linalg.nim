@@ -20,5 +20,6 @@ include private/initialize
 include private/access
 include private/iterators
 include private/display
+include private/trivial_ops
 include private/ops
 include private/rewrite

@@ -12,4 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, iterators, trivial_ops, ops
+import unittest, linalg
+
+
+suite "trivial operations":
+  test "reshape of matrices":
+    let
+      m1 = dmatrix(3, 4, @[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ])
+      m2 = dmatrix(4, 3, @[
+        @[1.0, 1.0, 2.0],
+        @[-1.0, 2.0, -1.0],
+        @[3.0, 2.0, 1.0],
+        @[0.0, 3.0, 4.0]
+      ])
+    check m1.reshape(4, 3) == m2

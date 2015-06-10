@@ -156,12 +156,3 @@ proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[
   else:
     result.order = colMajor
     dgemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
-
-proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
-  result.order = if a.order == rowMajor: colMajor else: rowMajor
-  result.data = a.data
-
-proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64[A, B] =
-  static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
-  result.order = m.order
-  result.data = m.data
