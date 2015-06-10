@@ -16,11 +16,11 @@ import unittest, linalg
 
 
 suite "vector operations":
-  test "scalar multiplication":
+  test "scalar vector multiplication":
     let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     check((v * 2.0) == vector([2.0, 6.0, 4.0, 16.0, -4.0]))
     check((-1.0 * v) == vector([-1.0, -3.0, -2.0, -8.0, 2.0]))
-  test "mutating scalar multiplication":
+  test "mutating scalar vector multiplication":
     var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     v *= 2.0
     check v == vector([2.0, 6.0, 4.0, 16.0, -4.0])
@@ -74,6 +74,33 @@ suite "matrix/vector operations":
     check((m * v) == vector([7.0, 6.0, 5.0]))
 
 suite "matrix operations":
+  test "scalar matrix multiplication":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+      m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    check(m1 * 3.0 == m2)
+    check(3.0 * m1 == m2)
+  test "mutating scalar multiplication":
+    var m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+    let m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    m1 *= 3.0
+    check(m1 == m2)
   test "matrix sum":
     let
       m1 = dmatrix(3, 4, @[

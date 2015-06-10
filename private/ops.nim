@@ -35,8 +35,6 @@ proc `-`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   dcopy(N, v.fp, 1, result.fp, 1)
   daxpy(N, -1, w.fp, 1, result.fp, 1)
 
-template `*`*[N: static[int]](k: float64, v: Vector64[N]): expr = v * k
-
 proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = ddot(N, v.fp, 1, w.fp, 1)
 
 proc l_2*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dnrm2(N, v.fp, 1)
@@ -78,6 +76,16 @@ proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
+
+proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = dscal(M * N, k, m.fp, 1)
+
+proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
+  new result.data
+  result.order = m.order
+  dcopy(M * N, m.fp, 1, result.fp, 1)
+  dscal(M * N, k, result.fp, 1)
+
+template `*`*(k: float64, v: Vector64 or Matrix64): expr = v * k
 
 proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   if a.order == b.order:
