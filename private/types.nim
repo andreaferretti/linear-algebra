@@ -26,3 +26,22 @@ type
 template fp(v: Vector64): ptr float64 = cast[ptr float64](addr(v[]))
 
 template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
+
+proc `==`*(u, v: Vector64): bool = u[] == v[]
+
+proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
+  if m.order == colMajor:
+    let
+      mData = cast[ref array[N, array[M, float64]]](m.data)
+      nData = cast[ref array[M, array[N, float64]]](m.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        if mData[j][i] != nData[i][j]:
+          return false
+    return true
+  else:
+    return slowEq(n, m)
+
+proc `==`*(m, n: Matrix64): bool =
+  if m.order == n.order: m.data[] == n.data[]
+  else: slowEq(m, n)

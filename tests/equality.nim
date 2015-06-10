@@ -12,4 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality
+import unittest, linalg
+
+
+suite "vector and matrix equality":
+  test "strict vector equality":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      w = vector([1.0, 3.0, 3.0, 4.0])
+    check u == v
+    check v != w
+  test "strict matrix equality":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
+      n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
+      p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
+    check m == n
+    check n != p

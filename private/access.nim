@@ -14,7 +14,7 @@
 
 proc len*[N: static[int]](v: Vector64[N]): int = N
 
-proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} =
+proc at*[M, N: static[int]](m: Matrix64[M, N], i: range[0 .. M], j: range[0 .. N]): float64 {. inline .} =
   if m.order == colMajor:
     let data = cast[ref array[N, array[M, float64]]](m.data)
     data[j][i]
@@ -22,7 +22,7 @@ proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} 
     let data = cast[ref array[M, array[N, float64]]](m.data)
     data[i][j]
 
-proc `[]`*(m: Matrix64, i, j: int): float64 {. inline .} = m.at(i, j)
+template `[]`*(m: Matrix64, i, j: int): float64 = m.at(i, j)
 
 proc put*[M, N: static[int]](m: var Matrix64[M, N], i, j: int, val: float64) {. inline .} =
   if m.order == colMajor:
