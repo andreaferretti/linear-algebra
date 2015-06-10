@@ -12,4 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, iterators
+import unittest, linalg
+
+
+suite "iterators on vectors":
+  test "item vector iterators":
+    let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    var
+      sum = 0.0
+      count = 0
+    for x in v:
+      sum += x
+      count += 1
+    check sum == 12.0
+    check count == 5
+  test "pairs vector iterators":
+    let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    var
+      sum = 0.0
+      sumI = 0
+    for i, x in v:
+      sum += x
+      sumI += i
+    check sum == 12.0
+    check sumI == 10
