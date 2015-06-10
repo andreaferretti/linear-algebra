@@ -141,7 +141,6 @@ when mutating matrices and vectors produced in this way, since the underyling da
     let m10: Matrix64[3, 3] = v5.asMatrix(3, 3)
     let v9: Vector64[15] = m3.asVector
 
-
 Rewrite rules
 -------------
 
