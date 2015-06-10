@@ -67,6 +67,16 @@ proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
 
 template min*(v: Vector64): float64 = minIndex(v).val
 
+proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
+  const epsilon = 0.000001
+  let
+    vNorm = l_2(v)
+    wNorm = l_2(w)
+    dNorm = l_2(v - w)
+  return (dNorm / (vNorm + wNorm)) < epsilon
+
+template `~!=`*(v, w: Vector64): bool = not (v ~= w)
+
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)

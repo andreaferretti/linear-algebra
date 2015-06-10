@@ -30,3 +30,12 @@ suite "vector and matrix equality":
       p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
     check m == n
     check n != p
+  test "approximate vector equality":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      w = vector([1.0, 2.0, 2.999999999, 4.00000001])
+      z = vector([1.0, 3.0, 3.0, 4.0])
+    check u ~= v
+    check v ~= w
+    check w ~!= z
