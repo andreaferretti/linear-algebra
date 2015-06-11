@@ -5,6 +5,8 @@ The library defines types `Matrix64[M, N]` and `Vector64[N]` and related operati
 
 In all examples, types are inferred, and are shown just for explanatory purposes.
 
+The library has been tested on Ubuntu Linux 14.10 and 15.04 64-bit.
+
 Initialization
 --------------
 
@@ -149,6 +151,19 @@ A few rewrite rules allow to optimize a chain of linear algebra operations into 
   echo v1 + 5.3 * v3
 
 this is not implemented as a scalar multiplication followed by a sum, but it is turned into a single function call.
+
+Type safety guarantees
+----------------------
+
+The library is designed with the use case of having dimensions known at compile time, and
+leverages the compiles to ensure that dimensions match when performing the appropriate
+operations - for instance in matrix multiplication.
+
+To see some examples where the compiler avoids malformed operations, look inside `tests/compilation`
+(yes, in Nim one can actually test that some operations do not compile!).
+
+Support for matrices and vectors whose size is only known at runtime will be added, but is not
+there yet.
 
 Linking BLAS implementations
 ----------------------------
