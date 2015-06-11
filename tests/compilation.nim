@@ -33,3 +33,36 @@ suite "compilation errors":
       v = vector([1.0, 2.0, 3.0, 4.0])
     when compiles(u += v): fail()
     when compiles(u -= v): fail()
+  test "making an array into a matrix should not work for wrong dimensions":
+    let u = vector([1.0, 2.0, 3.0, 4.0])
+    when compiles(u.asMatrix(3, 5)): fail()
+  test "reshaping a matrix should not work for wrong dimensions":
+    let m = randomMatrix(2, 3)
+    when compiles(m.reshape(3, 5)): fail()
+  test "matrix/vector multiplication should not work for wrong dimensions":
+    let
+      m = randomMatrix(6, 7)
+      v = randomVector(6)
+    when compiles(m * v): fail()
+  test "matrix dimensions should agree in a sum":
+    let
+      m = randomMatrix(3, 6)
+      n = randomMatrix(4, 5)
+    when compiles(m + n): fail()
+    when compiles(m - n): fail()
+  test "matrix dimensions should agree in a mutating sum":
+    var m = randomMatrix(3, 6)
+    let n = randomMatrix(4, 5)
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "mutating sum should not work for immutable matrices":
+    let
+      m = randomMatrix(3, 6)
+      n = randomMatrix(3, 6)
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "matrix multiplication should not work for wrong dimensions":
+    let
+      m = randomMatrix(6, 7)
+      n = randomMatrix(8, 18)
+    when compiles(m * n): fail()
