@@ -148,7 +148,7 @@ Rewrite rules
 
 A few rewrite rules allow to optimize a chain of linear algebra operations into a single BLAS call. For instance, if you try
 
-  echo v1 + 5.3 * v3
+    echo v1 + 5.3 * v3
 
 this is not implemented as a scalar multiplication followed by a sum, but it is turned into a single function call.
 
