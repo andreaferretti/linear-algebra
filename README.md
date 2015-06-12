@@ -171,6 +171,7 @@ Linking BLAS implementations
 A few compile flags are available to link specific BLAS implementations
 
     -d:atlas
+    -d:openblas
     -d:mkl
     -d:mkl -d:threaded
 
