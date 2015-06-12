@@ -27,6 +27,11 @@ else:
     const header = "atlas/cblas.h"
     static: echo "--USING ATLAS--"
   else:
-    {.passl: "-lblas".}
-    const header = "cblas.h"
-    static: echo "--USING DEFAULT BLAS--"
+    when defined(openblas):
+      {.passl: "-lopenblas".}
+      const header = "cblas.h"
+      static: echo "--USING OPENBLAS--"
+    else:
+      {.passl: "-lblas".}
+      const header = "cblas.h"
+      static: echo "--USING DEFAULT BLAS--"
