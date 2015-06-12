@@ -83,5 +83,12 @@ when defined(cublas):
     cudaErrorStartupFailure               =   0x7f
     cudaErrorApiFailureBase               =  10000
 
-  proc cudaMalloc*(p: ptr pointer, size: int): cudaError
+
+  proc cudaMalloc*(size: int): ptr float32 =
+    var error: cudaError
+    {.emit: """error = cudaMalloc((void**)&`result`, `size`); """.}
+    if error != cudaSuccess:
+      quit($(error))
+
+  proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
     {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}

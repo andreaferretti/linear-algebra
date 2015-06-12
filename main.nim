@@ -32,6 +32,9 @@ proc main() =
   echo mat5 + mat5.t
   echo mat5 - mat5.t
 
+  # var p: ptr ptr float32
+  var p = cudaMalloc(1000 * sizeof(ptr float32))
+
 when isMainModule:
   main()
   GC_fullCollect()
