@@ -23,13 +23,13 @@ type
     data: ref array[M * N, float64]
 
 # Float pointers
-template fp(v: Vector64): ptr float64 = cast[ptr float64](addr(v[]))
+template fp(v: Vector32 or Vector64): ptr float64 = cast[ptr float64](addr(v[]))
 
-template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
+template fp(m: Matrix32 or Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
-proc `==`*(u, v: Vector64): bool = u[] == v[]
+proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 
-proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
+proc slowEq[M, N: static[int]](m, n: Matrix32[M, N] or Matrix64[M, N]): bool =
   if m.order == colMajor:
     let
       mData = cast[ref array[N, array[M, float64]]](m.data)
@@ -42,6 +42,6 @@ proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
   else:
     return slowEq(n, m)
 
-proc `==`*(m, n: Matrix64): bool =
+proc `==`*(m, n: Matrix32 or Matrix64): bool =
   if m.order == n.order: m.data[] == n.data[]
   else: slowEq(m, n)

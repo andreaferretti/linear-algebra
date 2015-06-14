@@ -33,6 +33,24 @@ suite "vector accessors":
     check v[0] == -2.1
     check v[1] == 1.0
 
+suite "32-bit vector accessors":
+  test "reading vector length":
+    let v = randomVector32(10)
+    check v.len == 10
+  test "reading vector elements":
+    let v = makeVector32(5, proc(i: int): float32 = (3 * i - 2).float32)
+    check v[0] == -2.0
+    check v[1] == 1.0
+    check v[2] == 4.0
+    check v[3] == 7.0
+    check v[4] == 10.0
+  test "writing vector elements":
+    var v = zeros32(3)
+    v[0] = -2.5
+    v[1] = 1.0
+    check v[0] == -2.5
+    check v[1] == 1.0
+
 suite "matrix accessors":
   test "reading matrix dimensions":
     let m = randomMatrix(3, 7)

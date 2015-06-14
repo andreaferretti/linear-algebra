@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc `$`*[N: static[int]](v: Vector64[N]): string =
+proc `$`*[N: static[int]](v: Vector32[N] or Vector64[N]): string =
   result = "[ "
   for i in 0 .. < N - 1:
     result &= $(v[i]) & "\n  "

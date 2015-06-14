@@ -17,17 +17,34 @@ proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] =
   for i in 0 .. < N:
     result[i] = f(i)
 
+proc makeVector32*(N: static[int], f: proc (i: int): float32): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = f(i)
+
 proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
   makeVector(N, proc(i: int): float64 = random(max))
+
+proc randomVector32*(N: static[int], max: float64 = 1): Vector32[N] =
+  makeVector32(N, proc(i: int): float32 = random(max).float32)
 
 proc constantVector*(N: static[int], x: float64): Vector64[N] =
   new result
   for i in 0 .. < N:
     result[i] = x
 
-proc zeros*(N: static[int]): Vector64[N] = constantVector(N, 0)
+proc constantVector32*(N: static[int], x: float32): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = x
 
-proc ones*(N: static[int]): Vector64[N] = constantVector(N, 1)
+proc zeros*(N: static[int]): Vector64[N] = constantVector(N, 0'f64)
+
+proc zeros32*(N: static[int]): Vector32[N] = constantVector32(N, 0'f32)
+
+proc ones*(N: static[int]): Vector64[N] = constantVector(N, 1'f64)
+
+proc ones32*(N: static[int]): Vector32[N] = constantVector32(N, 1'f32)
 
 type Array[N: static[int], A] = array[N, A]
 
@@ -36,8 +53,16 @@ proc vector*[N: static[int]](xs: Array[N, float64]): Vector64[N] =
   for i in 0 .. < N:
     result[i] = xs[i]
 
+proc vector32*[N: static[int]](xs: Array[N, float32]): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = xs[i]
+
 proc dvector*(N: static[int], xs: seq[float64]): Vector64[N] =
   makeVector(N, proc(i: int): float64 = xs[i])
+
+proc dvector32*(N: static[int], xs: seq[float32]): Vector32[N] =
+  makeVector32(N, proc(i: int): float32 = xs[i])
 
 proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
   new result.data

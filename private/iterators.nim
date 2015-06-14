@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-iterator items*[N: static[int]](v: Vector64[N]): float64 {. inline .} =
+iterator items*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} =
   for i in 0 .. < N:
     yield v[i]
 
-iterator pairs*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] {. inline .} =
+iterator pairs*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} =
   for i in 0 .. < N:
     yield (i, v[i])
 

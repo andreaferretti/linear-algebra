@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc len*[N: static[int]](v: Vector64[N]): int = N
+proc len*[N: static[int]](v: Vector32[N] or Vector64[N]): int = N
 
 proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} =
   if m.order == colMajor:
