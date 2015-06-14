@@ -14,6 +14,14 @@
 
 proc len*[N: static[int]](v: Vector32[N] or Vector64[N]): int = N
 
+proc clone*[N: static[int]](v: Vector64[N]): Vector64[N] =
+  new result
+  copyMem(result.fp, v.fp, N * sizeof(float64))
+
+proc clone*[N: static[int]](v: Vector32[N]): Vector32[N] =
+  new result
+  copyMem(result.fp, v.fp, N * sizeof(float32))
+
 proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} =
   if m.order == colMajor:
     let data = cast[ref array[N, array[M, float64]]](m.data)
@@ -45,3 +53,8 @@ proc row*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .
     result[j] = m.at(i, j)
 
 proc dim*[M, N: static[int]](m: Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
+
+proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
+  result.order = m.order
+  new result.data
+  copyMem(result.fp, m.fp, M * N * sizeof(float64))

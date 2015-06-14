@@ -32,6 +32,14 @@ suite "vector accessors":
     v[1] = 1.0
     check v[0] == -2.1
     check v[1] == 1.0
+  test "cloning vectors":
+    var v = randomVector(5)
+    let
+      w = v.clone
+      f = w[0]
+    check v == w
+    v[0] = v[0] + 1
+    check w[0] == f
 
 suite "32-bit vector accessors":
   test "reading vector length":
@@ -50,6 +58,14 @@ suite "32-bit vector accessors":
     v[1] = 1.0
     check v[0] == -2.5
     check v[1] == 1.0
+  test "cloning vectors":
+    var v = randomVector32(5)
+    let
+      w = v.clone
+      f = w[0]
+    check v == w
+    v[0] = v[0] + 1
+    check w[0] == f
 
 suite "matrix accessors":
   test "reading matrix dimensions":
@@ -79,3 +95,11 @@ suite "matrix accessors":
       c = m.column(1)
     check c[0] == -2.0
     check c[1] == 1.0
+  test "cloning matrices":
+    var m = randomMatrix(5, 5)
+    let
+      n = m.clone
+      f = n[2, 2]
+    check m == n
+    m[2, 2] = m[2, 2] + 1
+    check n[2, 2] == f

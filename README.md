@@ -143,6 +143,12 @@ when mutating matrices and vectors produced in this way, since the underyling da
     let m10: Matrix64[3, 3] = v5.asMatrix(3, 3)
     let v9: Vector64[15] = m3.asVector
 
+In case you need to allocate a copy of the original data, say in order to transpose a matrix
+and then mutate the transpose without altering the original matrix, a `clone` operation is
+available:
+
+    let m11 = m10.clone
+
 Rewrite rules
 -------------
 
