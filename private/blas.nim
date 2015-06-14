@@ -18,8 +18,12 @@ type
   OrderType = enum
     rowMajor = 101, colMajor = 102
 
+proc sscal(N: int, ALPHA: float32, X: ptr float32, INCX: int)
+  {. header: header, importc: "cblas_sscal" .}
 proc dscal(N: int, ALPHA: float64, X: ptr float64, INCX: int)
   {. header: header, importc: "cblas_dscal" .}
+proc scopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
+  {. header: header, importc: "cblas_scopy" .}
 proc dcopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_dcopy" .}
 proc daxpy(N: int, ALPHA: float64, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)

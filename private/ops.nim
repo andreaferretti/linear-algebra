@@ -19,6 +19,13 @@ proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .}
   dcopy(N, v.fp, 1, result.fp, 1)
   dscal(N, k, result.fp, 1)
 
+proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = sscal(N, k, v.fp, 1)
+
+proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .} =
+  new result
+  scopy(N, v.fp, 1, result.fp, 1)
+  sscal(N, k, result.fp, 1)
+
 proc `+=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
   daxpy(N, 1, w.fp, 1, v.fp, 1)
 
@@ -86,6 +93,8 @@ proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. 
   dscal(M * N, k, result.fp, 1)
 
 template `*`*(k: float64, v: Vector64 or Matrix64): expr = v * k
+
+template `*`*(k: float32, v: Vector32 or Matrix32): expr = v * k
 
 proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   if a.order == b.order:

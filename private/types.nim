@@ -23,9 +23,13 @@ type
     data: ref array[M * N, float64]
 
 # Float pointers
-template fp(v: Vector32 or Vector64): ptr float64 = cast[ptr float64](addr(v[]))
+template fp(v: Vector32): ptr float32 = cast[ptr float32](addr(v[]))
 
-template fp(m: Matrix32 or Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
+template fp(v: Vector64): ptr float64 = cast[ptr float64](addr(v[]))
+
+template fp(m: Matrix32): ptr float32 = cast[ptr float32](addr(m.data[]))
+
+template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
 proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 

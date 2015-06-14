@@ -62,6 +62,16 @@ suite "vector operations":
     check min(v) == -2.0
     check minIndex(v) == (4, -2.0)
 
+suite "32-bit vector operations":
+  test "scalar vector multiplication":
+    let v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    check((v * 2'f32) == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32]))
+    check((-1'f32 * v) == vector32([-1'f32, -3'f32, -2'f32, -8'f32, 2'f32]))
+  test "mutating scalar vector multiplication":
+    var v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    v *= 2'f32
+    check v == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+
 suite "matrix/vector operations":
   test "multiplication of matrix and vector":
     let
