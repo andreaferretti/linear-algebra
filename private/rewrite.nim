@@ -25,3 +25,17 @@ template rewriteLinearCombination*{v + `*`(w, a)}(a: float64, v, w: Vector64): a
 
 template rewriteLinearCombinationMut*{v += `*`(w, a)}(a: float64, v: var Vector64, w: Vector64): auto =
   linearCombinationMut(a, v, w)
+
+proc linearCombination32[N: static[int]](a: float32, v, w: Vector32[N]): Vector32[N]  {. inline .} =
+  new result
+  scopy(N, v.fp, 1, result.fp, 1)
+  saxpy(N, a, w.fp, 1, result.fp, 1)
+
+proc linearCombinationMut32[N: static[int]](a: float32, v: var Vector32[N], w: Vector32[N])  {. inline .} =
+  saxpy(N, a, w.fp, 1, v.fp, 1)
+
+template rewriteLinearCombination*{v + `*`(w, a)}(a: float32, v, w: Vector32): auto =
+  linearCombination32(a, v, w)
+
+template rewriteLinearCombinationMut*{v += `*`(w, a)}(a: float32, v: var Vector32, w: Vector32): auto =
+  linearCombinationMut32(a, v, w)
