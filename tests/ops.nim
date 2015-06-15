@@ -71,6 +71,43 @@ suite "32-bit vector operations":
     var v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
     v *= 2'f32
     check v == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+  test "vector sum":
+    let
+      v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector32([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check((v + w) == vector32([3'f32, 2'f32, 4'f32, 8'f32, 2'f32]))
+  test "mutating vector sum":
+    var v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    let w = vector32([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    v += w
+    check v == vector32([3'f32, 2'f32, 4'f32, 8'f32, 2'f32])
+  test "vector difference":
+    let
+      v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector32([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check((v - w) == vector32([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32]))
+  test "mutating vector difference":
+    var v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    let w = vector32([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    v -= w
+    check v == vector32([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32])
+  test "dot product":
+    let
+      v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector32([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check(v * w == -5'f32)
+  test "ℓ² norm":
+    let v = vector32([1'f32, 1'f32, 2'f32, 3'f32, -7'f32])
+    check l_2(v) == 8'f32
+  test "ℓ¹ norm":
+    let v = vector32([1'f32, 1'f32, 2'f32, 3'f32, -7'f32])
+    check l_1(v) == 14'f32
+  test "max and min of vectors":
+    let v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    check max(v) == 8'f32
+    check maxIndex(v) == (3, 8'f32)
+    check min(v) == -2'f32
+    check minIndex(v) == (4, -2'f32)
 
 suite "matrix/vector operations":
   test "multiplication of matrix and vector":

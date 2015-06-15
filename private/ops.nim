@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = sscal(N, k, v.fp, 1)
+
+proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .} =
+  new result
+  scopy(N, v.fp, 1, result.fp, 1)
+  sscal(N, k, result.fp, 1)
+
 proc `*=`*[N: static[int]](v: var Vector64[N], k: float64) {. inline .} = dscal(N, k, v.fp, 1)
 
 proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .} =
@@ -19,12 +26,13 @@ proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .}
   dcopy(N, v.fp, 1, result.fp, 1)
   dscal(N, k, result.fp, 1)
 
-proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = sscal(N, k, v.fp, 1)
+proc `+=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
+  saxpy(N, 1, w.fp, 1, v.fp, 1)
 
-proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .} =
+proc `+`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
   new result
   scopy(N, v.fp, 1, result.fp, 1)
-  sscal(N, k, result.fp, 1)
+  saxpy(N, 1, w.fp, 1, result.fp, 1)
 
 proc `+=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
   daxpy(N, 1, w.fp, 1, v.fp, 1)
@@ -34,6 +42,14 @@ proc `+`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   dcopy(N, v.fp, 1, result.fp, 1)
   daxpy(N, 1, w.fp, 1, result.fp, 1)
 
+proc `-=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
+  saxpy(N, -1, w.fp, 1, v.fp, 1)
+
+proc `-`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
+  new result
+  scopy(N, v.fp, 1, result.fp, 1)
+  saxpy(N, -1, w.fp, 1, result.fp, 1)
+
 proc `-=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
   daxpy(N, -1, w.fp, 1, v.fp, 1)
 
@@ -42,11 +58,23 @@ proc `-`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   dcopy(N, v.fp, 1, result.fp, 1)
   daxpy(N, -1, w.fp, 1, result.fp, 1)
 
+proc `*`*[N: static[int]](v, w: Vector32[N]): float32 {. inline .} = sdot(N, v.fp, 1, w.fp, 1)
+
 proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = ddot(N, v.fp, 1, w.fp, 1)
 
-proc l_2*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dnrm2(N, v.fp, 1)
+proc l_2*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = nrm2(N, v.fp, 1)
 
-proc l_1*[N: static[int]](v: Vector64[N]): float64 {. inline .} = dasum(N, v.fp, 1)
+proc l_1*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = asum(N, v.fp, 1)
+
+proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val > m:
+      j = i
+      m = val
+  return (j, m)
 
 proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
   var
@@ -58,7 +86,17 @@ proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
       m = val
   return (j, m)
 
-template max*(v: Vector64): float64 = maxIndex(v).val
+template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
+
+proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val < m:
+      j = i
+      m = val
+  return (j, m)
 
 proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
   var
@@ -70,7 +108,7 @@ proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
       m = val
   return (j, m)
 
-template min*(v: Vector64): float64 = minIndex(v).val
+template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
 proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
   const epsilon = 0.000001
@@ -144,9 +182,9 @@ proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .}
   dcopy(M * N, a.fp, 1, result.fp, 1)
   result -= b
 
-proc l_2*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = dnrm2(M * N, m.fp, 1)
+proc l_2*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = nrm2(M * N, m.fp, 1)
 
-proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = dasum(M * N, m.fp, 1)
+proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = asum(M * N, m.fp, 1)
 
 proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool =
   const epsilon = 0.000001

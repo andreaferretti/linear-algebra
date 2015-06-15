@@ -15,24 +15,32 @@
 type
   TransposeType = enum
     noTranspose = 111, transpose = 112, conjTranspose = 113
-  OrderType = enum
+  OrderType* = enum
     rowMajor = 101, colMajor = 102
 
 proc sscal(N: int, ALPHA: float32, X: ptr float32, INCX: int)
   {. header: header, importc: "cblas_sscal" .}
 proc dscal(N: int, ALPHA: float64, X: ptr float64, INCX: int)
   {. header: header, importc: "cblas_dscal" .}
-proc scopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
+proc scopy(N: int, X: ptr float32, INCX: int, Y: ptr float32, INCY: int)
   {. header: header, importc: "cblas_scopy" .}
 proc dcopy(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_dcopy" .}
+proc saxpy(N: int, ALPHA: float32, X: ptr float32, INCX: int, Y: ptr float32, INCY: int)
+  {. header: header, importc: "cblas_saxpy" .}
 proc daxpy(N: int, ALPHA: float64, X: ptr float64, INCX: int, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_daxpy" .}
+proc sdot(N: int, X: ptr float32, INCX: int, Y: ptr float32, INCY: int): float32
+  {. header: header, importc: "cblas_sdot" .}
 proc ddot(N: int, X: ptr float64, INCX: int, Y: ptr float64, INCY: int): float64
   {. header: header, importc: "cblas_ddot" .}
-proc dnrm2(N: int, X: ptr float64, INCX: int): float64
+proc nrm2(N: int, X: ptr float32, INCX: int): float32
+  {. header: header, importc: "cblas_snrm2" .}
+proc nrm2(N: int, X: ptr float64, INCX: int): float64
   {. header: header, importc: "cblas_dnrm2" .}
-proc dasum(N: int, X: ptr float64, INCX: int): float64
+proc asum(N: int, X: ptr float32, INCX: int): float32
+  {. header: header, importc: "cblas_sasum" .}
+proc asum(N: int, X: ptr float64, INCX: int): float64
   {. header: header, importc: "cblas_dasum" .}
 proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A: ptr float64,
   LDA: int, X: ptr float64, INCX: int, BETA: float64, Y: ptr float64, INCY: int)
