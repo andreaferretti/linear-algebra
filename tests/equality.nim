@@ -23,6 +23,13 @@ suite "vector and matrix equality":
       w = vector([1.0, 3.0, 3.0, 4.0])
     check u == v
     check v != w
+  test "strict 32-bit vector equality":
+    let
+      u = vector32([1'f32, 2'f32, 3'f32, 4'f32])
+      v = vector32([1'f32, 2'f32, 3'f32, 4'f32])
+      w = vector32([1'f32, 3'f32, 3'f32, 4'f32])
+    check u == v
+    check v != w
   test "strict matrix equality":
     let
       m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
@@ -36,6 +43,16 @@ suite "vector and matrix equality":
       v = vector([1.0, 2.0, 3.0, 4.0])
       w = vector([1.0, 2.0, 2.999999999, 4.00000001])
       z = vector([1.0, 3.0, 3.0, 4.0])
+    check u ~= v
+    check v ~= w
+    check v != w
+    check w ~!= z
+  test "approximate 32-bit vector equality":
+    let
+      u = vector32([1'f32, 2'f32, 3'f32, 4'f32])
+      v = vector32([1'f32, 2'f32, 3'f32, 4'f32])
+      w = vector32([1'f32, 2'f32, 2.999999'f32, 4.000001'f32])
+      z = vector32([1'f32, 3'f32, 3'f32, 4'f32])
     check u ~= v
     check v ~= w
     check v != w

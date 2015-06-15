@@ -110,13 +110,18 @@ proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
-proc `~=`*[N: static[int]](v, w: Vector64[N]): bool =
+proc compareApprox(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool =
+  mixin l_1
   const epsilon = 0.000001
   let
-    vNorm = l_1(v)
-    wNorm = l_1(w)
-    dNorm = l_1(v - w)
-  return (dNorm / (vNorm + wNorm)) < epsilon
+    aNorm = l_1(a)
+    bNorm = l_1(b)
+    dNorm = l_1(a - b)
+  return (dNorm / (aNorm + bNorm)) < epsilon
+
+template `~=`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
+
+template `~=`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
@@ -186,15 +191,9 @@ proc l_2*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = nrm2(M *
 
 proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = asum(M * N, m.fp, 1)
 
-proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool =
-  const epsilon = 0.000001
-  let
-    mNorm = l_1(m)
-    nNorm = l_1(n)
-    dNorm = l_1(m - n)
-  return (dNorm / (mNorm + nNorm)) < epsilon
+proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 
-template `~!=`*(v, w: Vector64 or Matrix64): bool = not (v ~= w)
+template `~!=`*(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool = not (a ~= b)
 
 template max*(m: Matrix64): float64 = max(m.data)
 
