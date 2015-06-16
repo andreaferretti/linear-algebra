@@ -64,7 +64,7 @@ suite "vector operations":
 
 suite "32-bit vector operations":
   test "scalar vector multiplication":
-    let v = vector32([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     check((v * 2'f32) == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32]))
     check((-1'f32 * v) == vector32([-1'f32, -3'f32, -2'f32, -8'f32, 2'f32]))
   test "mutating scalar vector multiplication":

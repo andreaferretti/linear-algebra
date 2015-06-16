@@ -43,23 +43,23 @@ suite "vector accessors":
 
 suite "32-bit vector accessors":
   test "reading vector length":
-    let v = randomVector32(10)
+    let v = randomVector(10, max = 1'f32)
     check v.len == 10
   test "reading vector elements":
-    let v = makeVector32(5, proc(i: int): float32 = (3 * i - 2).float32)
+    let v = makeVector(5, proc(i: int): float32 = (3 * i - 2).float32)
     check v[0] == -2.0
     check v[1] == 1.0
     check v[2] == 4.0
     check v[3] == 7.0
     check v[4] == 10.0
   test "writing vector elements":
-    var v = zeros32(3)
+    var v = zeros(3, float32)
     v[0] = -2.5
     v[1] = 1.0
     check v[0] == -2.5
     check v[1] == 1.0
   test "cloning vectors":
-    var v = randomVector32(5)
+    var v = randomVector(5, max = 1'f32)
     let
       w = v.clone
       f = w[0]

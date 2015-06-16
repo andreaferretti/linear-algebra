@@ -25,9 +25,9 @@ suite "vector and matrix equality":
     check v != w
   test "strict 32-bit vector equality":
     let
-      u = vector32([1'f32, 2'f32, 3'f32, 4'f32])
-      v = vector32([1'f32, 2'f32, 3'f32, 4'f32])
-      w = vector32([1'f32, 3'f32, 3'f32, 4'f32])
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)
+      w = vector([1'f32, 3'f32, 3'f32, 4'f32], float32)
     check u == v
     check v != w
   test "strict matrix equality":
@@ -49,10 +49,10 @@ suite "vector and matrix equality":
     check w ~!= z
   test "approximate 32-bit vector equality":
     let
-      u = vector32([1'f32, 2'f32, 3'f32, 4'f32])
-      v = vector32([1'f32, 2'f32, 3'f32, 4'f32])
-      w = vector32([1'f32, 2'f32, 2.999999'f32, 4.000001'f32])
-      z = vector32([1'f32, 3'f32, 3'f32, 4'f32])
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)
+      w = vector([1'f32, 2'f32, 2.999999'f32, 4.000001'f32], float32)
+      z = vector([1'f32, 3'f32, 3'f32, 4'f32], float32)
     check u ~= v
     check v ~= w
     check v != w
