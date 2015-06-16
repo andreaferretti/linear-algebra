@@ -125,7 +125,8 @@ template `~=`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
-  dgemv(a.order, noTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
+  let lda = if a.order == colMajor: M.int else: N.int
+  dgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = dscal(M * N, k, m.fp, 1)
 
