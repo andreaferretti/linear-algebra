@@ -202,9 +202,12 @@ template min*(m: Matrix64): float64 = min(m.data)
 
 proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   new result.data
-  if a.order == b.order:
-    result.order = a.order
-    dgemm(a.order, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  if a.order == colMajor and b.order == colMajor:
+    result.order = colMajor
+    dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  elif a.order == rowMajor and b.order == rowMajor:
+    result.order = rowMajor
+    dgemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
   elif a.order == colMajor and b.order == rowMajor:
     result.order = colMajor
     dgemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
