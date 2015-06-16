@@ -14,46 +14,9 @@
 
 import unittest, linalg
 
-suite "row-major matrix/vector operations":
-  test "multiplication of matrix and vector":
-    let
-      m = dmatrix(3, 4, @[
-        @[1.0, 0.0, 2.0, -1.0],
-        @[-1.0, 1.0, 3.0, 1.0],
-        @[3.0, 2.0, 2.0, 4.0]
-      ], order = rowMajor)
-      v = vector([1.0, 3.0, 2.0, -2.0])
-    check((m * v) == vector([7.0, 6.0, 5.0]))
 
-suite "row-major matrix operations":
-  test "scalar matrix multiplication":
-    let
-      m1 = dmatrix(3, 2, @[
-        @[1.0, 3.0],
-        @[2.0, 8.0],
-        @[-2.0, 3.0]
-      ], order = rowMajor)
-      m2 = dmatrix(3, 2, @[
-        @[3.0, 9.0],
-        @[6.0, 24.0],
-        @[-6.0, 9.0]
-      ], order = rowMajor)
-    check(m1 * 3.0 == m2)
-    check(3.0 * m1 == m2)
-  test "mutating scalar multiplication":
-    var m1 = dmatrix(3, 2, @[
-        @[1.0, 3.0],
-        @[2.0, 8.0],
-        @[-2.0, 3.0]
-      ], order = rowMajor)
-    let m2 = dmatrix(3, 2, @[
-        @[3.0, 9.0],
-        @[6.0, 24.0],
-        @[-6.0, 9.0]
-      ], order = rowMajor)
-    m1 *= 3.0
-    check(m1 == m2)
-  test "matrix sum":
+suite "mixed matrix operations":
+  test "mixed matrix sum":
     let
       m1 = dmatrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
@@ -64,14 +27,14 @@ suite "row-major matrix operations":
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
-      ], order = rowMajor)
+      ])
       m3 = dmatrix(3, 4, @[
         @[4.0, 1.0, 1.0, 0.0],
         @[1.0, 2.0, 0.0, 1.0],
         @[7.0, 3.0, 4.0, 6.0]
-      ], order = rowMajor)
+      ])
     check(m1 + m2 == m3)
-  test "mutating matrix sum":
+  test "mixed mutating matrix sum":
     var m1 = dmatrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
@@ -82,21 +45,21 @@ suite "row-major matrix operations":
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
-      ], order = rowMajor)
+      ])
       m3 = dmatrix(3, 4, @[
         @[4.0, 1.0, 1.0, 0.0],
         @[1.0, 2.0, 0.0, 1.0],
         @[7.0, 3.0, 4.0, 6.0]
-      ], order = rowMajor)
+      ])
     m1 += m2
     check m1 == m3
-  test "matrix difference":
+  test "mixed matrix difference":
     let
       m1 = dmatrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
-      ], order = rowMajor)
+      ])
       m2 = dmatrix(3, 4, @[
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
@@ -106,7 +69,7 @@ suite "row-major matrix operations":
         @[-2.0, -1.0, 3.0, -2.0],
         @[-3.0, 0.0, 6.0, 1.0],
         @[-1.0, 1.0, 0.0, 2.0]
-      ], order = rowMajor)
+      ])
     check(m1 - m2 == m3)
   test "mutating matrix sum":
     var m1 = dmatrix(3, 4, @[
@@ -119,35 +82,15 @@ suite "row-major matrix operations":
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
-      ], order = rowMajor)
+      ])
       m3 = dmatrix(3, 4, @[
         @[-2.0, -1.0, 3.0, -2.0],
         @[-3.0, 0.0, 6.0, 1.0],
         @[-1.0, 1.0, 0.0, 2.0]
-      ], order = rowMajor)
+      ])
     m1 -= m2
     check m1 == m3
-  test "matrix ℓ² norm":
-    let m = dmatrix(2, 3, @[
-      @[1.0, 1.0, 2.0],
-      @[3.0, 0.0, -7.0]
-    ], order = rowMajor)
-    check l_2(m) == 8.0
-  test "matrix ℓ¹ norm":
-    let m = dmatrix(3, 3, @[
-      @[1.0, 1.0, 2.0],
-      @[3.0, 0.0, -7.0],
-      @[2.5, 3.1, -1.4]
-    ], order = rowMajor)
-    check l_1(m) == 21.0
-  test "max and min of matrices":
-    let m = dmatrix(2, 3, @[
-      @[1.0, 1.0, 2.0],
-      @[3.0, 0.0, -7.0]
-    ], order = rowMajor)
-    check max(m) == 3.0
-    check min(m) == -7.0
-  test "matrix multiplication":
+  test "mixed matrix multiplication":
     let
       m1 = dmatrix(2, 4, @[
         @[1.0, 1.0, 2.0, -3.0],
@@ -158,9 +101,26 @@ suite "row-major matrix operations":
         @[3.0, 1.0, -5.0],
         @[-1.0, -1.0, 2.0],
         @[4.0, 2.0, 3.0]
+      ])
+      m3 = dmatrix(2, 3, @[
+        @[-10.0, -6.0, -8.0],
+        @[18.0, 14.0, -2.0]
+      ])
+    check(m1 * m2 == m3)
+  test "mixed matrix multiplication take two":
+    let
+      m1 = dmatrix(2, 4, @[
+        @[1.0, 1.0, 2.0, -3.0],
+        @[3.0, 0.0, -7.0, 2.0]
+      ])
+      m2 = dmatrix(4, 3, @[
+        @[1.0, 1.0, 2.0],
+        @[3.0, 1.0, -5.0],
+        @[-1.0, -1.0, 2.0],
+        @[4.0, 2.0, 3.0]
       ], order = rowMajor)
       m3 = dmatrix(2, 3, @[
         @[-10.0, -6.0, -8.0],
         @[18.0, 14.0, -2.0]
-      ], order = rowMajor)
+      ])
     check(m1 * m2 == m3)
