@@ -109,7 +109,4 @@ suite "trivial operations on 32-bit matrices":
         @[2'f32, 3'f32, 2'f32],
         @[-1'f32, 1'f32, 4'f32]
       ])
-    echo m1
-    echo m2
-    echo m1.t
     check m1.t == m2

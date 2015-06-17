@@ -33,32 +33,21 @@ template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
 proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 
-proc slowEq[M, N: static[int]](m, n: Matrix32[M, N]): bool =
-  if m.order == colMajor:
-    let
-      mData = cast[ref array[N, array[M, float32]]](m.data)
-      nData = cast[ref array[M, array[N, float32]]](n.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        if mData[j][i] != nData[i][j]:
-          return false
-    return true
-  else:
-    return slowEq(n, m)
+template slowEqPrivate(M, N, m, n: expr, A: typedesc) =
+  let
+    mData = cast[ref array[N, array[M, A]]](m.data)
+    nData = cast[ref array[M, array[N, A]]](n.data)
+  for i in 0 .. < M:
+    for j in 0 .. < N:
+      if mData[j][i] != nData[i][j]:
+        return false
+  return true
 
-proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
-  if m.order == colMajor:
-    let
-      mData = cast[ref array[N, array[M, float64]]](m.data)
-      nData = cast[ref array[M, array[N, float64]]](n.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        if mData[j][i] != nData[i][j]:
-          return false
-    return true
-  else:
-    return slowEq(n, m)
+proc slowEq[M, N: static[int]](m, n: Matrix32[M, N]): bool = slowEqPrivate(M, N, m, n, float32)
+
+proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool = slowEqPrivate(M, N, m, n, float64)
 
 proc `==`*(m, n: Matrix32 or Matrix64): bool =
   if m.order == n.order: m.data[] == n.data[]
-  else: slowEq(m, n)
+  elif m.order == colMajor: slowEq(m, n)
+  else: slowEq(n, m)

@@ -13,7 +13,6 @@
 # limitations under the License.
 
 proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
-  echo "called"
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
