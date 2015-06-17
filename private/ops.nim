@@ -12,61 +12,61 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = sscal(N, k, v.fp, 1)
+proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = scal(N, k, v.fp, 1)
 
 proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .} =
   new result
-  scopy(N, v.fp, 1, result.fp, 1)
-  sscal(N, k, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  scal(N, k, result.fp, 1)
 
-proc `*=`*[N: static[int]](v: var Vector64[N], k: float64) {. inline .} = dscal(N, k, v.fp, 1)
+proc `*=`*[N: static[int]](v: var Vector64[N], k: float64) {. inline .} = scal(N, k, v.fp, 1)
 
 proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .} =
   new result
-  dcopy(N, v.fp, 1, result.fp, 1)
-  dscal(N, k, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  scal(N, k, result.fp, 1)
 
 proc `+=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
-  saxpy(N, 1, w.fp, 1, v.fp, 1)
+  axpy(N, 1, w.fp, 1, v.fp, 1)
 
 proc `+`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
   new result
-  scopy(N, v.fp, 1, result.fp, 1)
-  saxpy(N, 1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, 1, w.fp, 1, result.fp, 1)
 
 proc `+=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
-  daxpy(N, 1, w.fp, 1, v.fp, 1)
+  axpy(N, 1, w.fp, 1, v.fp, 1)
 
 proc `+`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   new result
-  dcopy(N, v.fp, 1, result.fp, 1)
-  daxpy(N, 1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, 1, w.fp, 1, result.fp, 1)
 
 proc `-=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
-  saxpy(N, -1, w.fp, 1, v.fp, 1)
+  axpy(N, -1, w.fp, 1, v.fp, 1)
 
 proc `-`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
   new result
-  scopy(N, v.fp, 1, result.fp, 1)
-  saxpy(N, -1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, -1, w.fp, 1, result.fp, 1)
 
 proc `-=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
-  daxpy(N, -1, w.fp, 1, v.fp, 1)
+  axpy(N, -1, w.fp, 1, v.fp, 1)
 
 proc `-`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   new result
-  dcopy(N, v.fp, 1, result.fp, 1)
-  daxpy(N, -1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, -1, w.fp, 1, result.fp, 1)
 
-proc `*`*[N: static[int]](v, w: Vector32[N]): float32 {. inline .} = sdot(N, v.fp, 1, w.fp, 1)
+proc `*`*[N: static[int]](v, w: Vector32[N]): float32 {. inline .} = dot(N, v.fp, 1, w.fp, 1)
 
-proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = ddot(N, v.fp, 1, w.fp, 1)
+proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = dot(N, v.fp, 1, w.fp, 1)
 
 proc l_2*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = nrm2(N, v.fp, 1)
 
 proc l_1*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = asum(N, v.fp, 1)
 
-proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+template maxIndexPrivate(N, v: expr, A: typedesc): auto =
   var
     j = 0
     m = v[0]
@@ -74,21 +74,17 @@ proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
     if val > m:
       j = i
       m = val
-  return (j, m)
+  (j, m)
+
+proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+  maxIndexPrivate(N, v, float32)
 
 proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
-  var
-    j = 0
-    m = v[0]
-  for i, val in v:
-    if val > m:
-      j = i
-      m = val
-  return (j, m)
+  maxIndexPrivate(N, v, float64)
 
 template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
 
-proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+template minIndexPrivate(N, v: expr, A: typedesc): auto =
   var
     j = 0
     m = v[0]
@@ -98,15 +94,11 @@ proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
       m = val
   return (j, m)
 
+proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
+  minIndexPrivate(N, v, float32)
+
 proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
-  var
-    j = 0
-    m = v[0]
-  for i, val in v:
-    if val < m:
-      j = i
-      m = val
-  return (j, m)
+  minIndexPrivate(N, v, float64)
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
@@ -133,53 +125,59 @@ proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {.
   let lda = if a.order == colMajor: M.int else: N.int
   sgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
-proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = dscal(M * N, k, m.fp, 1)
+proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 
 proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
   new result.data
   result.order = m.order
-  dcopy(M * N, m.fp, 1, result.fp, 1)
-  dscal(M * N, k, result.fp, 1)
+  copy(M * N, m.fp, 1, result.fp, 1)
+  scal(M * N, k, result.fp, 1)
 
-proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = sscal(M * N, k, m.fp, 1)
+proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = scal(M * N, k, m.fp, 1)
 
 proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. inline .} =
   new result.data
   result.order = m.order
-  scopy(M * N, m.fp, 1, result.fp, 1)
-  sscal(M * N, k, result.fp, 1)
+  copy(M * N, m.fp, 1, result.fp, 1)
+  scal(M * N, k, result.fp, 1)
 
 template `*`*(k: float64, v: Vector64 or Matrix64): expr = v * k
 
 template `*`*(k: float32, v: Vector32 or Matrix32): expr = v * k
 
-proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+template matrixAdd(M, N, a, b: expr, A: typedesc) =
   if a.order == b.order:
-    daxpy(M * N, 1, b.fp, 1, a.fp, 1)
+    axpy(M * N, 1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
     let
-      a_data = cast[ref array[N, array[M, float64]]](a.data)
-      b_data = cast[ref array[M, array[N, float64]]](b.data)
+      a_data = cast[ref array[N, array[M, A]]](a.data)
+      b_data = cast[ref array[M, array[N, A]]](b.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         a_data[j][i] += b_data[i][j]
   else:
     let
-      a_data = cast[ref array[M, array[N, float64]]](a.data)
-      b_data = cast[ref array[N, array[M, float64]]](b.data)
+      a_data = cast[ref array[M, array[N, A]]](a.data)
+      b_data = cast[ref array[N, array[M, A]]](b.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         a_data[i][j] += b_data[j][i]
 
+proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
+  matrixAdd(M, N, a, b, float32)
+
+proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+  matrixAdd(M, N, a, b, float64)
+
 proc `+`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
   new result.data
   result.order = a.order
-  dcopy(M * N, a.fp, 1, result.fp, 1)
+  copy(M * N, a.fp, 1, result.fp, 1)
   result += b
 
 proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   if a.order == b.order:
-    daxpy(M * N, -1, b.fp, 1, a.fp, 1)
+    axpy(M * N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
     let
       a_data = cast[ref array[N, array[M, float64]]](a.data)
@@ -198,7 +196,7 @@ proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inlin
 proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
   new result.data
   result.order = a.order
-  dcopy(M * N, a.fp, 1, result.fp, 1)
+  copy(M * N, a.fp, 1, result.fp, 1)
   result -= b
 
 proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = nrm2(M * N, m.fp, 1)
