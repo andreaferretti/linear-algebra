@@ -232,17 +232,23 @@ template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 
 template min*(m: Matrix32 or Matrix64): auto = min(m.data)
 
-proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
+template matrixMult(M, N, K, a, b, result: expr): auto =
   new result.data
   if a.order == colMajor and b.order == colMajor:
     result.order = colMajor
-    dgemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+    gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
   elif a.order == rowMajor and b.order == rowMajor:
     result.order = rowMajor
-    dgemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
+    gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
   elif a.order == colMajor and b.order == rowMajor:
     result.order = colMajor
-    dgemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
+    gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
   else:
     result.order = colMajor
-    dgemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+    gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+
+proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
+  matrixMult(M, N, K, a, b, result)
+
+proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
+  matrixMult(M, N, K, a, b, result)

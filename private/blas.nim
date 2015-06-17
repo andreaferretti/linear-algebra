@@ -55,6 +55,9 @@ proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A:
   LDA: int, X: ptr float64, INCX: int, BETA: float64, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_dgemv" .}
 
-proc dgemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float64,
+proc gemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float32,
+  A: ptr float32, LDA: int, B: ptr float32, LDB: int, BETA: float32, C: ptr float32, LDC: int)
+  {. header: header, importc: "cblas_sgemm" .}
+proc gemm(ORDER: OrderType, TRANSA, TRANSB: TransposeType, M, N, K: int, ALPHA: float64,
   A: ptr float64, LDA: int, B: ptr float64, LDB: int, BETA: float64, C: ptr float64, LDC: int)
   {. header: header, importc: "cblas_dgemm" .}
