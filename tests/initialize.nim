@@ -179,7 +179,7 @@ suite "initializaton of matrices":
 
 suite "initializaton of 32-bit matrices":
   # test "zero matrices":
-  #   let m = zeros(3, 2)
+  #   let m = zeros(3, 2, float32)
   #   check dim(m) == (3, 2)
   #   check m[0, 0] == 0.0
   #   check m[1, 0] == 0.0
@@ -188,21 +188,21 @@ suite "initializaton of 32-bit matrices":
   #   check m[1, 1] == 0.0
   #   check m[2, 1] == 0.0
   # test "one matrices":
-  #   let m = ones(2, 2)
+  #   let m = ones(2, 2, float32)
   #   check dim(m) == (2, 2)
   #   check m[0, 0] == 1.0
   #   check m[1, 0] == 1.0
   #   check m[0, 1] == 1.0
   #   check m[1, 1] == 1.0
-  # test "constant matrices":
-  #   let m = constantMatrix(2, 3, 1.5)
-  #   check dim(m) == (2, 3)
-  #   check m[0, 0] == 1.5
-  #   check m[1, 0] == 1.5
-  #   check m[0, 1] == 1.5
-  #   check m[1, 1] == 1.5
-  #   check m[0, 2] == 1.5
-  #   check m[1, 2] == 1.5
+  test "constant matrices":
+    let m = constantMatrix(2, 3, 1.5'f32)
+    check dim(m) == (2, 3)
+    check m[0, 0] == 1.5'f32
+    check m[1, 0] == 1.5'f32
+    check m[0, 1] == 1.5'f32
+    check m[1, 1] == 1.5'f32
+    check m[0, 2] == 1.5'f32
+    check m[1, 2] == 1.5'f32
   # test "identity matrices":
   #   let m = eye(4)
   #   check dim(m) == (4, 4)

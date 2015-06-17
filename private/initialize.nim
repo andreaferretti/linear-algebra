@@ -100,23 +100,29 @@ proc randomMatrix*(M, N: static[int], max: float64 = 1, order: OrderType = colMa
 proc randomMatrix*(M, N: static[int], max: float32, order: OrderType = colMajor): Matrix32[M, N] =
   makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
-proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
+template constantMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
   if order == colMajor:
-    var data = cast[ref array[N, array[M, float64]]](result.data)
+    var data = cast[ref array[N, array[M, A]]](result.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         data[j][i] = x
   else:
-    var data = cast[ref array[M, array[N, float64]]](result.data)
+    var data = cast[ref array[M, array[N, A]]](result.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         data[i][j] = x
 
-proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 0, order)
+proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
+  constantMatrixPrivate(M, N, x, order, result, float64)
 
-proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 1, order)
+proc constantMatrix*(M, N: static[int], x: float32, order: OrderType = colMajor): Matrix32[M, N] =
+  constantMatrixPrivate(M, N, x, order, result, float32)
+
+proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 0'f64, order)
+
+proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 1'f64, order)
 
 proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
   new result.data
