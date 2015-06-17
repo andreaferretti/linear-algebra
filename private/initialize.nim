@@ -74,22 +74,31 @@ proc dvector*(N: static[int], xs: seq[float64]): Vector64[N] =
 proc dvector*(N: static[int], xs: seq[float32]): Vector32[N] =
   makeVector(N, proc(i: int): float32 = xs[i])
 
-proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
+template makeMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
   if order == colMajor:
-    var data = cast[ref array[N, array[M, float64]]](result.data)
+    var data = cast[ref array[N, array[M, A]]](result.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         data[j][i] = f(i, j)
   else:
-    var data = cast[ref array[M, array[N, float64]]](result.data)
+    var data = cast[ref array[M, array[N, A]]](result.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         data[i][j] = f(i, j)
 
+proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
+  makeMatrixPrivate(M, N, f, order, result, float64)
+
+proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float32, order: OrderType = colMajor): Matrix32[M, N] =
+  makeMatrixPrivate(M, N, f, order, result, float32)
+
 proc randomMatrix*(M, N: static[int], max: float64 = 1, order: OrderType = colMajor): Matrix64[M, N] =
   makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)
+
+proc randomMatrix*(M, N: static[int], max: float32, order: OrderType = colMajor): Matrix32[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
 proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
   new result.data

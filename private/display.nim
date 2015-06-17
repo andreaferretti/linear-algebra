@@ -18,7 +18,7 @@ proc `$`*[N: static[int]](v: Vector32[N] or Vector64[N]): string =
     result &= $(v[i]) & "\n  "
   result &= $(v[N - 1]) & " ]"
 
-proc toStringHorizontal[N: static[int]](v: Vector64[N]): string =
+proc toStringHorizontal[N: static[int]](v: Vector32[N] or Vector64[N]): string =
   result = "[ "
   for i in 0 .. < N - 1:
     result &= $(v[i]) & "\t"

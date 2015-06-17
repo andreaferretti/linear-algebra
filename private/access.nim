@@ -32,6 +32,16 @@ proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} 
 
 template `[]`*(m: Matrix64, i, j: int): float64 = m.at(i, j)
 
+proc at*[M, N: static[int]](m: Matrix32[M, N], i, j: int): float32 {. inline .} =
+  if m.order == colMajor:
+    let data = cast[ref array[N, array[M, float32]]](m.data)
+    data[j][i]
+  else:
+    let data = cast[ref array[M, array[N, float32]]](m.data)
+    data[i][j]
+
+template `[]`*(m: Matrix32, i, j: int): float32 = m.at(i, j)
+
 proc put*[M, N: static[int]](m: var Matrix64[M, N], i, j: int, val: float64) {. inline .} =
   if m.order == colMajor:
     var data = cast[ref array[N, array[M, float64]]](m.data)
@@ -52,7 +62,7 @@ proc row*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .
   for j in 0 .. < N:
     result[j] = m.at(i, j)
 
-proc dim*[M, N: static[int]](m: Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
+proc dim*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
 
 proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
   result.order = m.order
