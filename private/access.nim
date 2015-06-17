@@ -22,35 +22,39 @@ proc clone*[N: static[int]](v: Vector32[N]): Vector32[N] =
   new result
   copyMem(result.fp, v.fp, N * sizeof(float32))
 
-proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} =
+template atPrivate(M, N, m, i, j: expr, A: typedesc): auto =
   if m.order == colMajor:
-    let data = cast[ref array[N, array[M, float64]]](m.data)
+    let data = cast[ref array[N, array[M, A]]](m.data)
     data[j][i]
   else:
-    let data = cast[ref array[M, array[N, float64]]](m.data)
+    let data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j]
+
+proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} = atPrivate(M, N, m, i, j, float64)
 
 template `[]`*(m: Matrix64, i, j: int): float64 = m.at(i, j)
 
-proc at*[M, N: static[int]](m: Matrix32[M, N], i, j: int): float32 {. inline .} =
-  if m.order == colMajor:
-    let data = cast[ref array[N, array[M, float32]]](m.data)
-    data[j][i]
-  else:
-    let data = cast[ref array[M, array[N, float32]]](m.data)
-    data[i][j]
+proc at*[M, N: static[int]](m: Matrix32[M, N], i, j: int): float32 {. inline .} = atPrivate(M, N, m, i, j, float32)
 
 template `[]`*(m: Matrix32, i, j: int): float32 = m.at(i, j)
 
-proc put*[M, N: static[int]](m: var Matrix64[M, N], i, j: int, val: float64) {. inline .} =
+template putPrivate(M, N, m, i, j, val: expr, A: typedesc) =
   if m.order == colMajor:
-    var data = cast[ref array[N, array[M, float64]]](m.data)
+    var data = cast[ref array[N, array[M, A]]](m.data)
     data[j][i] = val
   else:
-    var data = cast[ref array[M, array[N, float64]]](m.data)
+    var data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j] = val
 
+proc put*[M, N: static[int]](m: var Matrix64[M, N], i, j: int, val: float64) {. inline .} =
+  putPrivate(M, N, m, i, j, val, float64)
+
 proc `[]=`*(m: var Matrix64, i, j: int, val: float64) {. inline .} = m.put(i, j, val)
+
+proc put*[M, N: static[int]](m: var Matrix32[M, N], i, j: int, val: float32) {. inline .} =
+  putPrivate(M, N, m, i, j, val, float32)
+
+proc `[]=`*(m: var Matrix32, i, j: int, val: float32) {. inline .} = m.put(i, j, val)
 
 proc column*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inline .} =
   new result
