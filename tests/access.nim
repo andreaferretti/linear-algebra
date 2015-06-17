@@ -120,23 +120,23 @@ suite "32-bit matrix accessors":
     m[1, 1] = 1'f32
     check m[0, 2] == -2.5'f32
     check m[1, 1] == 1'f32
-  # test "reading matrix rows":
-  #   let
-  #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-  #     r = m.row(1)
-  #   check r[0] == 3.0
-  #   check r[1] == 1.0
-  # test "reading matrix columns":
-  #   let
-  #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-  #     c = m.column(1)
-  #   check c[0] == -2.0
-  #   check c[1] == 1.0
-  # test "cloning matrices":
-  #   var m = randomMatrix(5, 5)
-  #   let
-  #     n = m.clone
-  #     f = n[2, 2]
-  #   check m == n
-  #   m[2, 2] = m[2, 2] + 1
-  #   check n[2, 2] == f
+  test "reading matrix rows":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      r = m.row(1)
+    check r[0] == 3'f32
+    check r[1] == 1'f32
+  test "reading matrix columns":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      c = m.column(1)
+    check c[0] == -2'f32
+    check c[1] == 1'f32
+  test "cloning matrices":
+    var m = randomMatrix(5, 5, max = 1'f32)
+    let
+      n = m.clone
+      f = n[2, 2]
+    check m == n
+    m[2, 2] = m[2, 2] + 1
+    check n[2, 2] == f

@@ -56,6 +56,16 @@ proc put*[M, N: static[int]](m: var Matrix32[M, N], i, j: int, val: float32) {. 
 
 proc `[]=`*(m: var Matrix32, i, j: int, val: float32) {. inline .} = m.put(i, j, val)
 
+proc column*[M, N: static[int]](m: Matrix32[M, N], j: int): Vector32[M] {. inline .} =
+  new result
+  for i in 0 .. < M:
+    result[i] = m.at(i, j)
+
+proc row*[M, N: static[int]](m: Matrix32[M, N], i: int): Vector32[N] {. inline .} =
+  new result
+  for j in 0 .. < N:
+    result[j] = m.at(i, j)
+
 proc column*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inline .} =
   new result
   for i in 0 .. < M:
@@ -67,6 +77,11 @@ proc row*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .
     result[j] = m.at(i, j)
 
 proc dim*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
+
+proc clone*[M, N: static[int]](m: Matrix32[M, N]): Matrix32[M, N] =
+  result.order = m.order
+  new result.data
+  copyMem(result.fp, m.fp, M * N * sizeof(float32))
 
 proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
   result.order = m.order
