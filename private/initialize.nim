@@ -12,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] =
+template makeVectorPrivate(N, f, result: expr) =
   new result
   for i in 0 .. < N:
     result[i] = f(i)
 
-proc makeVector*(N: static[int], f: proc (i: int): float32): Vector32[N] =
-  new result
-  for i in 0 .. < N:
-    result[i] = f(i)
+proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] = makeVectorPrivate(N, f, result)
+
+proc makeVector*(N: static[int], f: proc (i: int): float32): Vector32[N] = makeVectorPrivate(N, f, result)
 
 proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
   makeVector(N, proc(i: int): float64 = random(max))
@@ -28,15 +27,14 @@ proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
 proc randomVector*(N: static[int], max: float32): Vector32[N] =
   makeVector(N, proc(i: int): float32 = random(max).float32)
 
-proc constantVector*(N: static[int], x: float64): Vector64[N] =
+template constantVectorPrivate(N, x, result: expr) =
   new result
   for i in 0 .. < N:
     result[i] = x
 
-proc constantVector*(N: static[int], x: float32): Vector32[N] =
-  new result
-  for i in 0 .. < N:
-    result[i] = x
+proc constantVector*(N: static[int], x: float64): Vector64[N] = constantVectorPrivate(N, x, result)
+
+proc constantVector*(N: static[int], x: float32): Vector32[N] = constantVectorPrivate(N, x, result)
 
 proc zeros*(N: static[int]): Vector64[N] = constantVector(N, 0'f64)
 
