@@ -141,6 +141,14 @@ proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. 
   dcopy(M * N, m.fp, 1, result.fp, 1)
   dscal(M * N, k, result.fp, 1)
 
+proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = sscal(M * N, k, m.fp, 1)
+
+proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. inline .} =
+  new result.data
+  result.order = m.order
+  scopy(M * N, m.fp, 1, result.fp, 1)
+  sscal(M * N, k, result.fp, 1)
+
 template `*`*(k: float64, v: Vector64 or Matrix64): expr = v * k
 
 template `*`*(k: float32, v: Vector32 or Matrix32): expr = v * k
