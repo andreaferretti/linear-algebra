@@ -128,6 +128,11 @@ proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {.
   let lda = if a.order == colMajor: M.int else: N.int
   dgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
+proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
+  new result
+  let lda = if a.order == colMajor: M.int else: N.int
+  sgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = dscal(M * N, k, m.fp, 1)
 
 proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
@@ -188,9 +193,11 @@ proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .}
   dcopy(M * N, a.fp, 1, result.fp, 1)
   result -= b
 
-proc l_2*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = nrm2(M * N, m.fp, 1)
+proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = nrm2(M * N, m.fp, 1)
 
-proc l_1*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} = asum(M * N, m.fp, 1)
+proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = asum(M * N, m.fp, 1)
+
+proc `~=`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
 
 proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 

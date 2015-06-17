@@ -120,6 +120,17 @@ suite "matrix/vector operations":
       v = vector([1.0, 3.0, 2.0, -2.0])
     check((m * v) == vector([7.0, 6.0, 5.0]))
 
+suite "32-bit matrix/vector operations":
+  test "multiplication of matrix and vector":
+    let
+      m = dmatrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      v = vector([1'f32, 3'f32, 2'f32, -2'f32], float32)
+    check((m * v) == vector([7'f32, 6'f32, 5'f32], float32))
+
 suite "matrix operations":
   test "scalar matrix multiplication":
     let

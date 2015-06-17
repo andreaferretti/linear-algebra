@@ -76,3 +76,15 @@ suite "vector and matrix equality":
     check n ~= p
     check n != p
     check p ~!= q
+  # test "approximate 32-bit matrix equality":
+  #   let
+  #     m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
+  #     n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
+  #     q = makeMatrix(3, 5, proc(i, j: int): float32 = (i - 2 * j).float32)
+  #   var p = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
+  #   p[2, 2] = p[2, 2] - 0.000001
+  #   p[1, 3] = p[1, 3] + 0.000001
+  #   check m ~= n
+  #   check n ~= p
+  #   check n != p
+  #   check p ~!= q
