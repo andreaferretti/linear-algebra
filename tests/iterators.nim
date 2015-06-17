@@ -101,3 +101,46 @@ suite "iterators on matrices":
       count += 1
     check sum == 18.0
     check count == 2
+
+suite "iterators on 32-bit matrices":
+  test "items matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32)
+    var
+      sum = 0'f32
+      count = 0
+    for x in m:
+      sum += x
+      count += 1
+    check sum == 18'f32
+    check count == 6
+  test "pairs matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32)
+    var
+      sum = 0'f32
+      sumI = 0
+    for t, x in m:
+      let (i, j) = t
+      sum += x
+      sumI += (i + j)
+    check sum == 18'f32
+    check sumI == 9
+  test "rows matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32)
+    var
+      sum = 0.0
+      count = 0
+    for r in m.rows:
+      sum += (r[0] + r[1])
+      count += 1
+    check sum == 18.0
+    check count == 3
+  test "columns matrix iterator":
+    let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32)
+    var
+      sum = 0.0
+      count = 0
+    for c in m.columns:
+      sum += (c[0] + c[1] + c[2])
+      count += 1
+    check sum == 18.0
+    check count == 2

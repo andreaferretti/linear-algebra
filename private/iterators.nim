@@ -20,11 +20,11 @@ iterator pairs*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .
   for i in 0 .. < N:
     yield (i, v[i])
 
-iterator columns*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M] {. inline .} =
+iterator columns*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < N:
     yield m.column(i)
 
-iterator rows*[M, N: static[int]](m: Matrix64[M, N]): Vector64[N] {. inline .} =
+iterator rows*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
     yield m.row(i)
 
