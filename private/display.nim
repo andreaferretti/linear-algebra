@@ -29,3 +29,9 @@ proc `$`*[M, N: static[int]](m: Matrix64[M, N]): string =
   for i in 0 .. < M - 1:
     result &= toStringHorizontal(m.row(i)) & "\n  "
   result &= toStringHorizontal(m.row(M - 1)) & " ]"
+
+proc `$`*[M, N: static[int]](m: Matrix32[M, N]): string =
+  result = "[ "
+  for i in 0 .. < M - 1:
+    result &= toStringHorizontal(m.row(i)) & "\n  "
+  result &= toStringHorizontal(m.row(M - 1)) & " ]"
