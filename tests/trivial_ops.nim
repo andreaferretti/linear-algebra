@@ -62,3 +62,54 @@ suite "trivial operations":
         @[-1.0, 1.0, 4.0]
       ])
     check m1.t == m2
+
+suite "trivial operations on 32-bit matrices":
+  test "reshape of matrices":
+    let
+      m1 = dmatrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = dmatrix(4, 3, @[
+        @[1'f32, 1'f32, 2'f32],
+        @[-1'f32, 2'f32, -1'f32],
+        @[3'f32, 2'f32, 1'f32],
+        @[0'f32, 3'f32, 4'f32]
+      ])
+    check m1.reshape(4, 3) == m2
+  test "turn vectors into matrices":
+    let
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
+      m = dmatrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+    check v.asMatrix(3, 4) == m
+  test "turn matrices into vectors":
+    let
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
+      m = dmatrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+    check m.asVector == v
+  test "transpose of matrices":
+    let
+      m1 = dmatrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = dmatrix(4, 3, @[
+        @[1'f32, -1'f32, 3'f32],
+        @[0'f32, 1'f32, 2'f32],
+        @[2'f32, 3'f32, 2'f32],
+        @[-1'f32, 1'f32, 4'f32]
+      ])
+    echo m1
+    echo m2
+    echo m1.t
+    check m1.t == m2

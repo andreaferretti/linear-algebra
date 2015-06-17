@@ -12,18 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
+  echo "called"
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data
+
 proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
+
+proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32[A, B] =
+  static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = m.order
+  result.data = m.data
 
 proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64[A, B] =
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = m.order
   result.data = m.data
 
+proc asMatrix*[N: static[int]](v: Vector32[N], A, B: static[int], order: OrderType = colMajor): Matrix32[A, B] =
+  static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = order
+  result.data = v
+
 proc asMatrix*[N: static[int]](v: Vector64[N], A, B: static[int], order: OrderType = colMajor): Matrix64[A, B] =
   static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = order
   result.data = v
+
+proc asVector*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M * N] = m.data
 
 proc asVector*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M * N] = m.data

@@ -37,6 +37,13 @@ suite "vector and matrix equality":
       p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
     check m == n
     check n != p
+  test "strict 32-bit matrix equality":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
+      n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
+      p = makeMatrix(3, 5, proc(i, j: int): float32 = (i - 2 * j).float32)
+    check m == n
+    check n != p
   test "approximate vector equality":
     let
       u = vector([1.0, 2.0, 3.0, 4.0])

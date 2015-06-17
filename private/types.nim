@@ -33,7 +33,20 @@ template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
 proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 
-proc slowEq[M, N: static[int]](m, n: Matrix32[M, N] or Matrix64[M, N]): bool =
+proc slowEq[M, N: static[int]](m, n: Matrix32[M, N]): bool =
+  if m.order == colMajor:
+    let
+      mData = cast[ref array[N, array[M, float32]]](m.data)
+      nData = cast[ref array[M, array[N, float32]]](n.data)
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        if mData[j][i] != nData[i][j]:
+          return false
+    return true
+  else:
+    return slowEq(n, m)
+
+proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool =
   if m.order == colMajor:
     let
       mData = cast[ref array[N, array[M, float64]]](m.data)
