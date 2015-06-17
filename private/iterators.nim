@@ -28,12 +28,12 @@ iterator rows*[M, N: static[int]](m: Matrix64[M, N]): Vector64[N] {. inline .} =
   for i in 0 .. < M:
     yield m.row(i)
 
-iterator items*[M, N: static[int]](m: Matrix64[M, N]): float64 {. inline .} =
+iterator items*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
     for j in 0 .. < N:
       yield m[i, j]
 
-iterator pairs*[M, N: static[int]](m: Matrix64[M, N]): tuple[indices: tuple[i, j: int], val: float64] {. inline .} =
+iterator pairs*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
     for j in 0 .. < N:
       yield ((i, j), m[i, j])

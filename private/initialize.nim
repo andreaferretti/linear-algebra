@@ -134,13 +134,25 @@ proc ones*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
   else:
     when A is float32: constantMatrix(M, N, 1'f32, order)
 
-proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
+template eyePrivate(N, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
-  var data = cast[ref array[N, array[N, float64]]](result.data)
+  var data = cast[ref array[N, array[N, A]]](result.data)
   for i in 0 .. < N:
     for j in 0 .. < N:
       data[i][j] = if i == j: 1 else: 0
+
+
+proc eye32(N: static[int], order: OrderType): Matrix32[N, N] = eyePrivate(N, order, result, float32)
+
+proc eye64(N: static[int], order: OrderType): Matrix64[N, N] = eyePrivate(N, order, result, float64)
+
+proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] = eye64(N, order)
+
+proc eye*(N: static[int], A: typedesc, order: OrderType = colMajor): auto =
+  when A is float64: eye64(N, order)
+  else:
+    when A is float32: eye32(N, order)
 
 proc dmatrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
   makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
