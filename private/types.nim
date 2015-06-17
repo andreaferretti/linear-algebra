@@ -31,6 +31,8 @@ template fp(m: Matrix32): ptr float32 = cast[ptr float32](addr(m.data[]))
 
 template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
+# Equality
+
 proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 
 template slowEqPrivate(M, N, m, n: expr, A: typedesc) =
@@ -51,3 +53,15 @@ proc `==`*(m, n: Matrix32 or Matrix64): bool =
   if m.order == n.order: m.data[] == n.data[]
   elif m.order == colMajor: slowEq(m, n)
   else: slowEq(n, m)
+
+# Conversion
+
+proc to32*[N: static[int]](v: Vector64[N]): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = v[i].float32
+
+proc to64*[N: static[int]](v: Vector32[N]): Vector64[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = v[i].float64

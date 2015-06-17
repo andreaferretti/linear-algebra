@@ -12,4 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, conversions, iterators, trivial_ops, ops, row_major_ops, mixed_ops, compilation
+import unittest, linalg
+
+
+suite "conversions":
+  test "Vector64 to Vector32":
+    let v = vector([1.0, 3.5, 2.0, 4.5])
+    check v.to32 == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+  test "Vector32 to Vector64":
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    check v.to64 == vector([1.0, 3.5, 2.0, 4.5])
