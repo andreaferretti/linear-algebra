@@ -122,7 +122,17 @@ proc constantMatrix*(M, N: static[int], x: float32, order: OrderType = colMajor)
 
 proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 0'f64, order)
 
+proc zeros*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
+  when A is float64: constantMatrix(M, N, 0'f64, order)
+  else:
+    when A is float32: constantMatrix(M, N, 0'f32, order)
+
 proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 1'f64, order)
+
+proc ones*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
+  when A is float64: constantMatrix(M, N, 1'f64, order)
+  else:
+    when A is float32: constantMatrix(M, N, 1'f32, order)
 
 proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
   new result.data
@@ -134,3 +144,6 @@ proc eye*(N: static[int], order: OrderType = colMajor): Matrix64[N, N] =
 
 proc dmatrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
   makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
+
+proc dmatrix*(M, N: static[int], xs: seq[seq[float32]], order: OrderType = colMajor): Matrix32[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float32 = xs[i][j], order)
