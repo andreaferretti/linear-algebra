@@ -169,29 +169,48 @@ proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inlin
 proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   matrixAdd(M, N, a, b, float64)
 
+proc `+`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
+  new result.data
+  result.order = a.order
+  copy(M * N, a.fp, 1, result.fp, 1)
+  result += b
+
 proc `+`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
   new result.data
   result.order = a.order
   copy(M * N, a.fp, 1, result.fp, 1)
   result += b
 
-proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+template matrixSub(M, N, a, b: expr, A: typedesc) =
   if a.order == b.order:
     axpy(M * N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
     let
-      a_data = cast[ref array[N, array[M, float64]]](a.data)
-      b_data = cast[ref array[M, array[N, float64]]](b.data)
+      a_data = cast[ref array[N, array[M, A]]](a.data)
+      b_data = cast[ref array[M, array[N, A]]](b.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         a_data[j][i] -= b_data[i][j]
   else:
     let
-      a_data = cast[ref array[M, array[N, float64]]](a.data)
-      b_data = cast[ref array[N, array[M, float64]]](b.data)
+      a_data = cast[ref array[M, array[N, A]]](a.data)
+      b_data = cast[ref array[N, array[M, A]]](b.data)
     for i in 0 .. < M:
       for j in 0 .. < N:
         a_data[i][j] -= b_data[j][i]
+
+
+proc `-=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
+  matrixSub(M, N, a, b, float32)
+
+proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+  matrixSub(M, N, a, b, float64)
+
+proc `-`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
+  new result.data
+  result.order = a.order
+  copy(M * N, a.fp, 1, result.fp, 1)
+  result -= b
 
 proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
   new result.data
@@ -209,9 +228,9 @@ proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 
 template `~!=`*(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool = not (a ~= b)
 
-template max*(m: Matrix64): float64 = max(m.data)
+template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 
-template min*(m: Matrix64): float64 = min(m.data)
+template min*(m: Matrix32 or Matrix64): auto = min(m.data)
 
 proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   new result.data
