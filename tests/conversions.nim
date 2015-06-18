@@ -22,3 +22,13 @@ suite "conversions":
   test "Vector32 to Vector64":
     let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
     check v.to64 == vector([1.0, 3.5, 2.0, 4.5])
+  test "Matrix64 to Matrix32":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + j).float32)
+    check m.to32 == n
+  test "Matrix32 to Matrix64":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + j).float32)
+    check n.to64 == m

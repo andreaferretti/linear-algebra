@@ -65,3 +65,15 @@ proc to64*[N: static[int]](v: Vector32[N]): Vector64[N] =
   new result
   for i in 0 .. < N:
     result[i] = v[i].float64
+
+proc to32*[M, N: static[int]](m: Matrix64[M, N]): Matrix32[M, N] =
+  new result.data
+  result.order = m.order
+  for i in 0 .. < (M * N):
+    result.data[i] = m.data[i].float32
+
+proc to64*[M, N: static[int]](m: Matrix32[M, N]): Matrix64[M, N] =
+  new result.data
+  result.order = m.order
+  for i in 0 .. < (M * N):
+    result.data[i] = m.data[i].float64
