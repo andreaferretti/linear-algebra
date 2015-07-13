@@ -112,7 +112,7 @@ when defined(cublas):
 
   proc cublasSetVector*(n, elemSize: int, x: pointer, incx: int,
     devicePtr: pointer, incy: int): cublasStatus
-    {. header: "cublas_api.h", importc: "cublasSetVector" .}
+    {. header: "cublas_v2.h", importc: "cublasSetVector" .}
 
 
   # proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
