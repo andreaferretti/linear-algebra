@@ -11,16 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from math import random
 
-include private/external
-include private/blas
-include private/cublas
-include private/types
-include private/initialize
-include private/access
-include private/iterators
-include private/display
-include private/trivial_ops
-include private/ops
-include private/rewrite
+import times, linalg
+
+proc main() =
+  let
+    m1 = randomMatrix(1000, 987)
+    m2 = randomMatrix(987, 876)
+    startTime = epochTime()
+
+  for i in 0 .. < 100:
+    discard m1 * m2
+  let endTime = epochTime()
+
+  echo "We have required ", endTime - startTime, " seconds to multiply matrices 100 times."
+
+when isMainModule:
+  main()

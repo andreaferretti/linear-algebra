@@ -11,16 +11,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from math import random
 
-include private/external
-include private/blas
-include private/cublas
-include private/types
-include private/initialize
-include private/access
-include private/iterators
-include private/display
-include private/trivial_ops
-include private/ops
-include private/rewrite
+import initialize, access, equality, conversions, iterators, trivial_ops, ops, row_major_ops, mixed_ops, compilation
