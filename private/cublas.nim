@@ -114,6 +114,18 @@ when defined(cublas):
     devicePtr: pointer, incy: int): cublasStatus
     {. header: "cublas_v2.h", importc: "cublasSetVector" .}
 
+  proc cublasGetVector*(n, elemSize: int, devicePtr: pointer, incx: int,
+    x: pointer, incy: int): cublasStatus
+    {. header: "cublas_v2.h", importc: "cublasGetVector" .}
+
+  proc rawCublasSaxpy*(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
+    y: ptr float32, incy: int): cublasStatus
+    {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
+
+  proc cublasSaxpy*(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
+    var al: ptr float32
+    {.emit: """al = &alpha; """.}
+    rawCublasSaxpy(handle, n, al, x, 1, y, 1)
 
   # proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
   #   {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}
