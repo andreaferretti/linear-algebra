@@ -98,17 +98,19 @@ when defined(cublas):
 
     cublasHandle = ptr object
 
-  proc cudaMalloc*(size: int): ptr float32 =
+  proc cudaMalloc(size: int): ptr float32 =
     var error: cudaError
     {.emit: """error = cudaMalloc((void**)&`result`, `size`); """.}
     if error != cudaSuccess:
       quit($(error))
 
-  proc cublasCreate*(): cublasHandle =
+  proc cublasCreate(): cublasHandle =
     var stat: cublasStatus
     {.emit: """stat = cublasCreate_v2(& `result`); """.}
     if stat != cublasStatusSuccess:
       quit($(stat))
+
+  let handle {.global.} = cublasCreate()
 
   proc cublasSetVector*(n, elemSize: int, x: pointer, incx: int,
     devicePtr: pointer, incy: int): cublasStatus
@@ -118,7 +120,7 @@ when defined(cublas):
     x: pointer, incy: int): cublasStatus
     {. header: "cublas_v2.h", importc: "cublasGetVector" .}
 
-  proc rawCublasSaxpy*(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
+  proc rawCublasSaxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
     y: ptr float32, incy: int): cublasStatus
     {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
 
@@ -127,7 +129,7 @@ when defined(cublas):
     {.emit: """al = &alpha; """.}
     rawCublasSaxpy(handle, n, al, x, 1, y, 1)
 
-  type CudaVector*[N: static[int]] = ref pointer
+  type CudaVector*[N: static[int]] = ref[ptr float32]
 
   proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
     new result
@@ -139,6 +141,11 @@ when defined(cublas):
   proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
     new result
     let stat = cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
+    if stat != cublasStatusSuccess:
+      quit($(stat))
+
+  proc `+=`*[N: static[int]](v: var CudaVector[N], w: CudaVector[N]) {. inline .} =
+    let stat = cublasSaxpy(handle, N, 1, w[], v[])
     if stat != cublasStatusSuccess:
       quit($(stat))
 
