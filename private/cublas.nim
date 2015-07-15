@@ -136,6 +136,12 @@ when defined(cublas):
     if stat != cublasStatusSuccess:
       quit($(stat))
 
+  proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
+    new result
+    let stat = cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
+    if stat != cublasStatusSuccess:
+      quit($(stat))
+
   # proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
   #   {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}
 

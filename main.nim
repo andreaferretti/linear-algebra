@@ -14,10 +14,14 @@ proc main() =
   var v3 = zeros(10, float32)
   stat = cublasGetVector(10, sizeof(float32), p2, 1, addr(v3[]), 1)
 
-  let q1 = v1.gpu()
+  let
+    q1 = v1.gpu()
+    q2 = q1.cpu()
 
   echo "v3 = ", v3
   echo "v1 + v2 = ", v1 + v2
+  echo "v1 = ", v1
+  echo "q2 = ", q2
 
 
 when isMainModule:
