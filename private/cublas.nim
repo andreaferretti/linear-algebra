@@ -127,6 +127,15 @@ when defined(cublas):
     {.emit: """al = &alpha; """.}
     rawCublasSaxpy(handle, n, al, x, 1, y, 1)
 
+  type CudaVector*[N: static[int]] = ref pointer
+
+  proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
+    new result
+    result[] = cudaMalloc(N * sizeof(float32))
+    let stat = cublasSetVector(N, sizeof(float32), v.fp, 1, result[], 1)
+    if stat != cublasStatusSuccess:
+      quit($(stat))
+
   # proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
   #   {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}
 

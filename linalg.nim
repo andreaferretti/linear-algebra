@@ -15,8 +15,8 @@ from math import random
 
 include private/external
 include private/blas
-include private/cublas
 include private/types
+include private/cublas
 include private/initialize
 include private/access
 include private/iterators
