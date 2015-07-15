@@ -27,6 +27,10 @@ proc cublasSaxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32
   {.emit: """al = &alpha; """.}
   rawCublasSaxpy(handle, n, al, x, 1, y, 1)
 
+proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
+  y: ptr float32, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasScopy" .}
+
 # proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
 #   {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}
 
