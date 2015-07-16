@@ -132,13 +132,13 @@ There are two kinds of equality. The usual `==` operator will compare the conten
     u == w # false
 
 Usually, though, one wants to take into account the errors introduced by floating point operations. To do this,
-use the `~=` operator, or its negation `~!=`:
+use the `=~` operator, or its negation `!=~`:
 
     let
       u = vector([1.0, 2.0, 3.0, 4.0])
       v = vector([1.0, 2.000000001, 2.99999999, 4.0])
     u == v # false
-    u ~= v # true
+    u =~ v # true
 
 Pretty-print
 ------------
