@@ -111,9 +111,9 @@ proc compareApprox(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool =
     dNorm = l_1(a - b)
   return (dNorm / (aNorm + bNorm)) < epsilon
 
-template `~=`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
+template `=~`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
 
-template `~=`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
+template `=~`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
@@ -222,11 +222,11 @@ proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inlin
 
 proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = asum(M * N, m.fp, 1)
 
-proc `~=`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
+proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
 
-proc `~=`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
+proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 
-template `~!=`*(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool = not (a ~= b)
+template `!=~`*(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool = not (a =~ b)
 
 template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 
