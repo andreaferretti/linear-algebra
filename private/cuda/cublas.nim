@@ -44,9 +44,3 @@ proc cublasSaxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32
 proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasScopy" .}
-
-# proc rawCudaMalloc(p: ptr ptr, size: int): cudaError
-#   {. header: "cuda_runtime_api.h", importc: "cudaMalloc" .}
-
-# proc rawCublasCreate(h: object): cublasStatus
-#   {. header: "cublas_api.h", importc: "cublasCreate_v2" .}
