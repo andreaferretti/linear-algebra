@@ -12,10 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
+template check(stat: cublasStatus): stmt =
+  if stat != cublasStatusSuccess:
+    quit($(stat))
 
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
+proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
+  new result
+  result[] = cudaMalloc(N * sizeof(float32))
+  check cublasSetVector(N, sizeof(float32), v.fp, 1, result[], 1)
+
+proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
+  new result
+  check cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
