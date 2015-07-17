@@ -29,6 +29,17 @@ suite "vector 32 operations":
 
     check(v1 + v2 == v3)
 
+  test "in place vector sum":
+    var v1 = randomVector(10, max=1'f32)
+    let v2 = randomVector(10, max=1'f32)
+
+    var p1 = v1.gpu()
+    let p2 = v2.gpu()
+
+    v1 += v2
+    p1 += p2
+    check(v1 == p1.cpu())
+
   test "vector difference":
     let
       v1 = randomVector(10, max=1'f32)
@@ -41,3 +52,14 @@ suite "vector 32 operations":
       v3 = p3.cpu()
 
     check(v1 - v2 == v3)
+
+  test "in place vector difference":
+    var v1 = randomVector(10, max=1'f32)
+    let v2 = randomVector(10, max=1'f32)
+
+    var p1 = v1.gpu()
+    let p2 = v2.gpu()
+
+    v1 -= v2
+    p1 -= p2
+    check(v1 == p1.cpu())
