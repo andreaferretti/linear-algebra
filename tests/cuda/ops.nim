@@ -12,11 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
-  static: echo "--USING CUBLAS--"
+import unittest, linalg
 
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
+
+suite "vector 32 operations":
+  test "vector sum":
+    let
+      v1 = randomVector(10, max=1'f32)
+      v2 = randomVector(10, max=1'f32)
+
+    let
+      p1 = v1.gpu()
+      p2 = v2.gpu()
+      p3 = p1 + p2
+      v3 = p3.cpu()
+
+    check(v1 + v2 == v3)
+
+  test "vector difference":
+    let
+      v1 = randomVector(10, max=1'f32)
+      v2 = randomVector(10, max=1'f32)
+
+    let
+      p1 = v1.gpu()
+      p2 = v2.gpu()
+      p3 = p1 - p2
+      v3 = p3.cpu()
+
+    check(v1 - v2 == v3)

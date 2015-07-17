@@ -12,11 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
-  static: echo "--USING CUBLAS--"
-
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
+import cuda/copy, cuda/ops

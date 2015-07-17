@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
-  static: echo "--USING CUBLAS--"
+import unittest, linalg
 
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
+
+suite "copying back and forth":
+  test "copy of a Vector32":
+    let
+      v1 = randomVector(10, max=1'f32)
+      v2 = v1.gpu()
+      v3 = v2.cpu()
+    check v1 == v3
