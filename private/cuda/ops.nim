@@ -14,6 +14,17 @@
 
 let handle {.global.} = cublasCreate()
 
+proc `*=`*[N: static[int]](v: var CudaVector[N], k: float32) {. inline .} =
+  check cublasSscal(handle, N, k, v[])
+
+proc `*`*[N: static[int]](v: CudaVector[N], k: float32): CudaVector[N]  {. inline .} =
+  new result
+  result[] = cudaMalloc(N * sizeof(float32))
+  check cublasScopy(handle, N, v[], 1, result[], 1)
+  check cublasSscal(handle, N, k, result[])
+
+template `*`*(k: float32, v: CudaVector): expr = v * k
+
 proc `+=`*[N: static[int]](v: var CudaVector[N], w: CudaVector[N]) {. inline .} =
   check cublasSaxpy(handle, N, 1, w[], v[])
 

@@ -32,6 +32,19 @@ proc cublasGetVector(n, elemSize: int, devicePtr: pointer, incx: int,
   x: pointer, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasGetVector" .}
 
+proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
+  y: ptr float32, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasScopy" .}
+
+proc rawCublasSscal(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32,
+  incx: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSscal" .}
+
+proc cublasSscal(handle: cublasHandle, n: int, alpha: float32, x: ptr float32): cublasStatus =
+  var al: ptr float32
+  {.emit: """al = &alpha; """.}
+  rawCublasSscal(handle, n, al, x, 1)
+
 proc rawCublasSaxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
@@ -40,7 +53,3 @@ proc cublasSaxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32
   var al: ptr float32
   {.emit: """al = &alpha; """.}
   rawCublasSaxpy(handle, n, al, x, 1, y, 1)
-
-proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
-  y: ptr float32, incy: int): cublasStatus
-  {. header: "cublas_v2.h", importc: "cublasScopy" .}
