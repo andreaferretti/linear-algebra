@@ -4,3 +4,4 @@ nimcache
 /main
 bench/matrix_matrix_mult
 tests/all
+tests/cublas
