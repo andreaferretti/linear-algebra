@@ -20,16 +20,23 @@ suite "vector operations":
     let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     check((v * 2.0) == vector([2.0, 6.0, 4.0, 16.0, -4.0]))
     check((-1.0 * v) == vector([-1.0, -3.0, -2.0, -8.0, 2.0]))
-  test "mutating scalar vector multiplication":
+  test "in place scalar vector multiplication":
     var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     v *= 2.0
     check v == vector([2.0, 6.0, 4.0, 16.0, -4.0])
+  test "scalar vector division":
+    let v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    check((v / 2.0) == vector([1.0, 3.0, 2.0, 8.0, -2.0]))
+  test "in place scalar vector division":
+    var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    v /= 2.0
+    check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
   test "vector sum":
     let
       v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
       w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     check((v + w) == vector([3.0, 2.0, 4.0, 8.0, 2.0]))
-  test "mutating vector sum":
+  test "in place vector sum":
     var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     v += w
@@ -39,7 +46,7 @@ suite "vector operations":
       v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
       w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     check((v - w) == vector([-1.0, 4.0, 0.0, 8.0, -6.0]))
-  test "mutating vector difference":
+  test "in place vector difference":
     var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     v -= w
@@ -67,16 +74,23 @@ suite "32-bit vector operations":
     let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     check((v * 2) == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32]))
     check((-1 * v) == vector32([-1'f32, -3'f32, -2'f32, -8'f32, 2'f32]))
-  test "mutating scalar vector multiplication":
+  test "in place scalar vector multiplication":
     var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     v *= 2
     check v == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+  test "scalar vector division":
+    let v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
+    check((v / 2) == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32))
+  test "in place scalar vector division":
+    var v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
+    v /= 2'f32
+    check v == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
   test "vector sum":
     let
       v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
       w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
     check((v + w) == vector32([3'f32, 2'f32, 4'f32, 8'f32, 2'f32]))
-  test "mutating vector sum":
+  test "in place vector sum":
     var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
     v += w
@@ -86,7 +100,7 @@ suite "32-bit vector operations":
       v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
       w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
     check((v - w) == vector32([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32]))
-  test "mutating vector difference":
+  test "in place vector difference":
     var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
     v -= w
@@ -146,7 +160,7 @@ suite "matrix operations":
       ])
     check(m1 * 3.0 == m2)
     check(3.0 * m1 == m2)
-  test "mutating scalar multiplication":
+  test "in place scalar multiplication":
     var m1 = dmatrix(3, 2, @[
         @[1.0, 3.0],
         @[2.0, 8.0],
@@ -158,6 +172,32 @@ suite "matrix operations":
         @[-6.0, 9.0]
       ])
     m1 *= 3.0
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+      m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    check(m2 / 3.0 == m1)
+  test "in place scalar division":
+    let m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+    var m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    m2 /= 3.0
     check(m1 == m2)
   test "matrix sum":
     let
@@ -177,7 +217,7 @@ suite "matrix operations":
         @[7.0, 3.0, 4.0, 6.0]
       ])
     check(m1 + m2 == m3)
-  test "mutating matrix sum":
+  test "in place matrix sum":
     var m1 = dmatrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
@@ -214,7 +254,7 @@ suite "matrix operations":
         @[-1.0, 1.0, 0.0, 2.0]
       ])
     check(m1 - m2 == m3)
-  test "mutating matrix difference":
+  test "in place matrix difference":
     var m1 = dmatrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
@@ -286,7 +326,7 @@ suite "32-bit matrix operations":
       ])
     check(m1 * 3 == m2)
     check(3 * m1 == m2)
-  test "mutating scalar multiplication":
+  test "in place scalar multiplication":
     var m1 = dmatrix(3, 2, @[
         @[1'f32, 3'f32],
         @[2'f32, 8'f32],
@@ -298,6 +338,32 @@ suite "32-bit matrix operations":
         @[-6'f32, 9'f32]
       ])
     m1 *= 3
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+      m2 = dmatrix(3, 2, @[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    check(m2 / 3 == m1)
+  test "in place scalar division":
+    let m1 = dmatrix(3, 2, @[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+    var m2 = dmatrix(3, 2, @[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    m2 /= 3
     check(m1 == m2)
   test "matrix sum":
     let
@@ -317,7 +383,7 @@ suite "32-bit matrix operations":
         @[7'f32, 3'f32, 4'f32, 6'f32]
       ])
     check(m1 + m2 == m3)
-  test "mutating matrix sum":
+  test "in place matrix sum":
     var m1 = dmatrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
@@ -354,7 +420,7 @@ suite "32-bit matrix operations":
         @[-1'f32, 1'f32, 0'f32, 2'f32]
       ])
     check(m1 - m2 == m3)
-  test "mutating matrix difference":
+  test "in place matrix difference":
     var m1 = dmatrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
