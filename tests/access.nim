@@ -40,6 +40,10 @@ suite "vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
+  test "mapping vectors":
+    var v = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+    check v.map(proc(x: float64): float64 = 2 * x) ==
+      vector([2.0, 4.0, 6.0, 8.0, 10.0])
 
 suite "32-bit vector accessors":
   test "reading vector length":
@@ -66,6 +70,10 @@ suite "32-bit vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
+  test "mapping vectors":
+    var v = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32)
+    check v.map(proc(x: float32): float32 = 2 * x) ==
+      vector([2'f32, 4'f32, 6'f32, 8'f32, 10'f32], float32)
 
 suite "matrix accessors":
   test "reading matrix dimensions":

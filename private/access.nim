@@ -22,6 +22,16 @@ proc clone*[N: static[int]](v: Vector32[N]): Vector32[N] =
   new result
   copyMem(result.fp, v.fp, N * sizeof(float32))
 
+proc map*[N: static[int]](v: Vector64[N], f: proc(x: float64): float64): Vector64[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = f(v[i])
+
+proc map*[N: static[int]](v: Vector32[N], f: proc(x: float32): float32): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = f(v[i])
+
 template atPrivate(M, N, m, i, j: expr, A: typedesc): auto =
   if m.order == colMajor:
     let data = cast[ref array[N, array[M, A]]](m.data)
