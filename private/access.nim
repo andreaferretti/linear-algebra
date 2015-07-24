@@ -22,12 +22,12 @@ proc clone*[N: static[int]](v: Vector32[N]): Vector32[N] =
   new result
   copyMem(result.fp, v.fp, N * sizeof(float32))
 
-proc map*[N: static[int]](v: Vector64[N], f: proc(x: float64): float64): Vector64[N] =
+proc map*[N: static[int]](v: Vector32[N], f: proc(x: float32): float32): Vector32[N] =
   new result
   for i in 0 .. < N:
     result[i] = f(v[i])
 
-proc map*[N: static[int]](v: Vector32[N], f: proc(x: float32): float32): Vector32[N] =
+proc map*[N: static[int]](v: Vector64[N], f: proc(x: float64): float64): Vector64[N] =
   new result
   for i in 0 .. < N:
     result[i] = f(v[i])
@@ -97,3 +97,15 @@ proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
   result.order = m.order
   new result.data
   copyMem(result.fp, m.fp, M * N * sizeof(float64))
+
+proc map*[M, N: static[int]](m: Matrix32[M, N], f: proc(x: float32): float32): Matrix32[M, N] =
+  result.order = m.order
+  new result.data
+  for i in 0 .. < (M * N):
+    result.data[i] = f(m.data[i])
+
+proc map*[M, N: static[int]](m: Matrix64[M, N], f: proc(x: float64): float64): Matrix64[M, N] =
+  result.order = m.order
+  new result.data
+  for i in 0 .. < (M * N):
+    result.data[i] = f(m.data[i])

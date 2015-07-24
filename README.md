@@ -98,7 +98,11 @@ Also one can see rows and columns as vectors
       r2: Vector64[7] = m.row(2)
       c5: Vector64[3] = m.column(5)
 
-For memory safety, this performs a **copy** of the row or column values, at least for now.
+For memory safety, this performs a **copy** of the row or column values, at least for now. One can also map vectors and matrices via a proc:
+
+    let
+      v1 = v.map(proc(x: float64): float64 = 2 - 3 * x)
+      m1 = m.map(proc(x: float64): float64 = 1 / x)
 
 Iterators
 ---------
