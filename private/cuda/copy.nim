@@ -17,7 +17,7 @@ template check(stat: cublasStatus): stmt =
     quit($(stat))
 
 proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
-  new result
+  new result, freeDeviceMemory
   result[] = cudaMalloc(N * sizeof(float32))
   check cublasSetVector(N, sizeof(float32), v.fp, 1, result[], 1)
 
@@ -27,7 +27,7 @@ proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
 
 proc gpu*[M, N: static[int]](m: Matrix32[M, N]): CudaMatrix[M, N] =
   if m.order == rowMajor: quit("wrong order")
-  new result.data
+  new result.data, freeDeviceMemory
   result.data[] = cudaMalloc(M * N * sizeof(float32))
   check cublasSetMatrix(M, N, sizeof(float32), m.fp, M, result.fp, M)
 

@@ -18,6 +18,14 @@ proc cudaMalloc(size: int): ptr float32 =
   if error != cudaSuccess:
     quit($(error))
 
+proc cudaFree(p: ptr float32) =
+  var error: cudaError
+  {.emit: """error = cudaFree(p); """.}
+  if error != cudaSuccess:
+    quit($(error))
+
+proc freeDeviceMemory(p: ref[ptr float32]) = cudaFree(p[])
+
 proc cublasCreate(): cublasHandle =
   var stat: cublasStatus
   {.emit: """stat = cublasCreate_v2(& `result`); """.}
