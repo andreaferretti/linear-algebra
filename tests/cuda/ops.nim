@@ -74,3 +74,15 @@ suite "vector 32 operations":
   test "ℓ¹ norm":
     let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
     check l_1(v) == 14.0
+
+suite "matrix/vector operations":
+  test "multiplication of matrix and vector":
+    let
+      m = dmatrix(3, 4, @[
+        @[1'f32, 0f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ]).gpu()
+      v = vector([1'f32, 3'f32, 2'f32, -2'f32], float32).gpu()
+
+    check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32], float32))

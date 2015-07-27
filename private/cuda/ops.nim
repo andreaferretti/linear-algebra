@@ -65,3 +65,8 @@ proc `=~`*[N: static[int]](v, w: CudaVector[N]): bool =
   return (dNorm / (vNorm + wNorm)) < epsilon
 
 template `!=~`*(a, b: CudaVector): bool = not (a =~ b)
+
+proc `*`*[M, N: static[int]](a: CudaMatrix[M, N], v: CudaVector[N]): CudaVector[M]  {. inline .} =
+  new result, freeDeviceMemory
+  result[] = cudaMalloc(M * sizeof(float32))
+  check cublasSgemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)

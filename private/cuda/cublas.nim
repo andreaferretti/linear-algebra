@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+type
+  cublasTransposeType = enum
+    cuNoTranspose = 0, cuTranspose = 1, cuConjTranspose = 2
+
 proc cudaMalloc(size: int): ptr float32 =
   var error: cudaError
   {.emit: """error = cudaMalloc((void**)&`result`, `size`); """.}
@@ -85,3 +89,15 @@ proc cublasSasum(handle: cublasHandle, n: int, x: ptr float32,
 proc cublasSdot(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSdot" .}
+
+proc rawCublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
+  m, n: int, alpha: ptr float32, A: ptr float32, lda: int, x: ptr float32,
+  incx: int, beta: ptr float32, y: ptr float32, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSgemv" .}
+
+proc cublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
+  m, n: int, alpha: float32, A: ptr float32, lda: int, x: ptr float32, incx: int,
+  beta: float32, y: ptr float32, incy: int): cublasStatus =
+  var al, be: ptr float32
+  {.emit: """al = &alpha; be = &beta; """.}
+  rawCublasSgemv(handle, trans, m, n, al, A, lda, x, incx, be, y, incy)

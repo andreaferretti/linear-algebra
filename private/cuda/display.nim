@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
-  static: echo "--USING CUBLAS--"
+proc `$`*[N: static[int]](v: CudaVector[N]): string = $(v.cpu())
 
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
-  include cuda/display
+proc `$`*[M, N: static[int]](m: CudaMatrix[M, N]): string = $(m.cpu())
