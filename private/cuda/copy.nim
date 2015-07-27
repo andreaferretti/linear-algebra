@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template check(stat: cublasStatus): stmt =
-  if stat != cublasStatusSuccess:
-    quit($(stat))
-
 proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
   new result, freeDeviceMemory
   result[] = cudaMalloc(N * sizeof(float32))

@@ -19,22 +19,19 @@ type
 proc cudaMalloc(size: int): ptr float32 =
   var error: cudaError
   {.emit: """error = cudaMalloc((void**)&`result`, `size`); """.}
-  if error != cudaSuccess:
-    quit($(error))
+  check error
 
 proc cudaFree(p: ptr float32) =
   var error: cudaError
   {.emit: """error = cudaFree(p); """.}
-  if error != cudaSuccess:
-    quit($(error))
+  check error
 
 proc freeDeviceMemory(p: ref[ptr float32]) = cudaFree(p[])
 
 proc cublasCreate(): cublasHandle =
   var stat: cublasStatus
   {.emit: """stat = cublasCreate_v2(& `result`); """.}
-  if stat != cublasStatusSuccess:
-    quit($(stat))
+  check stat
 
 # y is on device
 proc cublasSetVector(n, elemSize: int, x: pointer, incx: int,

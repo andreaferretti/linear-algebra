@@ -109,8 +109,30 @@ type
 
   cublasHandle = ptr object
 
+  CudaException = object of IOError
+    error: cudaError
+  CublasException = object of IOError
+    error: cublasStatus
   CudaVector*[N: static[int]] = ref[ptr float32]
   CudaMatrix*[M, N: static[int]] = object
     data: ref[ptr float32]
 
 template fp(c: CudaMatrix): ptr float32 = c.data[]
+
+proc newCudaError(error: cudaError): ref CudaException =
+  new result
+  result.error = error
+  result.msg = $(error)
+
+proc newCublasError(error: cublasStatus): ref CublasException =
+  new result
+  result.error = error
+  result.msg = $(error)
+
+template check(error: cudaError): stmt =
+  if error != cudaSuccess:
+    raise newCudaError(error)
+
+template check(stat: cublasStatus): stmt =
+  if stat != cublasStatusSuccess:
+    raise newCublasError(stat)
