@@ -22,3 +22,9 @@ suite "copying back and forth":
       v2 = v1.gpu()
       v3 = v2.cpu()
     check v1 == v3
+  test "copy of a Matrix32":
+    let
+      m1 = randomMatrix(10, 7, max=1'f32)
+      m2 = m1.gpu()
+      m3 = m2.cpu()
+    check m1 == m3

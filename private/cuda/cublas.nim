@@ -24,13 +24,25 @@ proc cublasCreate(): cublasHandle =
   if stat != cublasStatusSuccess:
     quit($(stat))
 
+# y is on device
 proc cublasSetVector(n, elemSize: int, x: pointer, incx: int,
-  devicePtr: pointer, incy: int): cublasStatus
+  y: pointer, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSetVector" .}
 
-proc cublasGetVector(n, elemSize: int, devicePtr: pointer, incx: int,
-  x: pointer, incy: int): cublasStatus
+# x is on device
+proc cublasGetVector(n, elemSize: int, x: pointer, incx: int,
+  y: pointer, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasGetVector" .}
+
+# b is on device
+proc cublasSetMatrix(rows, cols, elemSize: int, a: pointer, lda: int,
+  b: pointer, ldb: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSetMatrix" .}
+
+# a is on device
+proc cublasGetMatrix(rows, cols, elemSize: int, a: pointer, lda: int,
+  b: pointer, ldb: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasGetMatrix" .}
 
 proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus

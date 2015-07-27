@@ -24,3 +24,14 @@ proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
 proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
   new result
   check cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
+
+proc gpu*[M, N: static[int]](m: Matrix32[M, N]): CudaMatrix[M, N] =
+  if m.order == rowMajor: quit("wrong order")
+  new result.data
+  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  check cublasSetMatrix(M, N, sizeof(float32), m.fp, M, result.fp, M)
+
+proc cpu*[M, N: static[int]](m: CudaMatrix[M, N]): Matrix32[M, N] =
+  result.order = colMajor
+  new result.data
+  check cublasGetMatrix(M, N, sizeof(float32), m.fp, M, result.fp, M)

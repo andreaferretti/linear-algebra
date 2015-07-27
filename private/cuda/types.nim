@@ -110,3 +110,7 @@ type
   cublasHandle = ptr object
 
   CudaVector*[N: static[int]] = ref[ptr float32]
+  CudaMatrix*[M, N: static[int]] = object
+    data: ref[ptr float32]
+
+template fp(c: CudaMatrix): ptr float32 = c.data[]
