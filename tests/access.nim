@@ -40,6 +40,10 @@ suite "vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
+  test "mapping vectors":
+    var v = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+    check v.map(proc(x: float64): float64 = 2 * x) ==
+      vector([2.0, 4.0, 6.0, 8.0, 10.0])
 
 suite "32-bit vector accessors":
   test "reading vector length":
@@ -66,6 +70,10 @@ suite "32-bit vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
+  test "mapping vectors":
+    var v = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32)
+    check v.map(proc(x: float32): float32 = 2 * x) ==
+      vector([2'f32, 4'f32, 6'f32, 8'f32, 10'f32], float32)
 
 suite "matrix accessors":
   test "reading matrix dimensions":
@@ -103,6 +111,12 @@ suite "matrix accessors":
     check m == n
     m[2, 2] = m[2, 2] + 1
     check n[2, 2] == f
+  test "mapping matrices":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      n = makeMatrix(2, 2, proc(i, j: int): float64 = (6 * i - 4 * j).float64)
+    proc double(x: float64): float64 = 2 * x
+    check m.map(double) == n
 
 suite "32-bit matrix accessors":
   test "reading matrix dimensions":
@@ -140,3 +154,9 @@ suite "32-bit matrix accessors":
     check m == n
     m[2, 2] = m[2, 2] + 1
     check n[2, 2] == f
+  test "mapping matrices":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      n = makeMatrix(2, 2, proc(i, j: int): float32 = (6 * i - 4 * j).float32)
+    proc double(x: float32): float32 = 2 * x
+    check m.map(double) == n

@@ -24,6 +24,13 @@ suite "vector operations":
     var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
     v *= 2.0
     check v == vector([2.0, 6.0, 4.0, 16.0, -4.0])
+  test "scalar vector division":
+    let v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    check((v / 2.0) == vector([1.0, 3.0, 2.0, 8.0, -2.0]))
+  test "in place scalar vector division":
+    var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    v /= 2.0
+    check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
   test "vector sum":
     let
       v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
@@ -71,6 +78,13 @@ suite "32-bit vector operations":
     var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
     v *= 2
     check v == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+  test "scalar vector division":
+    let v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
+    check((v / 2) == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32))
+  test "in place scalar vector division":
+    var v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
+    v /= 2'f32
+    check v == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
   test "vector sum":
     let
       v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
@@ -158,6 +172,32 @@ suite "matrix operations":
         @[-6.0, 9.0]
       ])
     m1 *= 3.0
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+      m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    check(m2 / 3.0 == m1)
+  test "in place scalar division":
+    let m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+    var m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    m2 /= 3.0
     check(m1 == m2)
   test "matrix sum":
     let
@@ -298,6 +338,32 @@ suite "32-bit matrix operations":
         @[-6'f32, 9'f32]
       ])
     m1 *= 3
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+      m2 = dmatrix(3, 2, @[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    check(m2 / 3 == m1)
+  test "in place scalar division":
+    let m1 = dmatrix(3, 2, @[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+    var m2 = dmatrix(3, 2, @[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    m2 /= 3
     check(m1 == m2)
   test "matrix sum":
     let
