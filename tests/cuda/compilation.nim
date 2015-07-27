@@ -40,3 +40,8 @@ suite "compilation errors":
       v1 = v.gpu()
     when compiles(u1 += v1): fail()
     when compiles(u1 -= v1): fail()
+  test "vector dimension should agree in a dot product":
+    let
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32).gpu()
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
+    when compiles(u * v): fail()
