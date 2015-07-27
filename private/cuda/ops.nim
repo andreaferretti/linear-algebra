@@ -51,3 +51,17 @@ proc l_2*[N: static[int]](v: CudaVector[N]): float32 {. inline .} =
 
 proc l_1*[N: static[int]](v: CudaVector[N]): float32 {. inline .} =
   check cublasSasum(handle, N, v[], 1, addr(result))
+
+proc `==`*[N: static[int]](v, w: CudaVector[N]): bool =
+  v.cpu() == w.cpu()
+
+proc `=~`*[N: static[int]](v, w: CudaVector[N]): bool =
+  mixin l_1
+  const epsilon = 0.000001
+  let
+    vNorm = l_1(v)
+    wNorm = l_1(w)
+    dNorm = l_1(v - w)
+  return (dNorm / (vNorm + wNorm)) < epsilon
+
+template `!=~`*(a, b: CudaVector): bool = not (a =~ b)
