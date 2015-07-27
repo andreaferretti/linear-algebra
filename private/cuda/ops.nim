@@ -42,3 +42,12 @@ proc `-`*[N: static[int]](v, w: CudaVector[N]): CudaVector[N] {. inline .} =
   result[] = cudaMalloc(N * sizeof(float32))
   check cublasScopy(handle, N, v[], 1, result[], 1)
   check cublasSaxpy(handle, N, -1, w[], result[])
+
+proc `*`*[N: static[int]](v, w: CudaVector[N]): float32 {. inline .} =
+  check cublasSdot(handle, N, v[], 1, w[], 1, addr(result))
+
+proc l_2*[N: static[int]](v: CudaVector[N]): float32 {. inline .} =
+  check cublasSnrm2(handle, N, v[], 1, addr(result))
+
+proc l_1*[N: static[int]](v: CudaVector[N]): float32 {. inline .} =
+  check cublasSasum(handle, N, v[], 1, addr(result))

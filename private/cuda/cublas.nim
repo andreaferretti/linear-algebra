@@ -53,3 +53,15 @@ proc cublasSaxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32
   var al: ptr float32
   {.emit: """al = &alpha; """.}
   rawCublasSaxpy(handle, n, al, x, 1, y, 1)
+
+proc cublasSnrm2(handle: cublasHandle, n: int, x: ptr float32,
+  incx: int, res: ptr float32): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSnrm2" .}
+
+proc cublasSasum(handle: cublasHandle, n: int, x: ptr float32,
+  incx: int, res: ptr float32): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSasum" .}
+
+proc cublasSdot(handle: cublasHandle, n: int, x: ptr float32, incx: int,
+  y: ptr float32, incy: int, res: ptr float32): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSdot" .}
