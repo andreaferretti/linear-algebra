@@ -23,8 +23,6 @@ proc `*`*[N: static[int]](v: CudaVector[N], k: float32): CudaVector[N]  {. inlin
   check cublasScopy(handle, N, v[], 1, result[], 1)
   check cublasSscal(handle, N, k, result[])
 
-template `*`*(k: float32, v: CudaVector): expr = v * k
-
 proc `+=`*[N: static[int]](v: var CudaVector[N], w: CudaVector[N]) {. inline .} =
   check cublasSaxpy(handle, N, 1, w[], v[])
 
@@ -70,3 +68,21 @@ proc `*`*[M, N: static[int]](a: CudaMatrix[M, N], v: CudaVector[N]): CudaVector[
   new result, freeDeviceMemory
   result[] = cudaMalloc(M * sizeof(float32))
   check cublasSgemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
+
+proc `*=`*[M, N: static[int]](m: var CudaMatrix[M, N], k: float32) {. inline .} =
+  check cublasSscal(handle, M * N, k, m.fp)
+
+proc `==`*[M, N: static[int]](m, n: CudaMatrix[M, N]): bool =
+  m.cpu() == n.cpu()
+
+proc `*`*[M, N: static[int]](m: CudaMatrix[M, N], k: float32): CudaMatrix[M, N]  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  check cublasScopy(handle, M * N, m.fp, 1, result.fp, 1)
+  check cublasSscal(handle, M * N, k, result.fp)
+
+template `*`*(k: float32, v: CudaVector or CudaMatrix): expr = v * k
+
+template `/`*(v: CudaVector or CudaMatrix, k: float32): expr = v * (1 / k)
+
+template `/=`*(v: var CudaVector or var CudaMatrix, k: float32): expr = v *= (1 / k)

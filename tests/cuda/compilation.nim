@@ -32,7 +32,7 @@ suite "compilation errors":
     var u1 = u.gpu()
     when compiles(u1 += v1): fail()
     when compiles(u1 -= v1): fail()
-  test "mutating sum should not work for immutable vectors":
+  test "in place sum should not work for immutable vectors":
     let
       u = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)
       v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32)

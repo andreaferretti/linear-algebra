@@ -86,3 +86,58 @@ suite "matrix/vector operations":
       v = vector([1'f32, 3'f32, 2'f32, -2'f32], float32).gpu()
 
     check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32], float32))
+
+suite "matrix operations":
+  test "scalar matrix multiplication":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ]).to32().gpu()
+      m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ]).to32().gpu()
+    check(m1 * 3'f32 == m2)
+    check(3'f32 * m1 == m2)
+  test "in place scalar multiplication":
+    var m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ]).to32().gpu()
+    let m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ]).to32().gpu()
+    m1 *= 3.0
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ]).to32().gpu()
+      m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ]).to32().gpu()
+    check(m2 / 3.0 == m1)
+  test "in place scalar division":
+    let m1 = dmatrix(3, 2, @[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ]).to32().gpu()
+    var m2 = dmatrix(3, 2, @[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ]).to32().gpu()
+    m2 /= 3.0
+    check(m1 == m2)
