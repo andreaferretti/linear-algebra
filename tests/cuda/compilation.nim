@@ -45,3 +45,25 @@ suite "compilation errors":
       u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32).gpu()
       v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
     when compiles(u * v): fail()
+  test "matrix dimensions should agree in a sum":
+    let
+      m = randomMatrix(3, 6, max = 1'f32).gpu()
+      n = randomMatrix(4, 5, max = 1'f32).gpu()
+    when compiles(m + n): fail()
+    when compiles(m - n): fail()
+  test "matrix dimensions should agree in an in place sum":
+    var m = randomMatrix(3, 6, max = 1'f32).gpu()
+    let n = randomMatrix(4, 5, max = 1'f32).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "in place sum should not work for immutable matrices":
+    let
+      m = randomMatrix(3, 6, max = 1'f32).gpu()
+      n = randomMatrix(3, 6, max = 1'f32).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "matrix multiplication should not work for wrong dimensions":
+    let
+      m = randomMatrix(6, 7, max = 1'f32).gpu()
+      n = randomMatrix(8, 18, max = 1'f32).gpu()
+    when compiles(m * n): fail()

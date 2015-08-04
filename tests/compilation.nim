@@ -50,12 +50,12 @@ suite "compilation errors":
       n = randomMatrix(4, 5)
     when compiles(m + n): fail()
     when compiles(m - n): fail()
-  test "matrix dimensions should agree in a mutating sum":
+  test "matrix dimensions should agree in an in place sum":
     var m = randomMatrix(3, 6)
     let n = randomMatrix(4, 5)
     when compiles(m += n): fail()
     when compiles(m -= n): fail()
-  test "mutating sum should not work for immutable matrices":
+  test "in place sum should not work for immutable matrices":
     let
       m = randomMatrix(3, 6)
       n = randomMatrix(3, 6)
