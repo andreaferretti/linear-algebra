@@ -53,16 +53,17 @@ proc l_1*[N: static[int]](v: CudaVector[N]): float32 {. inline .} =
 proc `==`*[N: static[int]](v, w: CudaVector[N]): bool =
   v.cpu() == w.cpu()
 
-proc `=~`*[N: static[int]](v, w: CudaVector[N]): bool =
+proc compareApprox(a, b: CudaVector or CudaMatrix): bool =
   mixin l_1
   const epsilon = 0.000001
   let
-    vNorm = l_1(v)
-    wNorm = l_1(w)
-    dNorm = l_1(v - w)
-  return (dNorm / (vNorm + wNorm)) < epsilon
+    aNorm = l_1(a)
+    bNorm = l_1(b)
+    dNorm = l_1(a - b)
+  return (dNorm / (aNorm + bNorm)) < epsilon
 
-template `!=~`*(a, b: CudaVector): bool = not (a =~ b)
+
+proc `=~`*[N: static[int]](v, w: CudaVector[N]): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: CudaMatrix[M, N], v: CudaVector[N]): CudaVector[M]  {. inline .} =
   new result, freeDeviceMemory
@@ -110,3 +111,13 @@ proc `*`*[M, N, K: static[int]](a: CudaMatrix[M, K], b: CudaMatrix[K, N]): CudaM
   result.data[] = cudaMalloc(M * N * sizeof(float32))
   check cublasSgemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
     a.fp, M, b.fp, K, 0, result.fp, M)
+
+proc l_2*[M, N: static[int]](m: CudaMatrix[M, N]): float32 {. inline .} =
+  check cublasSnrm2(handle, M * N, m.fp, 1, addr(result))
+
+proc l_1*[M, N: static[int]](m: CudaMatrix[M, N]): float32 {. inline .} =
+  check cublasSasum(handle, M * N, m.fp, 1, addr(result))
+
+proc `=~`*[M, N: static[int]](m, n: CudaMatrix[M, N]): bool = compareApprox(m, n)
+
+template `!=~`*(a, b: CudaVector or CudaMatrix): bool = not (a =~ b)

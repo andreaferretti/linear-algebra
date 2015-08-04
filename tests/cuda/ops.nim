@@ -215,6 +215,19 @@ suite "matrix operations":
       ]).to32().gpu()
     m1 -= m2
     check m1 == m3
+  test "matrix ℓ² norm":
+    let m = dmatrix(2, 3, @[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32]
+    ]).gpu()
+    check l_2(m) == 8'f32
+  test "matrix ℓ¹ norm":
+    let m = dmatrix(3, 3, @[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32],
+      @[2.5'f32, 3.1'f32, -1.4'f32]
+    ]).gpu()
+    check l_1(m) == 21'f32
   test "matrix multiplication":
     let
       m1 = dmatrix(2, 4, @[
