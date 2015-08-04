@@ -86,3 +86,21 @@ template `*`*(k: float32, v: CudaVector or CudaMatrix): expr = v * k
 template `/`*(v: CudaVector or CudaMatrix, k: float32): expr = v * (1 / k)
 
 template `/=`*(v: var CudaVector or var CudaMatrix, k: float32): expr = v *= (1 / k)
+
+proc `+=`*[M, N: static[int]](a: var CudaMatrix[M, N], b: CudaMatrix[M, N]) {. inline .} =
+  check cublasSaxpy(handle, M * N, 1, b.fp, a.fp)
+
+proc `+`*[M, N: static[int]](a, b: CudaMatrix[M, N]): CudaMatrix[M, N]  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  check cublasScopy(handle, M * N, a.fp, 1, result.fp, 1)
+  check cublasSaxpy(handle, M * N, 1, b.fp, result.fp)
+
+proc `-=`*[M, N: static[int]](a: var CudaMatrix[M, N], b: CudaMatrix[M, N]) {. inline .} =
+  check cublasSaxpy(handle, M * N, -1, b.fp, a.fp)
+
+proc `-`*[M, N: static[int]](a, b: CudaMatrix[M, N]): CudaMatrix[M, N]  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  check cublasScopy(handle, M * N, a.fp, 1, result.fp, 1)
+  check cublasSaxpy(handle, M * N, -1, b.fp, result.fp)
