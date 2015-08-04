@@ -104,3 +104,9 @@ proc `-`*[M, N: static[int]](a, b: CudaMatrix[M, N]): CudaMatrix[M, N]  {. inlin
   result.data[] = cudaMalloc(M * N * sizeof(float32))
   check cublasScopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasSaxpy(handle, M * N, -1, b.fp, result.fp)
+
+proc `*`*[M, N, K: static[int]](a: CudaMatrix[M, K], b: CudaMatrix[K, N]): CudaMatrix[M, N] {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  check cublasSgemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
+    a.fp, M, b.fp, K, 0, result.fp, M)

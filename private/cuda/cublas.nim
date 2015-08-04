@@ -98,3 +98,15 @@ proc cublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
   var al, be: ptr float32
   {.emit: """al = &alpha; be = &beta; """.}
   rawCublasSgemv(handle, trans, m, n, al, A, lda, x, incx, be, y, incy)
+
+proc rawCublasSgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+  m, n, k: int, alpha: ptr float32, A: ptr float32, lda: int, B: ptr float32,
+  ldb: int, beta: ptr float32, C: ptr float32, ldc: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasSgemm" .}
+
+proc cublasSgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+  m, n, k: int, alpha: float32, A: ptr float32, lda: int, B: ptr float32,
+  ldb: int, beta: float32, C: ptr float32, ldc: int): cublasStatus =
+  var al, be: ptr float32
+  {.emit: """al = &alpha; be = &beta; """.}
+  rawCublasSgemm(handle, transa, transb, m, n, k, al, A, lda, B, ldb, be, C, ldc)

@@ -215,3 +215,20 @@ suite "matrix operations":
       ]).to32().gpu()
     m1 -= m2
     check m1 == m3
+  test "matrix multiplication":
+    let
+      m1 = dmatrix(2, 4, @[
+        @[1'f32, 1'f32, 2'f32, -3'f32],
+        @[3'f32, 0'f32, -7'f32, 2'f32]
+      ]).gpu()
+      m2 = dmatrix(4, 3, @[
+        @[1'f32, 1'f32, 2'f32],
+        @[3'f32, 1'f32, -5'f32],
+        @[-1'f32, -1'f32, 2'f32],
+        @[4'f32, 2'f32, 3'f32]
+      ]).gpu()
+      m3 = dmatrix(2, 3, @[
+        @[-10'f32, -6'f32, -8'f32],
+        @[18'f32, 14'f32, -2'f32]
+      ]).gpu()
+    check(m1 * m2 == m3)
