@@ -33,3 +33,10 @@ suite "vector and matrix equality":
     check v =~ w
     check v != w
     check w !=~ z
+  test "strict 32-bit matrix equality":
+    let
+      m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32).gpu()
+      n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32).gpu()
+      p = makeMatrix(3, 5, proc(i, j: int): float32 = (i - 2 * j).float32).gpu()
+    check m == n
+    check n != p
