@@ -1,0 +1,3 @@
+nim doc2 -d:cublas \
+  --docSeeSrcUrl:https://github.com/unicredit/linear-algebra/blob/master \
+  linalg.nim
