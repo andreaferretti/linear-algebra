@@ -9,6 +9,8 @@ The library has been tested on Ubuntu Linux 14.10 and 15.04 64-bit with ATLAS, O
 
 The GPU support has been tested using NVIDIA CUDA 7.0.
 
+API documentation is [here](http://unicredit.github.io/linear-algebra/)
+
 Initialization
 --------------
 
