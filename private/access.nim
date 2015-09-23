@@ -76,6 +76,18 @@ proc row*[M, N: static[int]](m: Matrix32[M, N], i: int): Vector32[N] {. inline .
   for j in 0 .. < N:
     result[j] = m.at(i, j)
 
+proc columnUnsafe*[M, N: static[int]](m: Matrix32[M, N], j: int): Vector32[M] {. inline .} =
+  if m.order == colMajor:
+    return cast[ref array[M, float32]](addr(m.data[j * N]))
+  else:
+    raise newException(AccessViolationError, "Cannot access columns in an unsafe way")
+
+proc rowUnsafe*[M, N: static[int]](m: Matrix32[M, N], i: int): Vector32[N] {. inline .} =
+  if m.order == rowMajor:
+    return cast[ref array[M, float32]](addr(m.data[i * M]))
+  else:
+    raise newException(AccessViolationError, "Cannot access rows in an unsafe way")
+
 proc column*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inline .} =
   new result
   for i in 0 .. < M:
@@ -85,6 +97,18 @@ proc row*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .
   new result
   for j in 0 .. < N:
     result[j] = m.at(i, j)
+
+proc columnUnsafe*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inline .} =
+  if m.order == colMajor:
+    return cast[ref array[M, float64]](addr(m.data[j * N]))
+  else:
+    raise newException(AccessViolationError, "Cannot access columns in an unsafe way")
+
+proc rowUnsafe*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .} =
+  if m.order == rowMajor:
+    return cast[ref array[M, float64]](addr(m.data[i * M]))
+  else:
+    raise newException(AccessViolationError, "Cannot access rows in an unsafe way")
 
 proc dim*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
 
