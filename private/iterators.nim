@@ -24,9 +24,37 @@ iterator columns*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto 
   for i in 0 .. < N:
     yield m.column(i)
 
+iterator columnsUnsafe*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M] {. inline .} =
+  if m.order == colMajor:
+    for i in 0 .. < N:
+      yield cast[ref array[M, float32]](addr(m.data[i * M]))
+  else:
+    raise newException(AccessViolationError, "Cannot access columns in an unsafe way")
+
+iterator columnsUnsafe*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M] {. inline .} =
+  if m.order == colMajor:
+    for i in 0 .. < N:
+      yield cast[ref array[M, float64]](addr(m.data[i * M]))
+  else:
+    raise newException(AccessViolationError, "Cannot access columns in an unsafe way")
+
 iterator rows*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
     yield m.row(i)
+
+iterator rowsUnsafe*[M, N: static[int]](m: Matrix32[M, N]): Vector32[N] {. inline .} =
+  if m.order == rowMajor:
+    for i in 0 .. < M:
+      yield cast[ref array[N, float32]](addr(m.data[i * N]))
+  else:
+    raise newException(AccessViolationError, "Cannot access rows in an unsafe way")
+
+iterator rowsUnsafe*[M, N: static[int]](m: Matrix64[M, N]): Vector64[N] {. inline .} =
+  if m.order == rowMajor:
+    for i in 0 .. < M:
+      yield cast[ref array[N, float64]](addr(m.data[i * N]))
+  else:
+    raise newException(AccessViolationError, "Cannot access rows in an unsafe way")
 
 iterator items*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:

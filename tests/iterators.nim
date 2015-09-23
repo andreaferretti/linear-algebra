@@ -101,6 +101,28 @@ suite "iterators on matrices":
       count += 1
     check sum == 18.0
     check count == 2
+  test "rows matrix iterator (unsafe)":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64, rowMajor)
+    var
+      sum = 0.0
+      count = 0
+    for r in m.rowsUnsafe:
+      sum += (r[0] + r[1])
+      count += 1
+    check sum == 18.0
+    check count == 3
+    GC_fullCollect()
+  test "columns matrix iterator (unsafe)":
+    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64)
+    var
+      sum = 0.0
+      count = 0
+    for c in m.columnsUnsafe:
+      sum += (c[0] + c[1] + c[2])
+      count += 1
+    check sum == 18.0
+    check count == 2
+    GC_fullCollect()
 
 suite "iterators on 32-bit matrices":
   test "items matrix iterator":
@@ -144,3 +166,25 @@ suite "iterators on 32-bit matrices":
       count += 1
     check sum == 18.0
     check count == 2
+  test "rows matrix iterator (unsafe)":
+    let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32, rowMajor)
+    var
+      sum = 0.0
+      count = 0
+    for r in m.rowsUnsafe:
+      sum += (r[0] + r[1])
+      count += 1
+    check sum == 18.0
+    check count == 3
+    GC_fullCollect()
+  # test "columns matrix iterator (unsafe)":
+  #   let m = makeMatrix(3, 2, proc(i, j: int): float32 = (i + 2 * j + 1).float32)
+  #   var
+  #     sum = 0.0
+  #     count = 0
+  #   for c in m.columnsUnsafe:
+  #     sum += (c[0] + c[1] + c[2])
+  #     count += 1
+  #   check sum == 18.0
+  #   check count == 2
+  #   GC_fullCollect()
