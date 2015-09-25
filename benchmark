@@ -1,1 +1,0 @@
-nim c -r bench/matrix_matrix_mult

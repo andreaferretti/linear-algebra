@@ -1,4 +1,0 @@
-nim c -d:cublas \
-  --cincludes:"/usr/local/cuda-7.0/targets/x86_64-linux/include" \
-  --clibdir:"/usr/local/cuda-7.0/targets/x86_64-linux/lib" \
-  -r bench/cuda/matrix_vector_mult
