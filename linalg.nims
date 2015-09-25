@@ -1,13 +1,11 @@
 mode = ScriptMode.Verbose
 
-#name          = "linalg"
 version       = "0.1.5"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
-#SkipDirs      = "tests,bench"
-#SkipFiles     = "test,test_cuda,benchmark,main,main.nim,doc"
-#
+skipDirs      = @["tests", "bench"]
+
 requires "nim >= 0.11.2"
 
 --forceBuild
@@ -32,4 +30,10 @@ task benchcuda, "run benchmarks for the cuda implementation":
     --cincludes:/usr/local/cuda-7.0/targets/x86_64-linux/include \
     --clibdir:/usr/local/cuda-7.0/targets/x86_64-linux/lib \
     -r bench/cuda/matrix_vector_mult"""
+  setCommand "nop"
+
+task gendoc, "generate documentation":
+  exec """nim doc2 -d:cublas \
+    --docSeeSrcUrl:https://github.com/unicredit/linear-algebra/blob/master \
+    linalg.nim"""
   setCommand "nop"
