@@ -12,22 +12,22 @@ requires "nim >= 0.11.2"
 
 --forceBuild
 
-task test, "run standard tests":
+task tests, "run standard tests":
   exec "nim c -r tests/all"
   setCommand "nop"
 
-task testcuda, "run tests for the cuda implementation":
+task testscuda, "run tests for the cuda implementation":
   exec """nim c -d:cublas \
     --cincludes:/usr/local/cuda-7.0/targets/x86_64-linux/include \
     --clibdir:/usr/local/cuda-7.0/targets/x86_64-linux/lib \
     -r tests/cublas"""
   setCommand "nop"
 
-task benchmark, "run standard benchmarks":
+task bench, "run standard benchmarks":
   exec "nim c -r bench/matrix_matrix_mult"
   setCommand "nop"
 
-task benchmarkcuda, "run benchmarks for the cuda implementation":
+task benchcuda, "run benchmarks for the cuda implementation":
   exec """nim c -d:cublas \
     --cincludes:/usr/local/cuda-7.0/targets/x86_64-linux/include \
     --clibdir:/usr/local/cuda-7.0/targets/x86_64-linux/lib \
