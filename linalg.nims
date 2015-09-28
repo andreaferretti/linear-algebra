@@ -16,8 +16,8 @@ task tests, "run standard tests":
 
 task testscuda, "run tests for the cuda implementation":
   exec """nim c -d:cublas \
-    --cincludes:/usr/local/cuda-7.0/targets/x86_64-linux/include \
-    --clibdir:/usr/local/cuda-7.0/targets/x86_64-linux/lib \
+    --cincludes:/usr/local/cuda/targets/x86_64-linux/include \
+    --clibdir:/usr/local/cuda/targets/x86_64-linux/lib \
     -r tests/cublas"""
   setCommand "nop"
 
@@ -27,8 +27,8 @@ task bench, "run standard benchmarks":
 
 task benchcuda, "run benchmarks for the cuda implementation":
   exec """nim c -d:cublas \
-    --cincludes:/usr/local/cuda-7.0/targets/x86_64-linux/include \
-    --clibdir:/usr/local/cuda-7.0/targets/x86_64-linux/lib \
+    --cincludes:/usr/local/cuda/targets/x86_64-linux/include \
+    --clibdir:/usr/local/cuda/targets/x86_64-linux/lib \
     -r bench/cuda/matrix_vector_mult"""
   setCommand "nop"
 
