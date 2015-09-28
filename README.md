@@ -7,7 +7,7 @@ In all examples, types are inferred, and are shown just for explanatory purposes
 
 The library has been tested on Ubuntu Linux 14.10 and 15.04 64-bit with ATLAS, OpenBlas and Intel MKL.
 
-The GPU support has been tested using NVIDIA CUDA 7.0.
+The GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.
 
 API documentation is [here](http://unicredit.github.io/linear-algebra/)
 
