@@ -10,9 +10,23 @@ requires "nim >= 0.11.2"
 
 --forceBuild
 
+proc configForTests() =
+  --hints: off
+  --linedir: on
+  --stacktrace: on
+  --linetrace: on
+  --debuginfo
+  --run
+
+proc configForBenchmarks() =
+  --define: "release"
+  --run
+
 task tests, "run standard tests":
-  exec "nim c -r tests/all"
-  setCommand "nop"
+  #exec "nim c -r tests/all"
+  #path = "$projectPath/.."
+  configForTests()
+  setCommand "c", "tests/all"
 
 task testscuda, "run tests for the cuda implementation":
   exec """nim c -d:cublas \
@@ -22,8 +36,9 @@ task testscuda, "run tests for the cuda implementation":
   setCommand "nop"
 
 task bench, "run standard benchmarks":
-  exec "nim c -r bench/matrix_matrix_mult"
-  setCommand "nop"
+  #exec "nim c -r bench/matrix_matrix_mult"
+  configForBenchmarks()
+  setCommand "c", "bench/matrix_matrix_mult"
 
 task benchcuda, "run benchmarks for the cuda implementation":
   exec """nim c -d:cublas \
@@ -33,7 +48,9 @@ task benchcuda, "run benchmarks for the cuda implementation":
   setCommand "nop"
 
 task gendoc, "generate documentation":
-  exec """nim doc2 -d:cublas \
-    --docSeeSrcUrl:https://github.com/unicredit/linear-algebra/blob/master \
-    linalg.nim"""
-  setCommand "nop"
+  #exec """nim doc2 -d:cublas \
+  #  --docSeeSrcUrl:https://github.com/unicredit/linear-algebra/blob/master \
+  #  linalg.nim"""
+  --define: "cublas"
+  --docSeeSrcUrl: "https://github.com/unicredit/linear-algebra/blob/master"
+  setCommand "doc2", "linalg"
