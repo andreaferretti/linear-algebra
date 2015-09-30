@@ -22,13 +22,19 @@ proc configForBenchmarks() =
   --define: "release"
   --run
 
+proc configForCuda() =
+  --cincludes: "/usr/local/cuda/targets/x86_64-linux/include"
+  --clibdir: "/usr/local/cuda/targets/x86_64-linux/lib"
+  --define: "cublas"
+
 task tests, "run standard tests":
-  #exec "nim c -r tests/all"
-  #path = "$projectPath/.."
   configForTests()
   setCommand "c", "tests/all"
 
 task testscuda, "run tests for the cuda implementation":
+  # configForTests()
+  # configForCuda()
+  # setCommand "c", "tests/cublas"
   exec """nim c -d:cublas \
     --cincludes:/usr/local/cuda/targets/x86_64-linux/include \
     --clibdir:/usr/local/cuda/targets/x86_64-linux/lib \
