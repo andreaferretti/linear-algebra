@@ -21,6 +21,16 @@ type
   Matrix64*[M, N: static[int]] = object
     order: OrderType
     data: ref array[M * N, float64]
+  DVector32* = seq[float32]
+  DVector64* = seq[float64]
+  DMatrix32* = object
+    order: OrderType
+    M, N: int
+    data: seq[float32]
+  DMatrix64* = object
+    order: OrderType
+    M, N: int
+    data: seq[float64]
 
 # Float pointers
 template fp(v: Vector32): ptr float32 = cast[ptr float32](addr(v[]))
