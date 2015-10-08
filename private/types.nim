@@ -76,6 +76,10 @@ proc to64*[N: static[int]](v: Vector32[N]): Vector64[N] =
   for i in 0 .. < N:
     result[i] = v[i].float64
 
+proc to32*(v: DVector64): DVector32 = v.mapIt(float32, it.float32)
+
+proc to64*(v: DVector32): DVector64 = v.mapIt(float64, it.float64)
+
 proc to32*[M, N: static[int]](m: Matrix64[M, N]): Matrix32[M, N] =
   new result.data
   result.order = m.order

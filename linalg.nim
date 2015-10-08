@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from math import random
+from sequtils import mapIt
 
 include private/external
 include private/blas
