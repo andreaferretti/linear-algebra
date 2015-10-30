@@ -105,13 +105,13 @@ suite "matrix accessors":
     check c[1] == 1.0
   test "reading matrix rows without copy":
     let
-      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
+      m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
       r = m.row(1)
       ru = m.rowUnsafe(1)
     check r == ru
   test "reading matrix columns without copy":
     let
-      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
       c = m.column(1)
       cu = m.columnUnsafe(1)
     check c == cu
@@ -160,13 +160,13 @@ suite "32-bit matrix accessors":
     check c[1] == 1'f32
   test "reading matrix rows without copy":
     let
-      m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32, rowMajor)
+      m = makeMatrix(4, 3, proc(i, j: int): float32 = (3 * i - 2 * j).float32, rowMajor)
       r = m.row(1)
       ru = m.rowUnsafe(1)
     check r == ru
   test "reading matrix columns without copy":
     let
-      m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      m = makeMatrix(3, 5, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
       c = m.column(1)
       cu = m.columnUnsafe(1)
     check c == cu
