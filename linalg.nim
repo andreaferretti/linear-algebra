@@ -13,6 +13,9 @@
 # limitations under the License.
 from math import random
 
+when defined(js):
+  {.fatal: "linalg is only available for native backends".}
+
 include private/external
 include private/blas
 include private/types
