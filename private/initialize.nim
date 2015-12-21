@@ -24,6 +24,8 @@ template makeDVectorPrivate(N, f, T, result: expr) =
 
 proc makeDVector*(N: int, f: proc (i: int): float64): DVector64 = makeDVectorPrivate(N, f, float64, result)
 
+proc makeDVector*(N: int, f: proc (i: int): float32): DVector32 = makeDVectorPrivate(N, f, float32, result)
+
 proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] = makeVectorPrivate(N, f, result)
 
 proc makeVector*(N: static[int], f: proc (i: int): float32): Vector32[N] = makeVectorPrivate(N, f, result)
@@ -42,14 +44,18 @@ template constantVectorPrivate(N, x, result: expr) =
   for i in 0 .. < N:
     result[i] = x
 
+template constantDVectorPrivate(N, x, T, result: expr) =
+  result = newSeq[T](N)
+  for i in 0 .. < N:
+    result[i] = x
+
 proc constantVector*(N: static[int], x: float64): Vector64[N] = constantVectorPrivate(N, x, result)
 
 proc constantVector*(N: static[int], x: float32): Vector32[N] = constantVectorPrivate(N, x, result)
 
-proc constantVector*(N: int, x: float64): DVector64 =
-  result = newSeq[type(x)](N)
-  for i in low(result) .. high(result):
-    result[i] = x
+proc constantVector*(N: int, x: float64): DVector64 = constantDVectorPrivate(N, x, float64, result)
+
+proc constantVector*(N: int, x: float32): DVector32 = constantDVectorPrivate(N, x, float32, result)
 
 proc zeros*(N: int): DVector64 = constantVector(N, 0'f64)
 
