@@ -151,9 +151,9 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
 
 template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
 
-template `/`*(v: Vector64 or Matrix64, k: float64): expr = v * (1 / k)
+template `/`*(v: Vector64 or Matrix64 or DVector64, k: float64): expr = v * (1 / k)
 
-template `/=`*(v: var Vector64 or var Matrix64, k: float64): expr = v *= (1 / k)
+template `/=`*(v: var Vector64 or var Matrix64 or var DVector64, k: float64): expr = v *= (1 / k)
 
 template `*`*(k: float32, v: Vector32 or Matrix32): expr = v * k
 

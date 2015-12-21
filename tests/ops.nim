@@ -486,13 +486,13 @@ suite "dynamic vector operations":
     var v = @[1.0, 3.0, 2.0, 8.0, -2.0]
     v *= 2.0
     check v == @[2.0, 6.0, 4.0, 16.0, -4.0]
-  # test "scalar vector division":
-  #   let v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
-  #   check((v / 2.0) == vector([1.0, 3.0, 2.0, 8.0, -2.0]))
-  # test "in place scalar vector division":
-  #   var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
-  #   v /= 2.0
-  #   check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
+  test "scalar vector division":
+    let v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    check((v / 2.0) == vector([1.0, 3.0, 2.0, 8.0, -2.0]))
+  test "in place scalar vector division":
+    var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    v /= 2.0
+    check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
   # test "vector sum":
   #   let
   #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
