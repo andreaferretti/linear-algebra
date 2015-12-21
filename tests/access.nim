@@ -184,3 +184,33 @@ suite "32-bit matrix accessors":
       n = makeMatrix(2, 2, proc(i, j: int): float32 = (6 * i - 4 * j).float32)
     proc double(x: float32): float32 = 2 * x
     check m.map(double) == n
+
+suite "dynamic vector accessors":
+  test "reading vector length":
+    let n = 10
+    let v = randomDVector(n)
+    check v.len == 10
+  test "reading vector elements":
+    let n = 5
+    let v = makeDVector(n, proc(i: int): float64 = (3 * i - 2).float64)
+    check v[0] == -2.0
+    check v[1] == 1.0
+    check v[2] == 4.0
+    check v[3] == 7.0
+    check v[4] == 10.0
+  test "writing vector elements":
+    let n = 3
+    var v = zeros(n)
+    v[0] = -2.1
+    v[1] = 1.0
+    check v[0] == -2.1
+    check v[1] == 1.0
+  test "cloning vectors":
+    let n = 5
+    var v = randomDVector(n)
+    let
+      w = v.clone
+      f = w[0]
+    check v == w
+    v[0] = v[0] + 1
+    check w[0] == f

@@ -22,6 +22,9 @@ proc clone*[N: static[int]](v: Vector32[N]): Vector32[N] =
   new result
   copyMem(result.fp, v.fp, N * sizeof(float32))
 
+proc clone*(v: DVector64 or DVector32): auto =
+  result = v
+
 proc map*[N: static[int]](v: Vector32[N], f: proc(x: float32): float32): Vector32[N] =
   new result
   for i in 0 .. < N:
