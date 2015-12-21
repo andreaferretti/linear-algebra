@@ -21,8 +21,16 @@ proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .}
 
 proc `*=`*[N: static[int]](v: var Vector64[N], k: float64) {. inline .} = scal(N, k, v.fp, 1)
 
+proc `*=`*(v: var DVector64, k: float64) {. inline .} = scal(v.len, k, v.fp, 1)
+
 proc `*`*[N: static[int]](v: Vector64[N], k: float64): Vector64[N]  {. inline .} =
   new result
+  copy(N, v.fp, 1, result.fp, 1)
+  scal(N, k, result.fp, 1)
+
+proc `*`*(v: DVector64, k: float64): DVector64 {. inline .} =
+  let N = v.len
+  result = newSeq[float64](N)
   copy(N, v.fp, 1, result.fp, 1)
   scal(N, k, result.fp, 1)
 
@@ -141,7 +149,7 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
   copy(M * N, m.fp, 1, result.fp, 1)
   scal(M * N, k, result.fp, 1)
 
-template `*`*(k: float64, v: Vector64 or Matrix64): expr = v * k
+template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
 
 template `/`*(v: Vector64 or Matrix64, k: float64): expr = v * (1 / k)
 
