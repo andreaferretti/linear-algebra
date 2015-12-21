@@ -33,6 +33,9 @@ proc makeVector*(N: static[int], f: proc (i: int): float32): Vector32[N] = makeV
 proc randomDVector*(N: int, max: float64 = 1): DVector64 =
   makeDVector(N, proc(i: int): float64 = random(max))
 
+proc randomDVector*(N: int, max: float32): DVector32 =
+  makeDVector(N, proc(i: int): float32 = random(max))
+
 proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
   makeVector(N, proc(i: int): float64 = random(max))
 

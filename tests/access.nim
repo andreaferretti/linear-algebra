@@ -214,3 +214,33 @@ suite "dynamic vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
+
+suite "dynamic 32-bit vector accessors":
+  test "reading vector length":
+    let n = 10
+    let v = randomDVector(n, max = 1'f32)
+    check v.len == 10
+  test "reading vector elements":
+    let n = 5
+    let v = makeDVector(n, proc(i: int): float32 = (3 * i - 2).float32)
+    check v[0] == -2'f32
+    check v[1] == 1'f32
+    check v[2] == 4'f32
+    check v[3] == 7'f32
+    check v[4] == 10'f32
+  test "writing vector elements":
+    let n = 3
+    var v = zeros(n, float32)
+    v[0] = -2.5'f32
+    v[1] = 1'f32
+    check v[0] == -2.5'f32
+    check v[1] == 1'f32
+  test "cloning vectors":
+    let n = 5
+    var v = randomDVector(n, max = 1'f32)
+    let
+      w = v.clone
+      f = w[0]
+    check v == w
+    v[0] = v[0] + 1
+    check w[0] == f
