@@ -36,17 +36,17 @@ proc constantVector*(N: static[int], x: float64): Vector64[N] = constantVectorPr
 
 proc constantVector*(N: static[int], x: float32): Vector32[N] = constantVectorPrivate(N, x, result)
 
-proc constantVectorD*(N: int, x: float64): DVector64 =
+proc constantVector*(N: int, x: float64): DVector64 =
   result = newSeq[float64](N)
   for i in low(result) .. high(result):
     result[i] = x
 
-proc zeros*(N: int): DVector64 = constantVectorD(N, 0'f64)
+proc zeros*(N: int): DVector64 = constantVector(N, 0'f64)
 
 proc zeros*(N: int, A: typedesc): auto =
-  when A is float64: constantVectorD(N, 0'f64)
+  when A is float64: constantVector(N, 0'f64)
   else:
-    when A is float32: constantVectorD(N, 0'f32)
+    when A is float32: constantVector(N, 0'f32)
 
 proc zeros*(N: static[int]): Vector64[N] = constantVector(N, 0'f64)
 
@@ -55,12 +55,12 @@ proc zeros*(N: static[int], A: typedesc): auto =
   else:
     when A is float32: constantVector(N, 0'f32)
 
-proc ones*(N: int): DVector64 = constantVectorD(N, 1'f64)
+proc ones*(N: int): DVector64 = constantVector(N, 1'f64)
 
 proc ones*(N: int, A: typedesc): auto =
-  when A is float64: constantVectorD(N, 1'f64)
+  when A is float64: constantVector(N, 1'f64)
   else:
-    when A is float32: constantVectorD(N, 1'f32)
+    when A is float32: constantVector(N, 1'f32)
 
 proc ones*(N: static[int]): Vector64[N] = constantVector(N, 1'f64)
 
