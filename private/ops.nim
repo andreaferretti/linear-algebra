@@ -155,11 +155,11 @@ template `/`*(v: Vector64 or Matrix64 or DVector64, k: float64): expr = v * (1 /
 
 template `/=`*(v: var Vector64 or var Matrix64 or var DVector64, k: float64): expr = v *= (1 / k)
 
-template `*`*(k: float32, v: Vector32 or Matrix32): expr = v * k
+template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32): expr = v * k
 
-template `/`*(v: Vector32 or Matrix32, k: float32): expr = v * (1 / k)
+template `/`*(v: Vector32 or Matrix32 or DVector32, k: float32): expr = v * (1 / k)
 
-template `/=`*(v: var Vector32 or var Matrix32, k: float32): expr = v *= (1 / k)
+template `/=`*(v: var Vector32 or var Matrix32 or var DVector32, k: float32): expr = v *= (1 / k)
 
 template matrixAdd(M, N, a, b: expr, A: typedesc) =
   if a.order == b.order:
