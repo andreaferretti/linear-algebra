@@ -67,15 +67,31 @@ template putPrivate(M, N, m, i, j, val: expr, A: typedesc) =
     var data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j] = val
 
+template putPrivateD(m, i, j, val: expr) =
+  if m.order == colMajor:
+    m.data[j * m.M + i] = val
+  else:
+    m.data[i * m.N + j] = val
+
 proc put*[M, N: static[int]](m: var Matrix64[M, N], i, j: int, val: float64) {. inline .} =
   putPrivate(M, N, m, i, j, val, float64)
 
+proc put*(m: var DMatrix64, i, j: int, val: float64) {. inline .} =
+  putPrivateD(m, i, j, val)
+
 proc `[]=`*(m: var Matrix64, i, j: int, val: float64) {. inline .} = m.put(i, j, val)
+
+proc `[]=`*(m: var DMatrix64, i, j: int, val: float64) {. inline .} = m.put(i, j, val)
 
 proc put*[M, N: static[int]](m: var Matrix32[M, N], i, j: int, val: float32) {. inline .} =
   putPrivate(M, N, m, i, j, val, float32)
 
+proc put*(m: var DMatrix32, i, j: int, val: float32) {. inline .} =
+  putPrivateD(m, i, j, val)
+
 proc `[]=`*(m: var Matrix32, i, j: int, val: float32) {. inline .} = m.put(i, j, val)
+
+proc `[]=`*(m: var DMatrix32, i, j: int, val: float32) {. inline .} = m.put(i, j, val)
 
 proc column*[M, N: static[int]](m: Matrix32[M, N], j: int): Vector32[M] {. inline .} =
   new result
