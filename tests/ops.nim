@@ -503,16 +503,16 @@ suite "dynamic vector operations":
     let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     v += w
     check v == vector([3.0, 2.0, 4.0, 8.0, 2.0])
-  # test "vector difference":
-  #   let
-  #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #     w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
-  #   check((v - w) == vector([-1.0, 4.0, 0.0, 8.0, -6.0]))
-  # test "in place vector difference":
-  #   var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #   let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
-  #   v -= w
-  #   check v == vector([-1.0, 4.0, 0.0, 8.0, -6.0])
+  test "vector difference":
+    let
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    check((v - w) == vector([-1.0, 4.0, 0.0, 8.0, -6.0]))
+  test "in place vector difference":
+    var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    v -= w
+    check v == vector([-1.0, 4.0, 0.0, 8.0, -6.0])
   # test "dot product":
   #   let
   #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
