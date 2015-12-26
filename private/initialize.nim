@@ -178,11 +178,32 @@ template constantMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
       for j in 0 .. < N:
         data[i][j] = x
 
+template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
+  result.data = newSeq[A](M * N)
+  result.order = order
+  result.M = M
+  result.N = N
+  for i in 0 ..  M * N:
+    result.data[i] = x
+
 proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
   constantMatrixPrivate(M, N, x, order, result, float64)
 
 proc constantMatrix*(M, N: static[int], x: float32, order: OrderType = colMajor): Matrix32[M, N] =
   constantMatrixPrivate(M, N, x, order, result, float32)
+
+proc constantDMatrix*(M, N: int, x: float64, order: OrderType = colMajor): DMatrix64 =
+  constantDMatrixPrivate(M, N, x, order, result, float64)
+
+proc constantDMatrix*(M, N: int, x: float32, order: OrderType = colMajor): DMatrix32 =
+  constantDMatrixPrivate(M, N, x, order, result, float32)
+
+proc zerosD*(M, N: int, order: OrderType = colMajor): DMatrix64 = constantDMatrix(M, N, 0'f64, order)
+
+proc zerosD*(M, N: int, A: typedesc, order: OrderType = colMajor): auto =
+  when A is float64: constantDMatrix(M, N, 0'f64, order)
+  else:
+    when A is float32: constantDMatrix(M, N, 0'f32, order)
 
 proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 0'f64, order)
 
@@ -190,6 +211,13 @@ proc zeros*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
   when A is float64: constantMatrix(M, N, 0'f64, order)
   else:
     when A is float32: constantMatrix(M, N, 0'f32, order)
+
+proc onesD*(M, N: int, order: OrderType = colMajor): DMatrix64 = constantDMatrix(M, N, 1'f64, order)
+
+proc onesD*(M, N: int, A: typedesc, order: OrderType = colMajor): auto =
+  when A is float64: constantDMatrix(M, N, 1'f64, order)
+  else:
+    when A is float32: constantDMatrix(M, N, 1'f32, order)
 
 proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 1'f64, order)
 

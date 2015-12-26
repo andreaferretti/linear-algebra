@@ -250,17 +250,20 @@ suite "dynamic matrix accessors":
     let m = randomDMatrix(3, 7)
     check m.dim == (3, 7)
   test "reading matrix elements":
-    let m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+    let
+      M = 2
+      N = 2
+      m = makeDMatrix(M, N, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
     check m[0, 0] == 0.0
     check m[0, 1] == -2.0
     check m[1, 0] == 3.0
     check m[1, 1] == 1.0
-  # test "writing matrix elements":
-  #   var m = zeros(3, 3)
-  #   m[0, 2] = -2.1
-  #   m[1, 1] = 1.0
-  #   check m[0, 2] == -2.1
-  #   check m[1, 1] == 1.0
+  test "writing matrix elements":
+    var m = zeros(3, 3)
+    #m[0, 2] = -2.1
+    #m[1, 1] = 1.0
+    #check m[0, 2] == -2.1
+    #check m[1, 1] == 1.0
   # test "reading matrix rows":
   #   let
   #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
