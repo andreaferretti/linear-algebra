@@ -94,6 +94,11 @@ proc `*`*[N: static[int]](v, w: Vector32[N]): float32 {. inline .} = dot(N, v.fp
 
 proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = dot(N, v.fp, 1, w.fp, 1)
 
+proc `*`*(v, w: DVector64): float64 {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  dot(N, v.fp, 1, w.fp, 1)
+
 proc l_2*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = nrm2(N, v.fp, 1)
 
 proc l_1*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = asum(N, v.fp, 1)
