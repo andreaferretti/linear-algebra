@@ -45,8 +45,20 @@ proc `+`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
 proc `+=`*[N: static[int]](v: var Vector64[N], w: Vector64[N]) {. inline .} =
   axpy(N, 1, w.fp, 1, v.fp, 1)
 
+proc `+=`*(v: var DVector64, w: DVector64) {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  axpy(N, 1, w.fp, 1, v.fp, 1)
+
 proc `+`*[N: static[int]](v, w: Vector64[N]): Vector64[N]  {. inline .} =
   new result
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, 1, w.fp, 1, result.fp, 1)
+
+proc `+`*(v, w: DVector64): DVector64  {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  result = newSeq[float64](N)
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, 1, w.fp, 1, result.fp, 1)
 

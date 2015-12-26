@@ -493,11 +493,11 @@ suite "dynamic vector operations":
     var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
     v /= 2.0
     check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  # test "vector sum":
-  #   let
-  #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #     w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
-  #   check((v + w) == vector([3.0, 2.0, 4.0, 8.0, 2.0]))
+  test "vector sum":
+    let
+      v = @[1.0, 3.0, 2.0, 8.0, -2.0]
+      w = @[2.0, -1.0, 2.0, 0.0, 4.0]
+    check((v + w) == @[3.0, 2.0, 4.0, 8.0, 2.0])
   # test "in place vector sum":
   #   var v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
   #   let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
