@@ -188,3 +188,47 @@ suite "iterators on 32-bit matrices":
   #   check sum == 18.0
   #   check count == 2
   #   GC_fullCollect()
+
+suite "iterators on dynamic vectors":
+  test "items vector iterator":
+    let v = @[1.0, 3.0, 2.0, 8.0, -2.0]
+    var
+      sum = 0.0
+      count = 0
+    for x in v:
+      sum += x
+      count += 1
+    check sum == 12.0
+    check count == 5
+  test "pairs vector iterator":
+    let v = @[1.0, 3.0, 2.0, 8.0, -2.0]
+    var
+      sum = 0.0
+      sumI = 0
+    for i, x in v:
+      sum += x
+      sumI += i
+    check sum == 12.0
+    check sumI == 10
+
+suite "iterators on 32-bit dynamic vectors":
+  test "items vector iterator":
+    let v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    var
+      sum = 0'f32
+      count = 0
+    for x in v:
+      sum += x
+      count += 1
+    check sum == 12'f32
+    check count == 5
+  test "pairs vector iterator":
+    let v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    var
+      sum = 0'f32
+      sumI = 0
+    for i, x in v:
+      sum += x
+      sumI += i
+    check sum == 12'f32
+    check sumI == 10
