@@ -487,12 +487,12 @@ suite "dynamic vector operations":
     v *= 2.0
     check v == @[2.0, 6.0, 4.0, 16.0, -4.0]
   test "scalar vector division":
-    let v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
-    check((v / 2.0) == vector([1.0, 3.0, 2.0, 8.0, -2.0]))
+    let v = @[2.0, 6.0, 4.0, 16.0, -4.0]
+    check((v / 2.0) == @[1.0, 3.0, 2.0, 8.0, -2.0])
   test "in place scalar vector division":
-    var v = vector([2.0, 6.0, 4.0, 16.0, -4.0])
+    var v = @[2.0, 6.0, 4.0, 16.0, -4.0]
     v /= 2.0
-    check v == vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    check v == @[1.0, 3.0, 2.0, 8.0, -2.0]
   test "vector sum":
     let
       v = @[1.0, 3.0, 2.0, 8.0, -2.0]
@@ -530,3 +530,57 @@ suite "dynamic vector operations":
     check maxIndex(v) == (3, 8.0)
     check min(v) == -2.0
     check minIndex(v) == (4, -2.0)
+
+suite "dynamic 32-bit vector operations":
+  test "scalar vector multiplication":
+    let v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    check((v * 2'f32) == @[2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+    check((-1'f32 * v) == @[-1'f32, -3'f32, -2'f32, -8'f32, 2'f32])
+  test "in place scalar vector multiplication":
+    var v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    v *= 2'f32
+    check v == @[2'f32, 6'f32, 4'f32, 16'f32, -4'f32]
+  test "scalar vector division":
+    let v = @[2'f32, 6'f32, 4'f32, 16'f32, -4'f32]
+    check((v / 2'f32) == @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+  test "in place scalar vector division":
+    var v = @[2'f32, 6'f32, 4'f32, 16'f32, -4'f32]
+    v /= 2'f32
+    check v == @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+  test "vector sum":
+    let
+      v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+      w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    check((v + w) == @[3'f32, 2'f32, 4'f32, 8'f32, 2'f32])
+  test "in place vector sum":
+    var v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    let w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    v += w
+    check v == @[3'f32, 2'f32, 4'f32, 8'f32, 2'f32]
+  test "vector difference":
+    let
+      v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+      w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    check((v - w) == @[-1'f32, 4'f32, 0'f32, 8'f32, -6'f32])
+  test "in place vector difference":
+    var v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    let w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    v -= w
+    check v == @[-1'f32, 4'f32, 0'f32, 8'f32, -6'f32]
+  test "dot product":
+    let
+      v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+      w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    check(v * w == -5'f32)
+  test "ℓ² norm":
+    let v = @[1'f32, 1'f32, 2'f32, 3'f32, -7'f32]
+    check l_2(v) == 8'f32
+  test "ℓ¹ norm":
+    let v = @[1'f32, 1'f32, 2'f32, 3'f32, -7'f32]
+    check l_1(v) == 14'f32
+  test "max and min of vectors":
+    let v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+    check max(v) == 8'f32
+    check maxIndex(v) == (3, 8'f32)
+    check min(v) == -2'f32
+    check minIndex(v) == (4, -2'f32)

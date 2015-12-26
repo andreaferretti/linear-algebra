@@ -14,8 +14,16 @@
 
 proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = scal(N, k, v.fp, 1)
 
+proc `*=`*(v: var DVector32, k: float32) {. inline .} = scal(v.len, k, v.fp, 1)
+
 proc `*`*[N: static[int]](v: Vector32[N], k: float32): Vector32[N]  {. inline .} =
   new result
+  copy(N, v.fp, 1, result.fp, 1)
+  scal(N, k, result.fp, 1)
+
+proc `*`*(v: DVector32, k: float32): DVector32 {. inline .} =
+  let N = v.len
+  result = newSeq[float32](N)
   copy(N, v.fp, 1, result.fp, 1)
   scal(N, k, result.fp, 1)
 
@@ -37,8 +45,20 @@ proc `*`*(v: DVector64, k: float64): DVector64 {. inline .} =
 proc `+=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
   axpy(N, 1, w.fp, 1, v.fp, 1)
 
+proc `+=`*(v: var DVector32, w: DVector32) {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  axpy(N, 1, w.fp, 1, v.fp, 1)
+
 proc `+`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
   new result
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, 1, w.fp, 1, result.fp, 1)
+
+proc `+`*(v, w: DVector32): DVector32  {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  result = newSeq[float32](N)
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, 1, w.fp, 1, result.fp, 1)
 
@@ -65,8 +85,20 @@ proc `+`*(v, w: DVector64): DVector64  {. inline .} =
 proc `-=`*[N: static[int]](v: var Vector32[N], w: Vector32[N]) {. inline .} =
   axpy(N, -1, w.fp, 1, v.fp, 1)
 
+proc `-=`*(v: var DVector32, w: DVector32) {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  axpy(N, -1, w.fp, 1, v.fp, 1)
+
 proc `-`*[N: static[int]](v, w: Vector32[N]): Vector32[N]  {. inline .} =
   new result
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, -1, w.fp, 1, result.fp, 1)
+
+proc `-`*(v, w: DVector32): DVector32  {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  result = newSeq[float32](N)
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, -1, w.fp, 1, result.fp, 1)
 
@@ -99,6 +131,11 @@ proc `*`*(v, w: DVector64): float64 {. inline .} =
   let N = v.len
   dot(N, v.fp, 1, w.fp, 1)
 
+proc `*`*(v, w: DVector32): float32 {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  dot(N, v.fp, 1, w.fp, 1)
+
 proc l_2*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = nrm2(N, v.fp, 1)
 
 proc l_2*(v: DVector32 or DVector64): auto {. inline .} = nrm2(v.len, v.fp, 1)
@@ -126,6 +163,9 @@ proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
 proc maxIndex*(v: DVector64): tuple[i: int, val: float64] =
   maxIndexPrivate(v.len, v)
 
+proc maxIndex*(v: DVector32): tuple[i: int, val: float32] =
+  maxIndexPrivate(v.len, v)
+
 template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
 
 template minIndexPrivate(N, v: expr): auto =
@@ -145,6 +185,9 @@ proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
   minIndexPrivate(N, v)
 
 proc minIndex*(v: DVector64): tuple[i: int, val: float64] =
+  minIndexPrivate(v.len, v)
+
+proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
   minIndexPrivate(v.len, v)
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
