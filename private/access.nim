@@ -43,13 +43,21 @@ template atPrivate(M, N, m, i, j: expr, A: typedesc): auto =
     let data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j]
 
+template atPrivateD(m, i, j: expr): auto =
+  if m.order == colMajor: m.data[j * m.M + i]
+  else: m.data[i * m.N + j]
+
 proc at*[M, N: static[int]](m: Matrix64[M, N], i, j: int): float64 {. inline .} = atPrivate(M, N, m, i, j, float64)
 
-template `[]`*(m: Matrix64, i, j: int): float64 = m.at(i, j)
+proc at*(m: DMatrix64, i, j: int): float64 {. inline .} = atPrivateD(m, i, j)
+
+template `[]`*(m: Matrix64 or DMatrix64, i, j: int): float64 = m.at(i, j)
 
 proc at*[M, N: static[int]](m: Matrix32[M, N], i, j: int): float32 {. inline .} = atPrivate(M, N, m, i, j, float32)
 
-template `[]`*(m: Matrix32, i, j: int): float32 = m.at(i, j)
+proc at*(m: DMatrix32, i, j: int): float32 {. inline .} = atPrivateD(m, i, j)
+
+template `[]`*(m: Matrix32 or DMatrix32, i, j: int): float32 = m.at(i, j)
 
 template putPrivate(M, N, m, i, j, val: expr, A: typedesc) =
   if m.order == colMajor:
@@ -114,6 +122,8 @@ proc rowUnsafe*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. in
     raise newException(AccessViolationError, "Cannot access rows in an unsafe way")
 
 proc dim*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): tuple[rows, columns: int] = (M, N)
+
+proc dim*(m: DMatrix32 or DMatrix64): tuple[rows, columns: int] = (m.M, m.N)
 
 proc clone*[M, N: static[int]](m: Matrix32[M, N]): Matrix32[M, N] =
   result.order = m.order
