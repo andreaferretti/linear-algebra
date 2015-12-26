@@ -32,3 +32,9 @@ suite "conversions":
       m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)
       n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + j).float32)
     check n.to64 == m
+  test "DVector64 to DVector32":
+    let v = @[1.0, 3.5, 2.0, 4.5]
+    check v.to32 == @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+  test "DVector32 to DVector64":
+    let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+    check v.to64 == @[1.0, 3.5, 2.0, 4.5]
