@@ -167,23 +167,15 @@ proc randomDMatrix*(M, N: int, max: float32, order: OrderType = colMajor): DMatr
 template constantMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
-  if order == colMajor:
-    var data = cast[ref array[N, array[M, A]]](result.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        data[j][i] = x
-  else:
-    var data = cast[ref array[M, array[N, A]]](result.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        data[i][j] = x
+  for i in 0 .. < (M * N):
+    result.data[i] = x
 
 template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
   result.data = newSeq[A](M * N)
   result.order = order
   result.M = M
   result.N = N
-  for i in 0 ..  M * N:
+  for i in 0 .. < (M * N):
     result.data[i] = x
 
 proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
