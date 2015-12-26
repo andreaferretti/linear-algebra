@@ -101,7 +101,11 @@ proc `*`*(v, w: DVector64): float64 {. inline .} =
 
 proc l_2*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = nrm2(N, v.fp, 1)
 
+proc l_2*(v: DVector32 or DVector64): auto {. inline .} = nrm2(v.len, v.fp, 1)
+
 proc l_1*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = asum(N, v.fp, 1)
+
+proc l_1*(v: DVector32 or DVector64): auto {. inline .} = asum(v.len, v.fp, 1)
 
 template maxIndexPrivate(N, v: expr, A: typedesc): auto =
   var

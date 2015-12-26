@@ -518,12 +518,12 @@ suite "dynamic vector operations":
       v = @[1.0, 3.0, 2.0, 8.0, -2.0]
       w = @[2.0, -1.0, 2.0, 0.0, 4.0]
     check(v * w == -5.0)
-  # test "ℓ² norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
-  #   check l_2(v) == 8.0
-  # test "ℓ¹ norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
-  #   check l_1(v) == 14.0
+  test "ℓ² norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0]
+    check l_2(v) == 8.0
+  test "ℓ¹ norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0]
+    check l_1(v) == 14.0
   # test "max and min of vectors":
   #   let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
   #   check max(v) == 8.0
