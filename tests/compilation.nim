@@ -27,10 +27,16 @@ suite "compilation errors":
     let v = vector([1.0, 2.0, 3.0, 4.0])
     when compiles(u += v): fail()
     when compiles(u -= v): fail()
-  test "mutating sum should not work for immutable vectors":
+  test "in place sum should not work for immutable vectors":
     let
       u = vector([1.0, 2.0, 3.0, 4.0])
       v = vector([1.0, 2.0, 3.0, 4.0])
+    when compiles(u += v): fail()
+    when compiles(u -= v): fail()
+  test "in place sum should not work for immutable dynamic vectors":
+    let
+      u = @[1.0, 2.0, 3.0, 4.0]
+      v = @[1.0, 2.0, 3.0, 4.0]
     when compiles(u += v): fail()
     when compiles(u -= v): fail()
   test "making an array into a matrix should not work for wrong dimensions":
