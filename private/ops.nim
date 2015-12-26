@@ -192,7 +192,7 @@ proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
-proc compareApprox(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool =
+proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
   mixin l_1
   const epsilon = 0.000001
   let
@@ -204,6 +204,10 @@ proc compareApprox(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool =
 template `=~`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
 
 template `=~`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
+
+template `=~`*(v, w: DVector32): bool = compareApprox(v, w)
+
+template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
@@ -324,7 +328,7 @@ proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
 
 proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 
-template `!=~`*(a, b: Vector32 or Vector64 or Matrix32 or Matrix64): bool = not (a =~ b)
+template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool = not (a =~ b)
 
 template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 
