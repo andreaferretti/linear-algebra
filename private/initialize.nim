@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template isStatic(a: typed): bool =
+  compiles(proc() =
+    const v = a)
+
 template makeVectorPrivate(N, f, result: expr) =
   new result
   for i in 0 .. < N:
@@ -190,33 +194,29 @@ proc constantDMatrix*(M, N: int, x: float64, order: OrderType = colMajor): DMatr
 proc constantDMatrix*(M, N: int, x: float32, order: OrderType = colMajor): DMatrix32 =
   constantDMatrixPrivate(M, N, x, order, result, float32)
 
-proc zerosD*(M, N: int, order: OrderType = colMajor): DMatrix64 = constantDMatrix(M, N, 0'f64, order)
-
-proc zerosD*(M, N: int, A: typedesc, order: OrderType = colMajor): auto =
-  when A is float64: constantDMatrix(M, N, 0'f64, order)
+proc zeros*(M: int or static[int], N: int or static[int], order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic:
+    constantMatrix(M, N, 0'f64, order)
   else:
-    when A is float32: constantDMatrix(M, N, 0'f32, order)
+    constantDMatrix(M, N, 0'f64, order)
 
-proc zeros*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 0'f64, order)
-
-proc zeros*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
-  when A is float64: constantMatrix(M, N, 0'f64, order)
+proc zeros*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic:
+    constantMatrix(M, N, 0'f32, order)
   else:
-    when A is float32: constantMatrix(M, N, 0'f32, order)
+    constantDMatrix(M, N, 0'f32, order)
 
-proc onesD*(M, N: int, order: OrderType = colMajor): DMatrix64 = constantDMatrix(M, N, 1'f64, order)
-
-proc onesD*(M, N: int, A: typedesc, order: OrderType = colMajor): auto =
-  when A is float64: constantDMatrix(M, N, 1'f64, order)
+proc ones*(M: int or static[int], N: int or static[int], order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic:
+    constantMatrix(M, N, 1'f64, order)
   else:
-    when A is float32: constantDMatrix(M, N, 1'f32, order)
+    constantDMatrix(M, N, 1'f64, order)
 
-proc ones*(M, N: static[int], order: OrderType = colMajor): Matrix64[M, N] = constantMatrix(M, N, 1'f64, order)
-
-proc ones*(M, N: static[int], A: typedesc, order: OrderType = colMajor): auto =
-  when A is float64: constantMatrix(M, N, 1'f64, order)
+proc ones*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic:
+    constantMatrix(M, N, 1'f32, order)
   else:
-    when A is float32: constantMatrix(M, N, 1'f32, order)
+    constantDMatrix(M, N, 1'f32, order)
 
 template eyePrivate(N, order, result: expr, A: typedesc) =
   new result.data
