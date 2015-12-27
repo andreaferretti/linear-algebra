@@ -182,41 +182,37 @@ template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
   for i in 0 .. < (M * N):
     result.data[i] = x
 
-proc constantMatrix*(M, N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
+proc constantSMatrix(M: static[int], N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
   constantMatrixPrivate(M, N, x, order, result, float64)
 
-proc constantMatrix*(M, N: static[int], x: float32, order: OrderType = colMajor): Matrix32[M, N] =
-  constantMatrixPrivate(M, N, x, order, result, float32)
-
-proc constantDMatrix*(M, N: int, x: float64, order: OrderType = colMajor): DMatrix64 =
+proc constantDMatrix(M, N: int, x: float64, order: OrderType = colMajor): DMatrix64 =
   constantDMatrixPrivate(M, N, x, order, result, float64)
 
-proc constantDMatrix*(M, N: int, x: float32, order: OrderType = colMajor): DMatrix32 =
+proc constantSMatrix(M, N: static[int], x: float32, order: OrderType = colMajor): Matrix32[M, N] =
+  constantMatrixPrivate(M, N, x, order, result, float32)
+
+proc constantDMatrix(M, N: int, x: float32, order: OrderType = colMajor): DMatrix32 =
   constantDMatrixPrivate(M, N, x, order, result, float32)
 
+proc constantMatrix*(M: int or static[int], N: int or static[int], x: float64, order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic: constantSMatrix(M, N, x, order)
+  else: constantDMatrix(M, N, x, order)
+
+proc constantMatrix*(M: int or static[int], N: int or static[int], x: float32, order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic: constantSMatrix(M, N, x, order)
+  else: constantDMatrix(M, N, x, order)
+
 proc zeros*(M: int or static[int], N: int or static[int], order: OrderType = colMajor): auto =
-  when M.isStatic and N.isStatic:
-    constantMatrix(M, N, 0'f64, order)
-  else:
-    constantDMatrix(M, N, 0'f64, order)
+  constantMatrix(M, N, 0'f64, order)
 
 proc zeros*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
-  when M.isStatic and N.isStatic:
-    constantMatrix(M, N, 0'f32, order)
-  else:
-    constantDMatrix(M, N, 0'f32, order)
+  constantMatrix(M, N, 0'f32, order)
 
 proc ones*(M: int or static[int], N: int or static[int], order: OrderType = colMajor): auto =
-  when M.isStatic and N.isStatic:
-    constantMatrix(M, N, 1'f64, order)
-  else:
-    constantDMatrix(M, N, 1'f64, order)
+  constantMatrix(M, N, 1'f64, order)
 
 proc ones*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
-  when M.isStatic and N.isStatic:
-    constantMatrix(M, N, 1'f32, order)
-  else:
-    constantDMatrix(M, N, 1'f32, order)
+  constantMatrix(M, N, 1'f32, order)
 
 template eyePrivate(N, order, result: expr, A: typedesc) =
   new result.data
