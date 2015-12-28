@@ -116,7 +116,7 @@ proc dvector*(N: static[int], xs: seq[float64]): Vector64[N] =
 proc dvector*(N: static[int], xs: seq[float32]): Vector32[N] =
   makeVector(N, proc(i: int): float32 = xs[i])
 
-template makeMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
+template makeSMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
   if order == colMajor:
@@ -144,29 +144,31 @@ template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
       for j in 0 .. < N:
         result.data[i * N + j] = f(i, j)
 
-proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): Matrix64[M, N] =
-  makeMatrixPrivate(M, N, f, order, result, float64)
+proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float64, order: OrderType): Matrix64[M, N] =
+  makeSMatrixPrivate(M, N, f, order, result, float64)
 
-proc makeMatrix*(M, N: static[int], f: proc (i, j: int): float32, order: OrderType = colMajor): Matrix32[M, N] =
-  makeMatrixPrivate(M, N, f, order, result, float32)
-
-proc makeDMatrix*(M, N: int, f: proc (i, j: int): float64, order: OrderType = colMajor): DMatrix64 =
+proc makeDMatrix(M, N: int, f: proc (i, j: int): float64, order: OrderType): DMatrix64 =
   makeDMatrixPrivate(M, N, f, order, result, float64)
 
-proc makeDMatrix*(M, N: int, f: proc (i, j: int): float32, order: OrderType = colMajor): DMatrix32 =
+proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
+  else: makeDMatrix(M, N, f, order)
+
+proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float32, order: OrderType): Matrix32[M, N] =
+  makeSMatrixPrivate(M, N, f, order, result, float32)
+
+proc makeDMatrix(M, N: int, f: proc (i, j: int): float32, order: OrderType): DMatrix32 =
   makeDMatrixPrivate(M, N, f, order, result, float32)
 
-proc randomMatrix*(M, N: static[int], max: float64 = 1, order: OrderType = colMajor): Matrix64[M, N] =
+proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: int): float32, order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
+  else: makeDMatrix(M, N, f, order)
+
+proc randomMatrix*(M: int or static[int], N: int or static[int], max: float64 = 1, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)
 
-proc randomMatrix*(M, N: static[int], max: float32, order: OrderType = colMajor): Matrix32[M, N] =
+proc randomMatrix*(M: int or static[int], N: int or static[int], max: float32, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
-
-proc randomDMatrix*(M, N: int, max: float64 = 1, order: OrderType = colMajor): DMatrix64 =
-  makeDMatrix(M, N, proc(i, j: int): float64 = random(max), order)
-
-proc randomDMatrix*(M, N: int, max: float32, order: OrderType = colMajor): DMatrix32 =
-  makeDMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
 template constantMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
   new result.data

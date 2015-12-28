@@ -247,13 +247,16 @@ suite "dynamic 32-bit vector accessors":
 
 suite "dynamic matrix accessors":
   test "reading matrix dimensions":
-    let m = randomDMatrix(3, 7)
+    let
+      M = 3
+      N = 7
+      m = randomMatrix(M, N)
     check m.dim == (3, 7)
   test "reading matrix elements":
     let
       M = 2
       N = 2
-      m = makeDMatrix(M, N, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
     check m[0, 0] == 0.0
     check m[0, 1] == -2.0
     check m[1, 0] == 3.0
