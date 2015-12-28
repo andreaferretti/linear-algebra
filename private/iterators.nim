@@ -65,3 +65,8 @@ iterator pairs*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {.
   for i in 0 .. < M:
     for j in 0 .. < N:
       yield ((i, j), m[i, j])
+
+iterator pairs*(m: DMatrix32 or DMatrix64): auto {. inline .} =
+  for i in 0 .. < m.M:
+    for j in 0 .. < m.N:
+      yield ((i, j), m[i, j])
