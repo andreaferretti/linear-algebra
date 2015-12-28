@@ -262,23 +262,28 @@ suite "dynamic matrix accessors":
     check m[1, 0] == 3.0
     check m[1, 1] == 1.0
   test "writing matrix elements":
-    var m = zeros(3, 3)
+    var
+      M = 3
+      N = 3
+      m = zeros(M, N)
     m[0, 2] = -2.1
     m[1, 1] = 1.0
     check m[0, 2] == -2.1
     check m[1, 1] == 1.0
-  # test "reading matrix rows":
-  #   let
-  #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-  #     r = m.row(1)
-  #   check r[0] == 3.0
-  #   check r[1] == 1.0
-  # test "reading matrix columns":
-  #   let
-  #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-  #     c = m.column(1)
-  #   check c[0] == -2.0
-  #   check c[1] == 1.0
+  test "reading matrix rows":
+    let
+      M = 2
+      N = 2
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      r = m.row(1)
+    check r == @[3.0, 1.0]
+  test "reading matrix columns":
+    let
+      M = 2
+      N = 2
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      c = m.column(1)
+    check c == @[-2.0, 1.0]
   # test "reading matrix rows without copy":
   #   let
   #     m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)

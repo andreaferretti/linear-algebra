@@ -103,6 +103,16 @@ proc row*[M, N: static[int]](m: Matrix32[M, N], i: int): Vector32[N] {. inline .
   for j in 0 .. < N:
     result[j] = m.at(i, j)
 
+proc column*(m: DMatrix32, j: int): DVector32 {. inline .} =
+  result = newSeq[float32](m.M)
+  for i in 0 .. < m.M:
+    result[i] = m.at(i, j)
+
+proc row*(m: DMatrix32, i: int): DVector32 {. inline .} =
+  result = newSeq[float32](m.N)
+  for j in 0 .. < m.N:
+    result[j] = m.at(i, j)
+
 proc columnUnsafe*[M, N: static[int]](m: Matrix32[M, N], j: int): Vector32[M] {. inline .} =
   if m.order == colMajor:
     return cast[ref array[M, float32]](addr(m.data[j * M]))
@@ -123,6 +133,16 @@ proc column*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inlin
 proc row*[M, N: static[int]](m: Matrix64[M, N], i: int): Vector64[N] {. inline .} =
   new result
   for j in 0 .. < N:
+    result[j] = m.at(i, j)
+
+proc column*(m: DMatrix64, j: int): DVector64 {. inline .} =
+  result = newSeq[float64](m.M)
+  for i in 0 .. < m.M:
+    result[i] = m.at(i, j)
+
+proc row*(m: DMatrix64, i: int): DVector64 {. inline .} =
+  result = newSeq[float64](m.N)
+  for j in 0 .. < m.N:
     result[j] = m.at(i, j)
 
 proc columnUnsafe*[M, N: static[int]](m: Matrix64[M, N], j: int): Vector64[M] {. inline .} =
