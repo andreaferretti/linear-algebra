@@ -63,14 +63,36 @@ template slowEqPrivate(M, N, m, n: expr, A: typedesc) =
         return false
   return true
 
+template elem(m, i, j: expr): auto =
+  if m.order == colMajor: m.data[j * m.M + i]
+  else: m.data[i * m.N + j]
+
+template slowEqPrivateD(m, n: expr) =
+  if m.M != n.M or m.N != n.N:
+    return false
+  for i in 0 .. < m.M:
+    for j in 0 .. < m.N:
+      if elem(m, i, j) != elem(n, i, j):
+        return false
+  return true
+
 proc slowEq[M, N: static[int]](m, n: Matrix32[M, N]): bool = slowEqPrivate(M, N, m, n, float32)
 
 proc slowEq[M, N: static[int]](m, n: Matrix64[M, N]): bool = slowEqPrivate(M, N, m, n, float64)
+
+proc slowEq(m, n: DMatrix32): bool = slowEqPrivateD(m, n)
+
+proc slowEq(m, n: DMatrix64): bool = slowEqPrivateD(m, n)
 
 proc `==`*(m, n: Matrix32 or Matrix64): bool =
   if m.order == n.order: m.data[] == n.data[]
   elif m.order == colMajor: slowEq(m, n)
   else: slowEq(n, m)
+
+proc `==`*(m, n: DMatrix32 or DMatrix64): bool =
+  if m.order == n.order: m.data == n.data
+  elif m.order == colMajor: slowEq(m, n)
+  else: slowEq(m, n)
 
 # Conversion
 

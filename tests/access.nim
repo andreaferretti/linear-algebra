@@ -296,14 +296,15 @@ suite "dynamic matrix accessors":
   #     c = m.column(1)
   #     cu = m.columnUnsafe(1)
   #   check c == cu
-  # test "cloning matrices":
-  #   var m = randomMatrix(5, 5)
-  #   let
-  #     n = m.clone
-  #     f = n[2, 2]
-  #   check m == n
-  #   m[2, 2] = m[2, 2] + 1
-  #   check n[2, 2] == f
+  test "cloning matrices":
+    let M = 5
+    var m = randomMatrix(M, M)
+    let
+      n = m.clone
+      f = n[2, 2]
+    check m == n
+    m[2, 2] = m[2, 2] + 1
+    check n[2, 2] == f
   # test "mapping matrices":
   #   let
   #     m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)

@@ -171,6 +171,18 @@ proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
   new result.data
   copyMem(result.fp, m.fp, M * N * sizeof(float64))
 
+proc clone*(m: DMatrix32): DMatrix32 =
+  result.order = m.order
+  result.M = m.M
+  result.N = m.N
+  result.data = m.data
+
+proc clone*(m: DMatrix64): DMatrix64 =
+  result.order = m.order
+  result.M = m.M
+  result.N = m.N
+  result.data = m.data
+
 proc map*[M, N: static[int]](m: Matrix32[M, N], f: proc(x: float32): float32): Matrix32[M, N] =
   result.order = m.order
   new result.data
