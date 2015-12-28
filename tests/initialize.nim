@@ -242,7 +242,7 @@ suite "initializaton of 32-bit matrices":
 suite "initializaton of dynamic vectors":
   test "zero vectors":
     let n = 5
-    let v = zeros(n, float64)
+    let v = zeros(n)
     check v == @[0.0, 0.0, 0.0, 0.0, 0.0]
   test "one vectors":
     let n = 3

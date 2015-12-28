@@ -56,41 +56,25 @@ template constantDVectorPrivate(N, x, T, result: expr) =
   for i in 0 .. < N:
     result[i] = x
 
-proc constantVector*(N: static[int], x: float64): Vector64[N] = constantVectorPrivate(N, x, result)
+proc constantSVector(N: static[int], x: float64): Vector64[N] = constantVectorPrivate(N, x, result)
 
-proc constantVector*(N: static[int], x: float32): Vector32[N] = constantVectorPrivate(N, x, result)
+proc constantSVector(N: static[int], x: float32): Vector32[N] = constantVectorPrivate(N, x, result)
 
-proc constantVector*(N: int, x: float64): DVector64 = constantDVectorPrivate(N, x, float64, result)
+proc constantDVector(N: int, x: float64): DVector64 = constantDVectorPrivate(N, x, float64, result)
 
-proc constantVector*(N: int, x: float32): DVector32 = constantDVectorPrivate(N, x, float32, result)
+proc constantDVector(N: int, x: float32): DVector32 = constantDVectorPrivate(N, x, float32, result)
 
-proc zeros*(N: int): DVector64 = constantVector(N, 0'f64)
+proc constantVector*(N: int or static[int], x: float32 or float64): auto =
+  when N.isStatic: constantSVector(N, x)
+  else: constantDVector(N, x)
 
-proc zeros*(N: int, A: typedesc): auto =
-  when A is float64: constantVector(N, 0'f64)
-  else:
-    when A is float32: constantVector(N, 0'f32)
+proc zeros*(N: int or static[int]): auto = constantVector(N, 0'f64)
 
-proc zeros*(N: static[int]): Vector64[N] = constantVector(N, 0'f64)
+proc zeros*(N: int or static[int], A: typedesc[float32]): auto = constantVector(N, 0'f32)
 
-proc zeros*(N: static[int], A: typedesc): auto =
-  when A is float64: constantVector(N, 0'f64)
-  else:
-    when A is float32: constantVector(N, 0'f32)
+proc ones*(N: int or static[int]): auto = constantVector(N, 1'f64)
 
-proc ones*(N: int): DVector64 = constantVector(N, 1'f64)
-
-proc ones*(N: int, A: typedesc): auto =
-  when A is float64: constantVector(N, 1'f64)
-  else:
-    when A is float32: constantVector(N, 1'f32)
-
-proc ones*(N: static[int]): Vector64[N] = constantVector(N, 1'f64)
-
-proc ones*(N: static[int], A: typedesc): auto =
-  when A is float64: constantVector(N, 1'f64)
-  else:
-    when A is float32: constantVector(N, 1'f32)
+proc ones*(N: int or static[int], A: typedesc[float32]): auto = constantVector(N, 1'f32)
 
 type Array[N: static[int], A] = array[N, A]
 
