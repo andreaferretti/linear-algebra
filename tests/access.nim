@@ -188,11 +188,11 @@ suite "32-bit matrix accessors":
 suite "dynamic vector accessors":
   test "reading vector length":
     let n = 10
-    let v = randomDVector(n)
+    let v = randomVector(n)
     check v.len == 10
   test "reading vector elements":
     let n = 5
-    let v = makeDVector(n, proc(i: int): float64 = (3 * i - 2).float64)
+    let v = makeVector(n, proc(i: int): float64 = (3 * i - 2).float64)
     check v[0] == -2.0
     check v[1] == 1.0
     check v[2] == 4.0
@@ -207,7 +207,7 @@ suite "dynamic vector accessors":
     check v[1] == 1.0
   test "cloning vectors":
     let n = 5
-    var v = randomDVector(n)
+    var v = randomVector(n)
     let
       w = v.clone
       f = w[0]
@@ -218,11 +218,11 @@ suite "dynamic vector accessors":
 suite "dynamic 32-bit vector accessors":
   test "reading vector length":
     let n = 10
-    let v = randomDVector(n, max = 1'f32)
+    let v = randomVector(n, max = 1'f32)
     check v.len == 10
   test "reading vector elements":
     let n = 5
-    let v = makeDVector(n, proc(i: int): float32 = (3 * i - 2).float32)
+    let v = makeVector(n, proc(i: int): float32 = (3 * i - 2).float32)
     check v[0] == -2'f32
     check v[1] == 1'f32
     check v[2] == 4'f32
@@ -237,7 +237,7 @@ suite "dynamic 32-bit vector accessors":
     check v[1] == 1'f32
   test "cloning vectors":
     let n = 5
-    var v = randomDVector(n, max = 1'f32)
+    var v = randomVector(n, max = 1'f32)
     let
       w = v.clone
       f = w[0]

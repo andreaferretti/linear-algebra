@@ -16,7 +16,7 @@ template isStatic(a: typed): bool =
   compiles(proc() =
     const v = a)
 
-template makeVectorPrivate(N, f, result: expr) =
+template makeSVectorPrivate(N, f, result: expr) =
   new result
   for i in 0 .. < N:
     result[i] = f(i)
@@ -26,24 +26,30 @@ template makeDVectorPrivate(N, f, T, result: expr) =
   for i in 0 .. < N:
     result[i] = f(i)
 
-proc makeDVector*(N: int, f: proc (i: int): float64): DVector64 = makeDVectorPrivate(N, f, float64, result)
+proc makeSVector(N: static[int], f: proc (i: int): float64): Vector64[N] =
+  makeSVectorPrivate(N, f, result)
 
-proc makeDVector*(N: int, f: proc (i: int): float32): DVector32 = makeDVectorPrivate(N, f, float32, result)
+proc makeSVector(N: static[int], f: proc (i: int): float32): Vector32[N] =
+  makeSVectorPrivate(N, f, result)
 
-proc makeVector*(N: static[int], f: proc (i: int): float64): Vector64[N] = makeVectorPrivate(N, f, result)
+proc makeDVector(N: int, f: proc (i: int): float64): DVector64 =
+  makeDVectorPrivate(N, f, float64, result)
 
-proc makeVector*(N: static[int], f: proc (i: int): float32): Vector32[N] = makeVectorPrivate(N, f, result)
+proc makeDVector(N: int, f: proc (i: int): float32): DVector32 =
+  makeDVectorPrivate(N, f, float32, result)
 
-proc randomDVector*(N: int, max: float64 = 1): DVector64 =
-  makeDVector(N, proc(i: int): float64 = random(max))
+proc makeVector*(N: int or static[int], f: proc (i: int): float64): auto =
+  when N.isStatic: makeSVector(N, f)
+  else: makeDVector(N, f)
 
-proc randomDVector*(N: int, max: float32): DVector32 =
-  makeDVector(N, proc(i: int): float32 = random(max))
+proc makeVector*(N: int or static[int], f: proc (i: int): float32): auto =
+  when N.isStatic: makeSVector(N, f)
+  else: makeDVector(N, f)
 
-proc randomVector*(N: static[int], max: float64 = 1): Vector64[N] =
+proc randomVector*(N: int or static[int], max: float64 = 1): auto =
   makeVector(N, proc(i: int): float64 = random(max))
 
-proc randomVector*(N: static[int], max: float32): Vector32[N] =
+proc randomVector*(N: int or static[int], max: float32): auto =
   makeVector(N, proc(i: int): float32 = random(max).float32)
 
 template constantVectorPrivate(N, x, result: expr) =
