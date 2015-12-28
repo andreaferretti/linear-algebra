@@ -232,7 +232,7 @@ proc eye*(N: int or static[int], order: OrderType = colMajor): auto =
   when N.isStatic: eye64S(N, order)
   else: eye64D(N, order)
 
-proc eye*(N: static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
+proc eye*(N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
   when N.isStatic: eye32S(N, order)
   else: eye32D(N, order)
 
