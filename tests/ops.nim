@@ -584,3 +584,14 @@ suite "dynamic 32-bit vector operations":
     check maxIndex(v) == (3, 8'f32)
     check min(v) == -2'f32
     check minIndex(v) == (4, -2'f32)
+
+# suite "dynamic matrix/vector operations":
+#   test "multiplication of matrix and vector":
+#     let
+#       m = matrix(@[
+#         @[1.0, 0.0, 2.0, -1.0],
+#         @[-1.0, 1.0, 3.0, 1.0],
+#         @[3.0, 2.0, 2.0, 4.0]
+#       ])
+#       v = @[1.0, 3.0, 2.0, -2.0]
+#     check((m * v) == @[7.0, 6.0, 5.0])

@@ -41,9 +41,9 @@ template fp(m: Matrix32): ptr float32 = cast[ptr float32](addr(m.data[]))
 
 template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
 
-template fp(v: DVector64): ptr float64 = cast[ptr float64](unsafeAddr(v[0]))
-
 template fp(v: DVector32): ptr float32 = cast[ptr float32](unsafeAddr(v[0]))
+
+template fp(v: DVector64): ptr float64 = cast[ptr float64](unsafeAddr(v[0]))
 
 template fp(m: DMatrix32): ptr float32 = cast[ptr float32](addr(m.data[0]))
 
