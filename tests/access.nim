@@ -312,3 +312,71 @@ suite "dynamic matrix accessors":
       n = makeMatrix(M, M, proc(i, j: int): float64 = (6 * i - 4 * j).float64)
     proc double(x: float64): float64 = 2 * x
     check m.map(double) == n
+
+suite "dynamic 32-bit matrix accessors":
+  test "reading matrix dimensions":
+    let
+      M = 3
+      N = 7
+      m = randomMatrix(M, N, max = 1'f32)
+    check m.dim == (3, 7)
+  test "reading matrix elements":
+    let
+      M = 2
+      N = 2
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+    check m[0, 0] == 0'f32
+    check m[0, 1] == -2'f32
+    check m[1, 0] == 3'f32
+    check m[1, 1] == 1'f32
+  test "writing matrix elements":
+    var
+      M = 3
+      N = 3
+      m = zeros(M, N, float32)
+    m[0, 2] = -2.5'f32
+    m[1, 1] = 1'f32
+    check m[0, 2] == -2.5'f32
+    check m[1, 1] == 1'f32
+  test "reading matrix rows":
+    let
+      M = 2
+      N = 2
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      r = m.row(1)
+    check r == @[3'f32, 1'f32]
+  test "reading matrix columns":
+    let
+      M = 2
+      N = 2
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      c = m.column(1)
+    check c == @[-2'f32, 1'f32]
+  # test "reading matrix rows without copy":
+  #   let
+  #     m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
+  #     r = m.row(1)
+  #     ru = m.rowUnsafe(1)
+  #   check r == ru
+  # test "reading matrix columns without copy":
+  #   let
+  #     m = makeMatrix(3, 5, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+  #     c = m.column(1)
+  #     cu = m.columnUnsafe(1)
+  #   check c == cu
+  test "cloning matrices":
+    let M = 5
+    var m = randomMatrix(M, M, max = 1'f32)
+    let
+      n = m.clone
+      f = n[2, 2]
+    check m == n
+    m[2, 2] = m[2, 2] + 1
+    check n[2, 2] == f
+  test "mapping matrices":
+    let
+      M = 2
+      m = makeMatrix(M, M, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+      n = makeMatrix(M, M, proc(i, j: int): float32 = (6 * i - 4 * j).float32)
+    proc double(x: float32): float32 = 2 * x
+    check m.map(double) == n
