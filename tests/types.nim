@@ -37,3 +37,17 @@ suite "types of created vectors":
       v = ones(N)
     when not (u is Vector64[5]): fail()
     when not (v is DVector64): fail()
+  test "random vectors should be of expected types":
+    let
+      N = 5
+      u = randomVector(5)
+      v = randomVector(N)
+    when not (u is Vector64[5]): fail()
+    when not (v is DVector64): fail()
+  test "proc vectors should be of expected types":
+    let
+      N = 5
+      u = makeVector(5, proc(i: int): float64 = i.float64)
+      v = makeVector(N, proc(i: int): float64 = i.float64)
+    when not (u is Vector64[5]): fail()
+    when not (v is DVector64): fail()
