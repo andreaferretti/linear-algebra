@@ -51,3 +51,40 @@ suite "types of created vectors":
       v = makeVector(N, proc(i: int): float64 = i.float64)
     when not (u is Vector64[5]): fail()
     when not (v is DVector64): fail()
+
+suite "types of created vectors (32-bit)":
+  test "constant vectors should be of expected types":
+    let
+      N = 5
+      u = constantVector(5, 1'f32)
+      v = constantVector(N, 1'f32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
+  test "zero vectors should be of expected types":
+    let
+      N = 5
+      u = zeros(5, float32)
+      v = zeros(N, float32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
+  test "one vectors should be of expected types":
+    let
+      N = 5
+      u = ones(5, float32)
+      v = ones(N, float32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
+  test "random vectors should be of expected types":
+    let
+      N = 5
+      u = randomVector(5, max = 1'f32)
+      v = randomVector(N, max = 1'f32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
+  test "proc vectors should be of expected types":
+    let
+      N = 5
+      u = makeVector(5, proc(i: int): float32 = i.float32)
+      v = makeVector(N, proc(i: int): float32 = i.float32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
