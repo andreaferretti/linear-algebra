@@ -143,18 +143,20 @@ suite "dynamic vector and matrix equality":
     check v =~ w
     check v != w
     check w !=~ z
-  # test "approximate matrix equality":
-  #   let
-  #     m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
-  #     n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
-  #     q = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
-  #   var p = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
-  #   p[2, 2] = p[2, 2] - 0.000000001
-  #   p[1, 3] = p[1, 3] + 0.000000001
-  #   check m =~ n
-  #   check n =~ p
-  #   check n != p
-  #   check p !=~ q
+  test "approximate matrix equality":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64)
+      n = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64)
+      q = makeMatrix(M, N, proc(i, j: int): float64 = (i - 2 * j).float64)
+    var p = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64)
+    p[2, 2] = p[2, 2] - 0.000000001
+    p[1, 3] = p[1, 3] + 0.000000001
+    check m =~ n
+    check n =~ p
+    check n != p
+    check p !=~ q
   # test "approximate 32-bit matrix equality":
   #   let
   #     m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)

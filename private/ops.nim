@@ -455,7 +455,7 @@ proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[
 
 proc `*`*(a: DMatrix64, b: DMatrix64): DMatrix64 {. inline .} = matrixMultD(a, b, result)
 
-proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
+proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
   const epsilon = 0.000001
   let
     aNorm = l_1(a)
@@ -475,4 +475,9 @@ proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
 
 proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
 
-template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool = not (a =~ b)
+template `=~`*(v, w: DMatrix32): bool = compareApprox(v, w)
+
+template `=~`*(v, w: DMatrix64): bool = compareApprox(v, w)
+
+template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
+  not (a =~ b)
