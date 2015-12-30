@@ -16,7 +16,19 @@ proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
+proc t*(a: DMatrix32): DMatrix32 =
+  result.M = a.M
+  result.N = a.N
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data
+
 proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data
+
+proc t*(a: DMatrix64): DMatrix64 =
+  result.M = a.M
+  result.N = a.N
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
@@ -25,8 +37,22 @@ proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32
   result.order = m.order
   result.data = m.data
 
+proc reshape*(m: DMatrix32, A, B: int): DMatrix32 =
+  assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
+  result.M = A
+  result.N = B
+  result.order = m.order
+  result.data = m.data
+
 proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64[A, B] =
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = m.order
+  result.data = m.data
+
+proc reshape*(m: DMatrix64, A, B: int): DMatrix64 =
+  assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
+  result.M = A
+  result.N = B
   result.order = m.order
   result.data = m.data
 
