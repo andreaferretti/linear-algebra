@@ -391,9 +391,15 @@ proc `-`*(a, b: DMatrix64): DMatrix64 {. inline .} =
   copy(a.len, a.fp, 1, result.fp, 1)
   result -= b
 
-proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = nrm2(M * N, m.fp, 1)
+proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
+  nrm2(M * N, m.fp, 1)
 
-proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = asum(M * N, m.fp, 1)
+proc l_2*(m: DMatrix32 or DMatrix64): auto {. inline .} = nrm2(m.len, m.fp, 1)
+
+proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
+  asum(M * N, m.fp, 1)
+
+proc l_1*(m: DMatrix32 or DMatrix64): auto {. inline .} = asum(m.len, m.fp, 1)
 
 template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 

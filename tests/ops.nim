@@ -735,19 +735,19 @@ suite "dynamic matrix operations":
       ])
     m1 -= m2
     check m1 == m3
-  # test "matrix ℓ² norm":
-  #   let m = dmatrix(2, 3, @[
-  #     @[1.0, 1.0, 2.0],
-  #     @[3.0, 0.0, -7.0]
-  #   ])
-  #   check l_2(m) == 8.0
-  # test "matrix ℓ¹ norm":
-  #   let m = dmatrix(3, 3, @[
-  #     @[1.0, 1.0, 2.0],
-  #     @[3.0, 0.0, -7.0],
-  #     @[2.5, 3.1, -1.4]
-  #   ])
-  #   check l_1(m) == 21.0
+  test "matrix ℓ² norm":
+    let m = matrix(@[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0]
+    ])
+    check l_2(m) == 8.0
+  test "matrix ℓ¹ norm":
+    let m = matrix(@[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0],
+      @[2.5, 3.1, -1.4]
+    ])
+    check l_1(m) == 21.0
   # test "max and min of matrices":
   #   let m = dmatrix(2, 3, @[
   #     @[1.0, 1.0, 2.0],
