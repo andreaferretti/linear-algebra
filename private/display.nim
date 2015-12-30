@@ -24,14 +24,26 @@ proc toStringHorizontal[N: static[int]](v: Vector32[N] or Vector64[N]): string =
     result &= $(v[i]) & "\t"
   result &= $(v[N - 1]) & " ]"
 
-proc `$`*[M, N: static[int]](m: Matrix64[M, N]): string =
+proc toStringHorizontal(v: DVector32 or DVector64): string =
   result = "[ "
-  for i in 0 .. < M - 1:
-    result &= toStringHorizontal(m.row(i)) & "\n  "
-  result &= toStringHorizontal(m.row(M - 1)) & " ]"
+  for i in 0 .. < (v.len - 1):
+    result &= $(v[i]) & "\t"
+  result &= $(v[v.len - 1]) & " ]"
 
 proc `$`*[M, N: static[int]](m: Matrix32[M, N]): string =
   result = "[ "
   for i in 0 .. < M - 1:
     result &= toStringHorizontal(m.row(i)) & "\n  "
   result &= toStringHorizontal(m.row(M - 1)) & " ]"
+
+proc `$`*[M, N: static[int]](m: Matrix64[M, N]): string =
+  result = "[ "
+  for i in 0 .. < M - 1:
+    result &= toStringHorizontal(m.row(i)) & "\n  "
+  result &= toStringHorizontal(m.row(M - 1)) & " ]"
+
+proc `$`*(m: DMatrix32 or DMatrix64): string =
+  result = "[ "
+  for i in 0 .. < (m.M - 1):
+    result &= toStringHorizontal(m.row(i)) & "\n  "
+  result &= toStringHorizontal(m.row(m.M - 1)) & " ]"
