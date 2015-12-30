@@ -164,3 +164,14 @@ suite "row-major matrix operations":
         @[18.0, 14.0, -2.0]
       ], order = rowMajor)
     check(m1 * m2 == m3)
+
+suite "row-major dynamic matrix/vector operations":
+  test "multiplication of matrix and vector":
+    let
+      m = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ], order = rowMajor)
+      v = @[1.0, 3.0, 2.0, -2.0]
+    check((m * v) == @[7.0, 6.0, 5.0])
