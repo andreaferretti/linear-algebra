@@ -126,12 +126,12 @@ proc `*`*[N: static[int]](v, w: Vector32[N]): float32 {. inline .} = dot(N, v.fp
 
 proc `*`*[N: static[int]](v, w: Vector64[N]): float64 {. inline .} = dot(N, v.fp, 1, w.fp, 1)
 
-proc `*`*(v, w: DVector64): float64 {. inline .} =
+proc `*`*(v, w: DVector32): float32 {. inline .} =
   assert(v.len == w.len)
   let N = v.len
   dot(N, v.fp, 1, w.fp, 1)
 
-proc `*`*(v, w: DVector32): float32 {. inline .} =
+proc `*`*(v, w: DVector64): float64 {. inline .} =
   assert(v.len == w.len)
   let N = v.len
   dot(N, v.fp, 1, w.fp, 1)
@@ -160,10 +160,10 @@ proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
 proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
   maxIndexPrivate(N, v)
 
-proc maxIndex*(v: DVector64): tuple[i: int, val: float64] =
+proc maxIndex*(v: DVector32): tuple[i: int, val: float32] =
   maxIndexPrivate(v.len, v)
 
-proc maxIndex*(v: DVector32): tuple[i: int, val: float32] =
+proc maxIndex*(v: DVector64): tuple[i: int, val: float64] =
   maxIndexPrivate(v.len, v)
 
 template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
@@ -184,20 +184,25 @@ proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
 proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
   minIndexPrivate(N, v)
 
-proc minIndex*(v: DVector64): tuple[i: int, val: float64] =
+proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
   minIndexPrivate(v.len, v)
 
-proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
+proc minIndex*(v: DVector64): tuple[i: int, val: float64] =
   minIndexPrivate(v.len, v)
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
-proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
+proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
   new result
   let lda = if a.order == colMajor: M.int else: N.int
   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
-proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
+proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
+  result = newSeq[float32](a.M)
+  let lda = if a.order == colMajor: a.M.int else: a.N.int
+  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+
+proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   let lda = if a.order == colMajor: M.int else: N.int
   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
@@ -206,21 +211,6 @@ proc `*`*(a: DMatrix64, v: DVector64): DVector64  {. inline .} =
   result = newSeq[float64](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
-
-proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
-  result = newSeq[float32](a.M)
-  let lda = if a.order == colMajor: a.M.int else: a.N.int
-  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
-
-proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
-
-proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
-  new result.data
-  result.order = m.order
-  copy(M * N, m.fp, 1, result.fp, 1)
-  scal(M * N, k, result.fp, 1)
-
-proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
 proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = scal(M * N, k, m.fp, 1)
 
@@ -232,17 +222,27 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
 
 proc `*=`*(m: var DMatrix32, k: float32) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
-template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
+proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 
-template `/`*(v: Vector64 or Matrix64 or DVector64, k: float64): expr = v * (1 / k)
+proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
+  new result.data
+  result.order = m.order
+  copy(M * N, m.fp, 1, result.fp, 1)
+  scal(M * N, k, result.fp, 1)
 
-template `/=`*(v: var Vector64 or var Matrix64 or var DVector64, k: float64): expr = v *= (1 / k)
+proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
 template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32): expr = v * k
 
 template `/`*(v: Vector32 or Matrix32 or DVector32, k: float32): expr = v * (1 / k)
 
 template `/=`*(v: var Vector32 or var Matrix32 or var DVector32, k: float32): expr = v *= (1 / k)
+
+template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
+
+template `/`*(v: Vector64 or Matrix64 or DVector64, k: float64): expr = v * (1 / k)
+
+template `/=`*(v: var Vector64 or var Matrix64 or var DVector64, k: float64): expr = v *= (1 / k)
 
 template matrixAdd(M, N, a, b: expr, A: typedesc) =
   if a.order == b.order:
@@ -340,10 +340,10 @@ template matrixMult(M, N, K, a, b, result: expr): auto =
     result.order = colMajor
     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
 
-proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
+proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
   matrixMult(M, N, K, a, b, result)
 
-proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
+proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   matrixMult(M, N, K, a, b, result)
 
 proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
