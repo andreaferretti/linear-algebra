@@ -635,32 +635,32 @@ suite "dynamic matrix operations":
       ])
     m1 *= 3.0
     check(m1 == m2)
-  # test "scalar matrix division":
-  #   let
-  #     m1 = dmatrix(3, 2, @[
-  #       @[1.0, 3.0],
-  #       @[2.0, 8.0],
-  #       @[-2.0, 3.0]
-  #     ])
-  #     m2 = dmatrix(3, 2, @[
-  #       @[3.0, 9.0],
-  #       @[6.0, 24.0],
-  #       @[-6.0, 9.0]
-  #     ])
-  #   check(m2 / 3.0 == m1)
-  # test "in place scalar division":
-  #   let m1 = dmatrix(3, 2, @[
-  #       @[1.0, 3.0],
-  #       @[2.0, 8.0],
-  #       @[-2.0, 3.0]
-  #     ])
-  #   var m2 = dmatrix(3, 2, @[
-  #       @[3.0, 9.0],
-  #       @[6.0, 24.0],
-  #       @[-6.0, 9.0]
-  #     ])
-  #   m2 /= 3.0
-  #   check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = matrix(@[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+      m2 = matrix(@[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    check(m2 / 3.0 == m1)
+  test "in place scalar division":
+    let m1 = matrix(@[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ])
+    var m2 = matrix(@[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ])
+    m2 /= 3.0
+    check(m1 == m2)
   # test "matrix sum":
   #   let
   #     m1 = dmatrix(3, 4, @[
