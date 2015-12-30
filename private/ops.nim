@@ -420,11 +420,40 @@ template matrixMult(M, N, K, a, b, result: expr): auto =
     result.order = colMajor
     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
 
+template matrixMultD(a, b, result: expr): auto =
+  let
+    M = a.M
+    K = a.N
+    N = b.N
+  assert b.M == K
+  when a is DMatrix32:
+    result.data = newSeq[float32](M * N)
+  when a is DMatrix64:
+    result.data = newSeq[float64](M * N)
+  result.M = M
+  result.N = N
+  if a.order == colMajor and b.order == colMajor:
+    result.order = colMajor
+    gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  elif a.order == rowMajor and b.order == rowMajor:
+    result.order = rowMajor
+    gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
+  elif a.order == colMajor and b.order == rowMajor:
+    result.order = colMajor
+    gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
+  else:
+    result.order = colMajor
+    gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+
 proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
   matrixMult(M, N, K, a, b, result)
 
+proc `*`*(a: DMatrix32, b: DMatrix32): DMatrix32 {. inline .} = matrixMultD(a, b, result)
+
 proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
   matrixMult(M, N, K, a, b, result)
+
+proc `*`*(a: DMatrix64, b: DMatrix64): DMatrix64 {. inline .} = matrixMultD(a, b, result)
 
 proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
   const epsilon = 0.000001
