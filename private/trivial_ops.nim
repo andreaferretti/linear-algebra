@@ -12,21 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template transposeDynamic(a, result: expr) =
-  result.M = a.N
-  result.N = a.M
+template transposeStatic(a, result: expr) =
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
+template transposeDynamic(a, result: expr) =
+  result.M = a.N
+  result.N = a.M
+  transposeStatic(a, result)
+
 proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
-  result.order = if a.order == rowMajor: colMajor else: rowMajor
-  result.data = a.data
+  transposeStatic(a, result)
 
 proc t*(a: DMatrix32): DMatrix32 = transposeDynamic(a, result)
 
 proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
-  result.order = if a.order == rowMajor: colMajor else: rowMajor
-  result.data = a.data
+  transposeStatic(a, result)
 
 proc t*(a: DMatrix64): DMatrix64 = transposeDynamic(a, result)
 
