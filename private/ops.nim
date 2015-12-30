@@ -299,14 +299,12 @@ template matrixDAdd(a, b: expr) =
 proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
   matrixAdd(M, N, a, b, float32)
 
-proc `+=`*(a: var DMatrix32, b: DMatrix32) {. inline .} =
-  matrixDAdd(a, b)
+proc `+=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDAdd(a, b)
 
 proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   matrixAdd(M, N, a, b, float64)
 
-proc `+=`*(a: var DMatrix64, b: DMatrix64) {. inline .} =
-  matrixDAdd(a, b)
+proc `+=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDAdd(a, b)
 
 proc `+`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} =
   new result.data
@@ -348,12 +346,23 @@ template matrixSub(M, N, a, b: expr, A: typedesc) =
       for j in 0 .. < N:
         a_data[i][j] -= b_data[j][i]
 
+template matrixDSub(a, b: expr) =
+  assert a.M == b.M and a.N == a.N
+  if a.order == b.order:
+    axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
+  elif a.order == colMajor and b.order == rowMajor:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[j * a.M + i] -= b.data[i * b.N + j]
+  else:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[i * a.N + j] -= b.data[j * b.M + i]
 
 proc `-=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
   matrixSub(M, N, a, b, float32)
 
-proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
-  matrixSub(M, N, a, b, float64)
+proc `-=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDSub(a, b)
 
 proc `-`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
   new result.data
@@ -361,10 +370,25 @@ proc `-`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .}
   copy(M * N, a.fp, 1, result.fp, 1)
   result -= b
 
+proc `-`*(a, b: DMatrix32): DMatrix32 {. inline .} =
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
+  result -= b
+
+proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+  matrixSub(M, N, a, b, float64)
+
+proc `-=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDSub(a, b)
+
 proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
   new result.data
   result.order = a.order
   copy(M * N, a.fp, 1, result.fp, 1)
+  result -= b
+
+proc `-`*(a, b: DMatrix64): DMatrix64 {. inline .} =
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
   result -= b
 
 proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = nrm2(M * N, m.fp, 1)
