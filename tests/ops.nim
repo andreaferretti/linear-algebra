@@ -772,3 +772,169 @@ suite "dynamic matrix operations":
         @[18.0, 14.0, -2.0]
       ])
     check(m1 * m2 == m3)
+
+suite "32-bit dynamic matrix operations":
+  test "scalar matrix multiplication":
+    let
+      m1 = matrix(@[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+      m2 = matrix(@[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    check(m1 * 3 == m2)
+    check(3 * m1 == m2)
+  test "in place scalar multiplication":
+    var m1 = matrix(@[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+    let m2 = matrix(@[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    m1 *= 3
+    check(m1 == m2)
+  test "scalar matrix division":
+    let
+      m1 = matrix(@[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+      m2 = matrix(@[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    check(m2 / 3 == m1)
+  test "in place scalar division":
+    let m1 = matrix(@[
+        @[1'f32, 3'f32],
+        @[2'f32, 8'f32],
+        @[-2'f32, 3'f32]
+      ])
+    var m2 = matrix(@[
+        @[3'f32, 9'f32],
+        @[6'f32, 24'f32],
+        @[-6'f32, 9'f32]
+      ])
+    m2 /= 3
+    check(m1 == m2)
+  test "matrix sum":
+    let
+      m1 = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = matrix(@[
+        @[3'f32, 1'f32, -1'f32, 1'f32],
+        @[2'f32, 1'f32, -3'f32, 0'f32],
+        @[4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix(@[
+        @[4'f32, 1'f32, 1'f32, 0'f32],
+        @[1'f32, 2'f32, 0'f32, 1'f32],
+        @[7'f32, 3'f32, 4'f32, 6'f32]
+      ])
+    check(m1 + m2 == m3)
+  test "in place matrix sum":
+    var m1 = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+    let
+      m2 = matrix(@[
+        @[3'f32, 1'f32, -1'f32, 1'f32],
+        @[2'f32, 1'f32, -3'f32, 0'f32],
+        @[4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix(@[
+        @[4'f32, 1'f32, 1'f32, 0'f32],
+        @[1'f32, 2'f32, 0'f32, 1'f32],
+        @[7'f32, 3'f32, 4'f32, 6'f32]
+      ])
+    m1 += m2
+    check m1 == m3
+  test "matrix difference":
+    let
+      m1 = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = matrix(@[
+        @[3'f32, 1'f32, -1'f32, 1'f32],
+        @[2'f32, 1'f32, -3'f32, 0'f32],
+        @[4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix(@[
+        @[-2'f32, -1'f32, 3'f32, -2'f32],
+        @[-3'f32, 0'f32, 6'f32, 1'f32],
+        @[-1'f32, 1'f32, 0'f32, 2'f32]
+      ])
+    check(m1 - m2 == m3)
+  test "in place matrix difference":
+    var m1 = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+    let
+      m2 = matrix(@[
+        @[3'f32, 1'f32, -1'f32, 1'f32],
+        @[2'f32, 1'f32, -3'f32, 0'f32],
+        @[4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix(@[
+        @[-2'f32, -1'f32, 3'f32, -2'f32],
+        @[-3'f32, 0'f32, 6'f32, 1'f32],
+        @[-1'f32, 1'f32, 0'f32, 2'f32]
+      ])
+    m1 -= m2
+    check m1 == m3
+  test "matrix ℓ² norm":
+    let m = matrix(@[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32]
+    ])
+    check l_2(m) == 8'f32
+  test "matrix ℓ¹ norm":
+    let m = matrix(@[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32],
+      @[2.5'f32, 3.1'f32, -1.4'f32]
+    ])
+    check l_1(m) == 21'f32
+  test "max and min of matrices":
+    let m = matrix(@[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32]
+    ])
+    check max(m) == 3'f32
+    check min(m) == -7'f32
+  test "matrix multiplication":
+    let
+      m1 = matrix(@[
+        @[1'f32, 1'f32, 2'f32, -3'f32],
+        @[3'f32, 0'f32, -7'f32, 2'f32]
+      ])
+      m2 = matrix(@[
+        @[1'f32, 1'f32, 2'f32],
+        @[3'f32, 1'f32, -5'f32],
+        @[-1'f32, -1'f32, 2'f32],
+        @[4'f32, 2'f32, 3'f32]
+      ])
+      m3 = matrix(@[
+        @[-10'f32, -6'f32, -8'f32],
+        @[18'f32, 14'f32, -2'f32]
+      ])
+    check(m1 * m2 == m3)
