@@ -105,20 +105,24 @@ suite "dynamic vector and matrix equality":
       w = @[1'f32, 3'f32, 3'f32, 4'f32]
     check u == v
     check v != w
-  # test "strict matrix equality":
-  #   let
-  #     m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
-  #     n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64)
-  #     p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64)
-  #   check m == n
-  #   check n != p
-  # test "strict 32-bit matrix equality":
-  #   let
-  #     m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
-  #     n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + 3 * j).float32)
-  #     p = makeMatrix(3, 5, proc(i, j: int): float32 = (i - 2 * j).float32)
-  #   check m == n
-  #   check n != p
+  test "strict matrix equality":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64)
+      n = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64)
+      p = makeMatrix(M, N, proc(i, j: int): float64 = (i - 2 * j).float64)
+    check m == n
+    check n != p
+  test "strict 32-bit matrix equality":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (i + 3 * j).float32)
+      n = makeMatrix(M, N, proc(i, j: int): float32 = (i + 3 * j).float32)
+      p = makeMatrix(M, N, proc(i, j: int): float32 = (i - 2 * j).float32)
+    check m == n
+    check n != p
   test "approximate vector equality":
     let
       u = @[1.0, 2.0, 3.0, 4.0]
