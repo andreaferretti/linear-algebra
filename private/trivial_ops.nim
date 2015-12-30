@@ -61,10 +61,24 @@ proc asMatrix*[N: static[int]](v: Vector32[N], A, B: static[int], order: OrderTy
   result.order = order
   result.data = v
 
+proc asMatrix*(v: DVector32, A, B: int, order: OrderType = colMajor): DMatrix32 =
+  assert(v.len == A * B, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = order
+  result.data = v
+  result.M = A
+  result.N = B
+
 proc asMatrix*[N: static[int]](v: Vector64[N], A, B: static[int], order: OrderType = colMajor): Matrix64[A, B] =
   static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = order
   result.data = v
+
+proc asMatrix*(v: DVector64, A, B: int, order: OrderType = colMajor): DMatrix64 =
+  assert(v.len == A * B, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = order
+  result.data = v
+  result.M = A
+  result.N = B
 
 proc asVector*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M * N] = m.data
 
