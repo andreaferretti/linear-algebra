@@ -212,22 +212,22 @@ template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   let lda = if a.order == colMajor: M.int else: N.int
-  dgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
   new result
   let lda = if a.order == colMajor: M.int else: N.int
-  sgemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*(a: DMatrix64, v: DVector64): DVector64  {. inline .} =
   result = newSeq[float64](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
-  dgemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
   result = newSeq[float32](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
-  sgemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 

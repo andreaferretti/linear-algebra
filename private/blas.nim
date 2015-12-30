@@ -48,10 +48,10 @@ proc asum(N: int, X: ptr float32, INCX: int): float32
 proc asum(N: int, X: ptr float64, INCX: int): float64
   {. header: header, importc: "cblas_dasum" .}
 
-proc sgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float32, A: ptr float32,
+proc gemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float32, A: ptr float32,
   LDA: int, X: ptr float32, INCX: int, BETA: float32, Y: ptr float32, INCY: int)
   {. header: header, importc: "cblas_sgemv" .}
-proc dgemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A: ptr float64,
+proc gemv(ORDER: OrderType, TRANS: TransposeType, M, N: int, ALPHA: float64, A: ptr float64,
   LDA: int, X: ptr float64, INCX: int, BETA: float64, Y: ptr float64, INCY: int)
   {. header: header, importc: "cblas_dgemv" .}
 
