@@ -222,6 +222,14 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
 
 proc `*=`*(m: var DMatrix32, k: float32) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
+proc `*`*(m: DMatrix32, k: float32): DMatrix32  {. inline .} =
+  result.data = newSeq[float32](m.M * m.N)
+  result.order = m.order
+  result.M = m.M
+  result.N = m.N
+  copy(m.M * m.N, m.fp, 1, result.fp, 1)
+  scal(m.M * m.N, k, result.fp, 1)
+
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 
 proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
@@ -232,17 +240,25 @@ proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. 
 
 proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
-template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32): expr = v * k
+proc `*`*(m: DMatrix64, k: float64): DMatrix64  {. inline .} =
+  result.data = newSeq[float64](m.M * m.N)
+  result.order = m.order
+  result.M = m.M
+  result.N = m.N
+  copy(m.M * m.N, m.fp, 1, result.fp, 1)
+  scal(m.M * m.N, k, result.fp, 1)
 
-template `/`*(v: Vector32 or Matrix32 or DVector32, k: float32): expr = v * (1 / k)
+template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32 or DMatrix32): expr = v * k
 
-template `/=`*(v: var Vector32 or var Matrix32 or var DVector32, k: float32): expr = v *= (1 / k)
+template `/`*(v: Vector32 or Matrix32 or DVector32 or DMatrix32, k: float32): expr = v * (1 / k)
 
-template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
+template `/=`*(v: var Vector32 or var Matrix32 or var DVector32 or var DMatrix32, k: float32): expr = v *= (1 / k)
 
-template `/`*(v: Vector64 or Matrix64 or DVector64, k: float64): expr = v * (1 / k)
+template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64 or DMatrix64): expr = v * k
 
-template `/=`*(v: var Vector64 or var Matrix64 or var DVector64, k: float64): expr = v *= (1 / k)
+template `/`*(v: Vector64 or Matrix64 or DVector64 or DMatrix64, k: float64): expr = v * (1 / k)
+
+template `/=`*(v: var Vector64 or var Matrix64 or var DVector64 or var DMatrix64, k: float64): expr = v *= (1 / k)
 
 template matrixAdd(M, N, a, b: expr, A: typedesc) =
   if a.order == b.order:
