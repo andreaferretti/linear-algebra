@@ -31,29 +31,29 @@ proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
 
 proc t*(a: DMatrix64): DMatrix64 = transposeDynamic(a, result)
 
-proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32[A, B] =
+template reshapeStatic(M, N, A, B, m , result: expr) =
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  result.order = m.order
+  result.data = m.data
+
+proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32[A, B] =
+  reshapeStatic(M, N, A, B, m, result)
+
+template reshapeDynamic(A, B, m , result: expr) =
+  assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
+  result.M = A
+  result.N = B
   result.order = m.order
   result.data = m.data
 
 proc reshape*(m: DMatrix32, A, B: int): DMatrix32 =
-  assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
-  result.M = A
-  result.N = B
-  result.order = m.order
-  result.data = m.data
+  reshapeDynamic(A, B, m, result)
 
 proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64[A, B] =
-  static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
-  result.order = m.order
-  result.data = m.data
+  reshapeStatic(M, N, A, B, m, result)
 
 proc reshape*(m: DMatrix64, A, B: int): DMatrix64 =
-  assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
-  result.M = A
-  result.N = B
-  result.order = m.order
-  result.data = m.data
+  reshapeDynamic(A, B, m, result)
 
 proc asMatrix*[N: static[int]](v: Vector32[N], A, B: static[int], order: OrderType = colMajor): Matrix32[A, B] =
   static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
