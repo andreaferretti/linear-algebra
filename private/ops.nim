@@ -227,7 +227,7 @@ proc `*`*(a: DMatrix64, v: DVector64): DVector64  {. inline .} =
 proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
   result = newSeq[float32](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
-  dgemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  sgemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 
