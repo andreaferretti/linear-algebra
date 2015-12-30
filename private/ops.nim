@@ -283,7 +283,7 @@ template matrixAdd(M, N, a, b: expr, A: typedesc) =
       for j in 0 .. < N:
         a_data[i][j] += b_data[j][i]
 
-template matrixDAdd(a, b: expr, A: typedesc) =
+template matrixDAdd(a, b: expr) =
   assert a.M == b.M and a.N == a.N
   if a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
@@ -300,13 +300,13 @@ proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inlin
   matrixAdd(M, N, a, b, float32)
 
 proc `+=`*(a: var DMatrix32, b: DMatrix32) {. inline .} =
-  matrixDAdd(a, b, float32)
+  matrixDAdd(a, b)
 
 proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
   matrixAdd(M, N, a, b, float64)
 
 proc `+=`*(a: var DMatrix64, b: DMatrix64) {. inline .} =
-  matrixDAdd(a, b, float64)
+  matrixDAdd(a, b)
 
 proc `+`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} =
   new result.data
