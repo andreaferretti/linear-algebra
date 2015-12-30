@@ -121,3 +121,15 @@ proc to64*[M, N: static[int]](m: Matrix32[M, N]): Matrix64[M, N] =
   result.order = m.order
   for i in 0 .. < (M * N):
     result.data[i] = m.data[i].float64
+
+proc to32*(v: DMatrix64): DMatrix32 =
+  result.order = v.order
+  result.M = v.M
+  result.N = v.N
+  result.data = v.data.mapIt(float32, it.float32)
+
+proc to64*(v: DMatrix32): DMatrix64 =
+  result.order = v.order
+  result.M = v.M
+  result.N = v.N
+  result.data = v.data.mapIt(float64, it.float64)

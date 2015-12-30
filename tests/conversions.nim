@@ -38,3 +38,17 @@ suite "conversions":
   test "DVector32 to DVector64":
     let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
     check v.to64 == @[1.0, 3.5, 2.0, 4.5]
+  test "DMatrix64 to DMatrix32":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
+    check m.to32 == n
+  test "DMatrix32 to DMatrix64":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
+    check n.to64 == m
