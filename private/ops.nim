@@ -401,9 +401,9 @@ proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inlin
 
 proc l_1*(m: DMatrix32 or DMatrix64): auto {. inline .} = asum(m.len, m.fp, 1)
 
-template max*(m: Matrix32 or Matrix64): auto = max(m.data)
+template max*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = max(m.data)
 
-template min*(m: Matrix32 or Matrix64): auto = min(m.data)
+template min*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = min(m.data)
 
 template matrixMult(M, N, K, a, b, result: expr): auto =
   new result.data
