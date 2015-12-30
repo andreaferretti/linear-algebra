@@ -69,3 +69,5 @@ proc asMatrix*[N: static[int]](v: Vector64[N], A, B: static[int], order: OrderTy
 proc asVector*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M * N] = m.data
 
 proc asVector*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M * N] = m.data
+
+proc asVector*(m: DMatrix32 or DMatrix64): auto = m.data
