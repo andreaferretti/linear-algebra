@@ -17,8 +17,8 @@ proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
   result.data = a.data
 
 proc t*(a: DMatrix32): DMatrix32 =
-  result.M = a.M
-  result.N = a.N
+  result.M = a.N
+  result.N = a.M
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
@@ -27,8 +27,8 @@ proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
   result.data = a.data
 
 proc t*(a: DMatrix64): DMatrix64 =
-  result.M = a.M
-  result.N = a.N
+  result.M = a.N
+  result.N = a.M
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
