@@ -287,7 +287,14 @@ template matrixDAdd(a, b: expr, A: typedesc) =
   assert a.M == b.M and a.N == a.N
   if a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
-  else: nil
+  elif a.order == colMajor and b.order == rowMajor:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[j * a.M + i] += b.data[i * b.N + j]
+  else:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[i * a.N + j] += b.data[j * b.M + i]
 
 proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
   matrixAdd(M, N, a, b, float32)
