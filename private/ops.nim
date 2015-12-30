@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template len(m: DMatrix32 or DMatrix64): int = m.M * m.N
+
+template initLike(r, m: typed) =
+  when m is DMatrix32:
+    r.data = newSeq[float32](m.len)
+  when m is DMatrix64:
+    r.data = newSeq[float64](m.len)
+  r.order = m.order
+  r.M = m.M
+  r.N = m.N
+
 proc `*=`*[N: static[int]](v: var Vector32[N], k: float32) {. inline .} = scal(N, k, v.fp, 1)
 
 proc `*=`*(v: var DVector32, k: float32) {. inline .} = scal(v.len, k, v.fp, 1)
@@ -223,12 +234,9 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
 proc `*=`*(m: var DMatrix32, k: float32) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
 proc `*`*(m: DMatrix32, k: float32): DMatrix32  {. inline .} =
-  result.data = newSeq[float32](m.M * m.N)
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  copy(m.M * m.N, m.fp, 1, result.fp, 1)
-  scal(m.M * m.N, k, result.fp, 1)
+  result.initLike(m)
+  copy(m.len, m.fp, 1, result.fp, 1)
+  scal(m.len, k, result.fp, 1)
 
 proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
 
@@ -241,12 +249,9 @@ proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. 
 proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
 proc `*`*(m: DMatrix64, k: float64): DMatrix64  {. inline .} =
-  result.data = newSeq[float64](m.M * m.N)
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  copy(m.M * m.N, m.fp, 1, result.fp, 1)
-  scal(m.M * m.N, k, result.fp, 1)
+  result.initLike(m)
+  copy(m.len, m.fp, 1, result.fp, 1)
+  scal(m.len, k, result.fp, 1)
 
 template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32 or DMatrix32): expr = v * k
 
@@ -303,11 +308,8 @@ proc `+`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} 
   result += b
 
 proc `+`*(a, b: DMatrix32): DMatrix32 {. inline .} =
-  result.data = newSeq[float32](a.M * a.N)
-  result.order = a.order
-  result.M = a.M
-  result.N = a.N
-  copy(a.M * a.N, a.fp, 1, result.fp, 1)
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
   result += b
 
 proc `+`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
@@ -317,11 +319,8 @@ proc `+`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .}
   result += b
 
 proc `+`*(a, b: DMatrix64): DMatrix64 {. inline .} =
-  result.data = newSeq[float64](a.M * a.N)
-  result.order = a.order
-  result.M = a.M
-  result.N = a.N
-  copy(a.M * a.N, a.fp, 1, result.fp, 1)
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
   result += b
 
 template matrixSub(M, N, a, b: expr, A: typedesc) =
