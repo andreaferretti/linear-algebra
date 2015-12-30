@@ -192,23 +192,6 @@ proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
 
 template min*(v: Vector32 or Vector64): auto = minIndex(v).val
 
-proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
-  mixin l_1
-  const epsilon = 0.000001
-  let
-    aNorm = l_1(a)
-    bNorm = l_1(b)
-    dNorm = l_1(a - b)
-  return (dNorm / (aNorm + bNorm)) < epsilon
-
-template `=~`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
-
-template `=~`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
-
-template `=~`*(v, w: DVector32): bool = compareApprox(v, w)
-
-template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
-
 proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {. inline .} =
   new result
   let lda = if a.order == colMajor: M.int else: N.int
@@ -237,6 +220,8 @@ proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. 
   copy(M * N, m.fp, 1, result.fp, 1)
   scal(M * N, k, result.fp, 1)
 
+proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
+
 proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = scal(M * N, k, m.fp, 1)
 
 proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. inline .} =
@@ -244,6 +229,8 @@ proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. 
   result.order = m.order
   copy(M * N, m.fp, 1, result.fp, 1)
   scal(M * N, k, result.fp, 1)
+
+proc `*=`*(m: var DMatrix32, k: float32) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
 template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64): expr = v * k
 
@@ -334,12 +321,6 @@ proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inlin
 
 proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} = asum(M * N, m.fp, 1)
 
-proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
-
-proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
-
-template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool = not (a =~ b)
-
 template max*(m: Matrix32 or Matrix64): auto = max(m.data)
 
 template min*(m: Matrix32 or Matrix64): auto = min(m.data)
@@ -364,3 +345,25 @@ proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[
 
 proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
   matrixMult(M, N, K, a, b, result)
+
+proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool =
+  const epsilon = 0.000001
+  let
+    aNorm = l_1(a)
+    bNorm = l_1(b)
+    dNorm = l_1(a - b)
+  return (dNorm / (aNorm + bNorm)) < epsilon
+
+template `=~`*[N: static[int]](v, w: Vector32[N]): bool = compareApprox(v, w)
+
+template `=~`*[N: static[int]](v, w: Vector64[N]): bool = compareApprox(v, w)
+
+template `=~`*(v, w: DVector32): bool = compareApprox(v, w)
+
+template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
+
+proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
+
+proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
+
+template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64): bool = not (a =~ b)
