@@ -12,25 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
-  result.order = if a.order == rowMajor: colMajor else: rowMajor
-  result.data = a.data
-
-proc t*(a: DMatrix32): DMatrix32 =
+template transposeDynamic(a, result: expr) =
   result.M = a.N
   result.N = a.M
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
+
+proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  result.data = a.data
+
+proc t*(a: DMatrix32): DMatrix32 = transposeDynamic(a, result)
 
 proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
-proc t*(a: DMatrix64): DMatrix64 =
-  result.M = a.N
-  result.N = a.M
-  result.order = if a.order == rowMajor: colMajor else: rowMajor
-  result.data = a.data
+proc t*(a: DMatrix64): DMatrix64 = transposeDynamic(a, result)
 
 proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32[A, B] =
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
