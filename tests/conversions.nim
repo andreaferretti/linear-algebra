@@ -15,7 +15,7 @@
 import unittest, linalg
 
 
-suite "conversions":
+suite "precision conversions":
   test "Vector64 to Vector32":
     let v = vector([1.0, 3.5, 2.0, 4.5])
     check v.to32 == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
@@ -52,3 +52,25 @@ suite "conversions":
       m = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
       n = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
     check n.to64 == m
+
+suite "dynamism conversions":
+  test "Vector32 to DVector32":
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    check v.toDynamic == @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+  test "Vector64 to DVector64":
+    let v = vector([1.0, 3.5, 2.0, 4.5])
+    check v.toDynamic == @[1.0, 3.5, 2.0, 4.5]
+  test "Matrix32 to DMatrix32":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(3, 5, proc(i, j: int): float32 = (i + j).float32)
+      n = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
+    check m.toDynamic == n
+  test "Matrix64 to DMatrix64":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
+    check m.toDynamic == n

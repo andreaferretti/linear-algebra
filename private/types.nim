@@ -133,3 +133,19 @@ proc to64*(v: DMatrix32): DMatrix64 =
   result.M = v.M
   result.N = v.N
   result.data = v.data.mapIt(float64, it.float64)
+
+proc toDynamic*[N: static[int]](v: Vector32[N]): DVector32 = @(v[])
+
+proc toDynamic*[N: static[int]](v: Vector64[N]): DVector64 = @(v[])
+
+proc toDynamic*[M, N: static[int]](m: Matrix32[M, N]): DMatrix32 =
+  result.data = @(m.data[])
+  result.order = m.order
+  result.M = M
+  result.N = N
+
+proc toDynamic*[M, N: static[int]](m: Matrix64[M, N]): DMatrix64 =
+  result.data = @(m.data[])
+  result.order = m.order
+  result.M = M
+  result.N = N
