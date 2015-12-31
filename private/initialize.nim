@@ -99,12 +99,6 @@ proc vector32*[N: static[int]](xs: Array[N, float32]): Vector32[N] =
   for i in 0 .. < N:
     result[i] = xs[i]
 
-proc dvector*(N: static[int], xs: seq[float64]): Vector64[N] =
-  makeVector(N, proc(i: int): float64 = xs[i])
-
-proc dvector*(N: static[int], xs: seq[float32]): Vector32[N] =
-  makeVector(N, proc(i: int): float32 = xs[i])
-
 template makeSMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
   new result.data
   result.order = order
