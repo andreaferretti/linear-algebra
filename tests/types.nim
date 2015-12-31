@@ -100,3 +100,51 @@ suite "types of created vectors (32-bit)":
       v = makeVector(N, proc(i: int): float32 = i.float32)
     when not (u is Vector32[5]): fail()
     when not (v is DVector32): fail()
+
+suite "types of created matrices":
+  test "constant matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = constantMatrix(4, 5, 1.5)
+      v = constantMatrix(M, N, 1.5)
+    when not (u is Matrix64[4, 5]): fail()
+    when not (v is DMatrix64): fail()
+  test "zero matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = zeros(4, 5)
+      v = zeros(M, N)
+    when not (u is Matrix64[4, 5]): fail()
+    when not (v is DMatrix64): fail()
+  test "one matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = ones(4, 5)
+      v = ones(M, N)
+    when not (u is Matrix64[4, 5]): fail()
+    when not (v is DMatrix64): fail()
+  test "literal matrices should be of expected types":
+    let
+      u = dmatrix(2, 3, @[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
+      v = matrix(@[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
+    when not (u is Matrix64[2, 3]): fail()
+    when not (v is DMatrix64): fail()
+  test "random matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = randomMatrix(4, 5)
+      v = randomMatrix(M, N)
+    when not (u is Matrix64[4, 5]): fail()
+    when not (v is DMatrix64): fail()
+  test "proc matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = makeMatrix(4, 5, proc(i, j: int): float64 = (i + j).float64)
+      v = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
+    when not (u is Matrix64[4, 5]): fail()
+    when not (v is DMatrix64): fail()
