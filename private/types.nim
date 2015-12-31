@@ -157,3 +157,15 @@ proc toStatic*(v: DVector64, N: static[int]): Vector64[N] =
   new result
   for i in 0 .. < N:
     result[i] = v[i]
+
+proc toStatic*(m: DMatrix32, M, N: static[int]): Matrix32[M, N] =
+  result.order = m.order
+  new result.data
+  for i in 0 .. < (M * N):
+    result.data[i] = m.data[i]
+
+proc toStatic*(m: DMatrix64, M, N: static[int]): Matrix64[M, N] =
+  result.order = m.order
+  new result.data
+  for i in 0 .. < (M * N):
+    result.data[i] = m.data[i]

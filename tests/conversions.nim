@@ -80,3 +80,17 @@ suite "dynamism conversions":
   test "DVector64 to Vector64":
     let v = @[1.0, 3.5, 2.0, 4.5]
     check v.toStatic(4) == vector([1.0, 3.5, 2.0, 4.5])
+  test "DMatrix32 to Matrix32":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
+      n = makeMatrix(3, 5, proc(i, j: int): float32 = (i + j).float32)
+    check m.toStatic(3, 5) == n
+  test "DMatrix64 to Matrix64":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
+      n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)
+    check m.toStatic(3, 5) == n
