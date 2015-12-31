@@ -148,3 +148,51 @@ suite "types of created matrices":
       v = makeMatrix(M, N, proc(i, j: int): float64 = (i + j).float64)
     when not (u is Matrix64[4, 5]): fail()
     when not (v is DMatrix64): fail()
+
+suite "types of created 32-bit matrices":
+  test "constant matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = constantMatrix(4, 5, 1.5'f32)
+      v = constantMatrix(M, N, 1.5'f32)
+    when not (u is Matrix32[4, 5]): fail()
+    when not (v is DMatrix32): fail()
+  test "zero matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = zeros(4, 5, float32)
+      v = zeros(M, N, float32)
+    when not (u is Matrix32[4, 5]): fail()
+    when not (v is DMatrix32): fail()
+  test "one matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = ones(4, 5, float32)
+      v = ones(M, N, float32)
+    when not (u is Matrix32[4, 5]): fail()
+    when not (v is DMatrix32): fail()
+  test "literal matrices should be of expected types":
+    let
+      u = dmatrix(2, 3, @[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
+      v = matrix(@[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
+    when not (u is Matrix32[2, 3]): fail()
+    when not (v is DMatrix32): fail()
+  test "random matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = randomMatrix(4, 5, max = 1'f32)
+      v = randomMatrix(M, N, max = 1'f32)
+    when not (u is Matrix32[4, 5]): fail()
+    when not (v is DMatrix32): fail()
+  test "proc matrices should be of expected types":
+    let
+      M = 4
+      N = 5
+      u = makeMatrix(4, 5, proc(i, j: int): float32 = (i + j).float32)
+      v = makeMatrix(M, N, proc(i, j: int): float32 = (i + j).float32)
+    when not (u is Matrix32[4, 5]): fail()
+    when not (v is DMatrix32): fail()
