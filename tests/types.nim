@@ -37,6 +37,12 @@ suite "types of created vectors":
       v = ones(N)
     when not (u is Vector64[5]): fail()
     when not (v is DVector64): fail()
+  test "literal vectors should be of expected types":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+      v = @[1.0, 2.0, 3.0, 4.0, 5.0]
+    when not (u is Vector64[5]): fail()
+    when not (v is DVector64): fail()
   test "random vectors should be of expected types":
     let
       N = 5
@@ -72,6 +78,12 @@ suite "types of created vectors (32-bit)":
       N = 5
       u = ones(5, float32)
       v = ones(N, float32)
+    when not (u is Vector32[5]): fail()
+    when not (v is DVector32): fail()
+  test "literal vectors should be of expected types":
+    let
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32)
+      v = @[1'f32, 2'f32, 3'f32, 4'f32, 5'f32]
     when not (u is Vector32[5]): fail()
     when not (v is DVector32): fail()
   test "random vectors should be of expected types":
