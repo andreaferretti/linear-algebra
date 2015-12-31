@@ -89,11 +89,10 @@ proc vector*[N: static[int]](xs: Array[N, float64]): Vector64[N] =
   for i in 0 .. < N:
     result[i] = xs[i]
 
-proc vector*[N: static[int]](xs: Array[N, float32], A: typedesc): Vector32[N] =
-  when A is float32:
-    new result
-    for i in 0 .. < N:
-      result[i] = xs[i]
+proc vector*[N: static[int]](xs: Array[N, float32], A: typedesc[float32]): Vector32[N] =
+  new result
+  for i in 0 .. < N:
+    result[i] = xs[i]
 
 proc vector32*[N: static[int]](xs: Array[N, float32]): Vector32[N] =
   new result
