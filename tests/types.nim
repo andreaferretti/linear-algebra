@@ -132,6 +132,13 @@ suite "types of created matrices":
       v = matrix(@[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
     when not (u is Matrix64[2, 3]): fail()
     when not (v is DMatrix64): fail()
+  test "identity matrices should be of expected types":
+    let
+      M = 5
+      u = eye(5)
+      v = eye(M)
+    when not (u is Matrix64[5, 5]): fail()
+    when not (v is DMatrix64): fail()
   test "random matrices should be of expected types":
     let
       M = 4
@@ -179,6 +186,13 @@ suite "types of created 32-bit matrices":
       u = dmatrix(2, 3, @[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
       v = matrix(@[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
     when not (u is Matrix32[2, 3]): fail()
+    when not (v is DMatrix32): fail()
+  test "identity matrices should be of expected types":
+    let
+      M = 5
+      u = eye(5, float32)
+      v = eye(M, float32)
+    when not (u is Matrix32[5, 5]): fail()
     when not (v is DMatrix32): fail()
   test "random matrices should be of expected types":
     let
