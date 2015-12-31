@@ -235,8 +235,8 @@ proc matrix*(xs: seq[seq[float64]], order: OrderType = colMajor): DMatrix64 =
 proc matrix*(xs: seq[seq[float32]], order: OrderType = colMajor): DMatrix32 =
   makeMatrix(xs.len, xs[0].len, proc(i, j: int): float32= xs[i][j], order)
 
-proc dmatrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
+proc Matrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
   makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
 
-proc dmatrix*(M, N: static[int], xs: seq[seq[float32]], order: OrderType = colMajor): Matrix32[M, N] =
+proc Matrix*(M, N: static[int], xs: seq[seq[float32]], order: OrderType = colMajor): Matrix32[M, N] =
   makeMatrix(M, N, proc(i, j: int): float32 = xs[i][j], order)

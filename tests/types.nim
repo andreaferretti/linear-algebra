@@ -128,7 +128,7 @@ suite "types of created matrices":
     when not (v is DMatrix64): fail()
   test "literal matrices should be of expected types":
     let
-      u = dmatrix(2, 3, @[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
+      u = Matrix(2, 3, @[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
       v = matrix(@[@[1.0, 2.0, 3.0], @[4.0, 5.0, 6.0]])
     when not (u is Matrix64[2, 3]): fail()
     when not (v is DMatrix64): fail()
@@ -183,7 +183,7 @@ suite "types of created 32-bit matrices":
     when not (v is DMatrix32): fail()
   test "literal matrices should be of expected types":
     let
-      u = dmatrix(2, 3, @[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
+      u = Matrix(2, 3, @[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
       v = matrix(@[@[1'f32, 2'f32, 3'f32], @[4'f32, 5'f32, 6'f32]])
     when not (u is Matrix32[2, 3]): fail()
     when not (v is DMatrix32): fail()

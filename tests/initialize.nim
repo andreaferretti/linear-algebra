@@ -150,7 +150,7 @@ suite "initializaton of matrices":
         @[2.3, 2.8, -1.45],
         @[-1.2, 3.1, 3.3]
       ]
-      m = dmatrix(3, 3, a)
+      m = Matrix(3, 3, a)
     check dim(m) == (3, 3)
     for i in 0 .. 2:
       for j in 0 .. 2:
@@ -212,7 +212,7 @@ suite "initializaton of 32-bit matrices":
         @[2.3'f32, 2.8'f32, -1.45'f32],
         @[-1.2'f32, 3.1'f32, 3.3'f32]
       ]
-      m = dmatrix(3, 3, a)
+      m = Matrix(3, 3, a)
     check dim(m) == (3, 3)
     for i in 0 .. 2:
       for j in 0 .. 2:

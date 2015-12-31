@@ -18,12 +18,12 @@ import unittest, linalg
 suite "trivial operations":
   test "reshape of matrices":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1.0, 1.0, 2.0],
         @[-1.0, 2.0, -1.0],
         @[3.0, 2.0, 1.0],
@@ -33,7 +33,7 @@ suite "trivial operations":
   test "turn vectors into matrices":
     let
       v = vector([1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0])
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
@@ -42,7 +42,7 @@ suite "trivial operations":
   test "turn matrices into vectors":
     let
       v = vector([1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0])
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
@@ -50,12 +50,12 @@ suite "trivial operations":
     check m.asVector == v
   test "transpose of matrices":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1.0, -1.0, 3.0],
         @[0.0, 1.0, 2.0],
         @[2.0, 3.0, 2.0],
@@ -66,12 +66,12 @@ suite "trivial operations":
 suite "trivial operations on 32-bit matrices":
   test "reshape of matrices":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1'f32, 1'f32, 2'f32],
         @[-1'f32, 2'f32, -1'f32],
         @[3'f32, 2'f32, 1'f32],
@@ -81,7 +81,7 @@ suite "trivial operations on 32-bit matrices":
   test "turn vectors into matrices":
     let
       v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
@@ -90,7 +90,7 @@ suite "trivial operations on 32-bit matrices":
   test "turn matrices into vectors":
     let
       v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
@@ -98,12 +98,12 @@ suite "trivial operations on 32-bit matrices":
     check m.asVector == v
   test "transpose of matrices":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1'f32, -1'f32, 3'f32],
         @[0'f32, 1'f32, 2'f32],
         @[2'f32, 3'f32, 2'f32],

@@ -126,7 +126,7 @@ suite "32-bit vector operations":
 suite "matrix/vector operations":
   test "multiplication of matrix and vector":
     let
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
@@ -137,7 +137,7 @@ suite "matrix/vector operations":
 suite "32-bit matrix/vector operations":
   test "multiplication of matrix and vector":
     let
-      m = dmatrix(3, 4, @[
+      m = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
@@ -148,12 +148,12 @@ suite "32-bit matrix/vector operations":
 suite "matrix operations":
   test "scalar matrix multiplication":
     let
-      m1 = dmatrix(3, 2, @[
+      m1 = Matrix(3, 2, @[
         @[1.0, 3.0],
         @[2.0, 8.0],
         @[-2.0, 3.0]
       ])
-      m2 = dmatrix(3, 2, @[
+      m2 = Matrix(3, 2, @[
         @[3.0, 9.0],
         @[6.0, 24.0],
         @[-6.0, 9.0]
@@ -161,12 +161,12 @@ suite "matrix operations":
     check(m1 * 3.0 == m2)
     check(3.0 * m1 == m2)
   test "in place scalar multiplication":
-    var m1 = dmatrix(3, 2, @[
+    var m1 = Matrix(3, 2, @[
         @[1.0, 3.0],
         @[2.0, 8.0],
         @[-2.0, 3.0]
       ])
-    let m2 = dmatrix(3, 2, @[
+    let m2 = Matrix(3, 2, @[
         @[3.0, 9.0],
         @[6.0, 24.0],
         @[-6.0, 9.0]
@@ -175,24 +175,24 @@ suite "matrix operations":
     check(m1 == m2)
   test "scalar matrix division":
     let
-      m1 = dmatrix(3, 2, @[
+      m1 = Matrix(3, 2, @[
         @[1.0, 3.0],
         @[2.0, 8.0],
         @[-2.0, 3.0]
       ])
-      m2 = dmatrix(3, 2, @[
+      m2 = Matrix(3, 2, @[
         @[3.0, 9.0],
         @[6.0, 24.0],
         @[-6.0, 9.0]
       ])
     check(m2 / 3.0 == m1)
   test "in place scalar division":
-    let m1 = dmatrix(3, 2, @[
+    let m1 = Matrix(3, 2, @[
         @[1.0, 3.0],
         @[2.0, 8.0],
         @[-2.0, 3.0]
       ])
-    var m2 = dmatrix(3, 2, @[
+    var m2 = Matrix(3, 2, @[
         @[3.0, 9.0],
         @[6.0, 24.0],
         @[-6.0, 9.0]
@@ -201,35 +201,35 @@ suite "matrix operations":
     check(m1 == m2)
   test "matrix sum":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[4.0, 1.0, 1.0, 0.0],
         @[1.0, 2.0, 0.0, 1.0],
         @[7.0, 3.0, 4.0, 6.0]
       ])
     check(m1 + m2 == m3)
   test "in place matrix sum":
-    var m1 = dmatrix(3, 4, @[
+    var m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
     let
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[4.0, 1.0, 1.0, 0.0],
         @[1.0, 2.0, 0.0, 1.0],
         @[7.0, 3.0, 4.0, 6.0]
@@ -238,35 +238,35 @@ suite "matrix operations":
     check m1 == m3
   test "matrix difference":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[-2.0, -1.0, 3.0, -2.0],
         @[-3.0, 0.0, 6.0, 1.0],
         @[-1.0, 1.0, 0.0, 2.0]
       ])
     check(m1 - m2 == m3)
   test "in place matrix difference":
-    var m1 = dmatrix(3, 4, @[
+    var m1 = Matrix(3, 4, @[
         @[1.0, 0.0, 2.0, -1.0],
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ])
     let
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3.0, 1.0, -1.0, 1.0],
         @[2.0, 1.0, -3.0, 0.0],
         @[4.0, 1.0, 2.0, 2.0]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[-2.0, -1.0, 3.0, -2.0],
         @[-3.0, 0.0, 6.0, 1.0],
         @[-1.0, 1.0, 0.0, 2.0]
@@ -274,20 +274,20 @@ suite "matrix operations":
     m1 -= m2
     check m1 == m3
   test "matrix ℓ² norm":
-    let m = dmatrix(2, 3, @[
+    let m = Matrix(2, 3, @[
       @[1.0, 1.0, 2.0],
       @[3.0, 0.0, -7.0]
     ])
     check l_2(m) == 8.0
   test "matrix ℓ¹ norm":
-    let m = dmatrix(3, 3, @[
+    let m = Matrix(3, 3, @[
       @[1.0, 1.0, 2.0],
       @[3.0, 0.0, -7.0],
       @[2.5, 3.1, -1.4]
     ])
     check l_1(m) == 21.0
   test "max and min of matrices":
-    let m = dmatrix(2, 3, @[
+    let m = Matrix(2, 3, @[
       @[1.0, 1.0, 2.0],
       @[3.0, 0.0, -7.0]
     ])
@@ -295,17 +295,17 @@ suite "matrix operations":
     check min(m) == -7.0
   test "matrix multiplication":
     let
-      m1 = dmatrix(2, 4, @[
+      m1 = Matrix(2, 4, @[
         @[1.0, 1.0, 2.0, -3.0],
         @[3.0, 0.0, -7.0, 2.0]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1.0, 1.0, 2.0],
         @[3.0, 1.0, -5.0],
         @[-1.0, -1.0, 2.0],
         @[4.0, 2.0, 3.0]
       ])
-      m3 = dmatrix(2, 3, @[
+      m3 = Matrix(2, 3, @[
         @[-10.0, -6.0, -8.0],
         @[18.0, 14.0, -2.0]
       ])
@@ -314,12 +314,12 @@ suite "matrix operations":
 suite "32-bit matrix operations":
   test "scalar matrix multiplication":
     let
-      m1 = dmatrix(3, 2, @[
+      m1 = Matrix(3, 2, @[
         @[1'f32, 3'f32],
         @[2'f32, 8'f32],
         @[-2'f32, 3'f32]
       ])
-      m2 = dmatrix(3, 2, @[
+      m2 = Matrix(3, 2, @[
         @[3'f32, 9'f32],
         @[6'f32, 24'f32],
         @[-6'f32, 9'f32]
@@ -327,12 +327,12 @@ suite "32-bit matrix operations":
     check(m1 * 3 == m2)
     check(3 * m1 == m2)
   test "in place scalar multiplication":
-    var m1 = dmatrix(3, 2, @[
+    var m1 = Matrix(3, 2, @[
         @[1'f32, 3'f32],
         @[2'f32, 8'f32],
         @[-2'f32, 3'f32]
       ])
-    let m2 = dmatrix(3, 2, @[
+    let m2 = Matrix(3, 2, @[
         @[3'f32, 9'f32],
         @[6'f32, 24'f32],
         @[-6'f32, 9'f32]
@@ -341,24 +341,24 @@ suite "32-bit matrix operations":
     check(m1 == m2)
   test "scalar matrix division":
     let
-      m1 = dmatrix(3, 2, @[
+      m1 = Matrix(3, 2, @[
         @[1'f32, 3'f32],
         @[2'f32, 8'f32],
         @[-2'f32, 3'f32]
       ])
-      m2 = dmatrix(3, 2, @[
+      m2 = Matrix(3, 2, @[
         @[3'f32, 9'f32],
         @[6'f32, 24'f32],
         @[-6'f32, 9'f32]
       ])
     check(m2 / 3 == m1)
   test "in place scalar division":
-    let m1 = dmatrix(3, 2, @[
+    let m1 = Matrix(3, 2, @[
         @[1'f32, 3'f32],
         @[2'f32, 8'f32],
         @[-2'f32, 3'f32]
       ])
-    var m2 = dmatrix(3, 2, @[
+    var m2 = Matrix(3, 2, @[
         @[3'f32, 9'f32],
         @[6'f32, 24'f32],
         @[-6'f32, 9'f32]
@@ -367,35 +367,35 @@ suite "32-bit matrix operations":
     check(m1 == m2)
   test "matrix sum":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3'f32, 1'f32, -1'f32, 1'f32],
         @[2'f32, 1'f32, -3'f32, 0'f32],
         @[4'f32, 1'f32, 2'f32, 2'f32]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[4'f32, 1'f32, 1'f32, 0'f32],
         @[1'f32, 2'f32, 0'f32, 1'f32],
         @[7'f32, 3'f32, 4'f32, 6'f32]
       ])
     check(m1 + m2 == m3)
   test "in place matrix sum":
-    var m1 = dmatrix(3, 4, @[
+    var m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
     let
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3'f32, 1'f32, -1'f32, 1'f32],
         @[2'f32, 1'f32, -3'f32, 0'f32],
         @[4'f32, 1'f32, 2'f32, 2'f32]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[4'f32, 1'f32, 1'f32, 0'f32],
         @[1'f32, 2'f32, 0'f32, 1'f32],
         @[7'f32, 3'f32, 4'f32, 6'f32]
@@ -404,35 +404,35 @@ suite "32-bit matrix operations":
     check m1 == m3
   test "matrix difference":
     let
-      m1 = dmatrix(3, 4, @[
+      m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3'f32, 1'f32, -1'f32, 1'f32],
         @[2'f32, 1'f32, -3'f32, 0'f32],
         @[4'f32, 1'f32, 2'f32, 2'f32]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[-2'f32, -1'f32, 3'f32, -2'f32],
         @[-3'f32, 0'f32, 6'f32, 1'f32],
         @[-1'f32, 1'f32, 0'f32, 2'f32]
       ])
     check(m1 - m2 == m3)
   test "in place matrix difference":
-    var m1 = dmatrix(3, 4, @[
+    var m1 = Matrix(3, 4, @[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ])
     let
-      m2 = dmatrix(3, 4, @[
+      m2 = Matrix(3, 4, @[
         @[3'f32, 1'f32, -1'f32, 1'f32],
         @[2'f32, 1'f32, -3'f32, 0'f32],
         @[4'f32, 1'f32, 2'f32, 2'f32]
       ])
-      m3 = dmatrix(3, 4, @[
+      m3 = Matrix(3, 4, @[
         @[-2'f32, -1'f32, 3'f32, -2'f32],
         @[-3'f32, 0'f32, 6'f32, 1'f32],
         @[-1'f32, 1'f32, 0'f32, 2'f32]
@@ -440,20 +440,20 @@ suite "32-bit matrix operations":
     m1 -= m2
     check m1 == m3
   test "matrix ℓ² norm":
-    let m = dmatrix(2, 3, @[
+    let m = Matrix(2, 3, @[
       @[1'f32, 1'f32, 2'f32],
       @[3'f32, 0'f32, -7'f32]
     ])
     check l_2(m) == 8'f32
   test "matrix ℓ¹ norm":
-    let m = dmatrix(3, 3, @[
+    let m = Matrix(3, 3, @[
       @[1'f32, 1'f32, 2'f32],
       @[3'f32, 0'f32, -7'f32],
       @[2.5'f32, 3.1'f32, -1.4'f32]
     ])
     check l_1(m) == 21'f32
   test "max and min of matrices":
-    let m = dmatrix(2, 3, @[
+    let m = Matrix(2, 3, @[
       @[1'f32, 1'f32, 2'f32],
       @[3'f32, 0'f32, -7'f32]
     ])
@@ -461,17 +461,17 @@ suite "32-bit matrix operations":
     check min(m) == -7'f32
   test "matrix multiplication":
     let
-      m1 = dmatrix(2, 4, @[
+      m1 = Matrix(2, 4, @[
         @[1'f32, 1'f32, 2'f32, -3'f32],
         @[3'f32, 0'f32, -7'f32, 2'f32]
       ])
-      m2 = dmatrix(4, 3, @[
+      m2 = Matrix(4, 3, @[
         @[1'f32, 1'f32, 2'f32],
         @[3'f32, 1'f32, -5'f32],
         @[-1'f32, -1'f32, 2'f32],
         @[4'f32, 2'f32, 3'f32]
       ])
-      m3 = dmatrix(2, 3, @[
+      m3 = Matrix(2, 3, @[
         @[-10'f32, -6'f32, -8'f32],
         @[18'f32, 14'f32, -2'f32]
       ])
