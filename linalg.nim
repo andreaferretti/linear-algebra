@@ -14,6 +14,9 @@
 import math
 from sequtils import mapIt
 
+when defined(js):
+  {.fatal: "linalg is only available for native backends".}
+
 include private/external
 include private/blas
 include private/types
