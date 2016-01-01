@@ -12,5 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import initialize, access, equality, conversions, iterators, trivial_ops, ops,
-  row_major_ops, mixed_ops, compilation, types, ufunc
+import unittest, linalg
+
+
+suite "universal functions":
+  test "universal logarithm on static vectors":
+    let u = vector([1.0, 2.0, 4.0, 8.0])
+    check log2(u) == vector([0.0, 1.0, 2.0, 3.0])
+  test "universal sqrt on dynamic vectors":
+    let u = @[1.0, 4.0, 9.0, 16.0]
+    check sqrt(u) == @[1.0, 2.0, 3.0, 4.0]

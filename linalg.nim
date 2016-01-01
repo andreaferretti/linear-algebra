@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from math import random
+import math
 from sequtils import mapIt
 
 include private/external
@@ -24,4 +24,5 @@ include private/iterators
 include private/display
 include private/trivial_ops
 include private/ops
+include private/ufunc
 include private/rewrite

@@ -1,0 +1,62 @@
+# Copyright 2015 UniCredit S.p.A.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+template makeUniversal*(fname: expr) =
+  proc fname*[N: static[int]](v: Vector64[N]): Vector64[N] =
+    new result
+    for i in 0 .. < N:
+      result[i] = fname(v[i])
+
+  proc fname*(v: DVector64): DVector64 =
+    result = newSeq[float64](v.len)
+    for i in 0 .. < (v.len):
+      result[i] = fname(v[i])
+
+  proc fname*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
+    new result.data
+    result.order = m.order
+    for i in 0 .. < (M * N):
+      result.data[i] = fname(m.data[i])
+
+  proc fname*(m: DMatrix64): DMatrix64 =
+    result.initLike(m)
+    for i in 0 .. < (m.len):
+      result.data[i] = fname(m.data[i])
+
+
+
+makeUniversal(sqrt)
+makeUniversal(cbrt)
+makeUniversal(log10)
+makeUniversal(log2)
+makeUniversal(exp)
+makeUniversal(arccos)
+makeUniversal(arcsin)
+makeUniversal(arctan)
+makeUniversal(cos)
+makeUniversal(cosh)
+makeUniversal(sin)
+makeUniversal(sinh)
+makeUniversal(tan)
+makeUniversal(tanh)
+makeUniversal(erf)
+makeUniversal(erfc)
+makeUniversal(lgamma)
+makeUniversal(tgamma)
+makeUniversal(trunc)
+makeUniversal(floor)
+makeUniversal(ceil)
+makeUniversal(degToRad)
+makeUniversal(radToDeg)
