@@ -315,7 +315,6 @@ For more information, look at the tests in `tests/cuda`.
 TODO
 ----
 
-* Add support for matrices and vectors whose size is only known at runtime
 * Add support for matrices and vector on the stack, since dimensions are known at compile time anyway
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * 64-bit GPU support
