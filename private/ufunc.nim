@@ -35,6 +35,8 @@ template makeUniversal*(fname: expr) =
     for i in 0 .. < (m.len):
       result.data[i] = fname(m.data[i])
 
+  export fname
+
 
 
 makeUniversal(sqrt)

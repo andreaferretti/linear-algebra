@@ -22,3 +22,9 @@ suite "universal functions":
   test "universal sqrt on dynamic vectors":
     let u = @[1.0, 4.0, 9.0, 16.0]
     check sqrt(u) == @[1.0, 2.0, 3.0, 4.0]
+  test "universal cosine on static matrices":
+    let m = Matrix(2, 2, @[@[1.0, 2.0], @[4.0, 8.0]])
+    check cos(m) == Matrix(2, 2, @[@[cos(1.0), cos(2.0)], @[cos(4.0), cos(8.0)]])
+  test "universal sine on dynamic matrices":
+    let m = matrix(@[@[1.0, 2.0], @[4.0, 8.0]])
+    check sin(m) == matrix(@[@[sin(1.0), sin(2.0)], @[sin(4.0), sin(8.0)]])
