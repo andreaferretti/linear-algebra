@@ -28,3 +28,8 @@ suite "universal functions":
   test "universal sine on dynamic matrices":
     let m = matrix(@[@[1.0, 2.0], @[4.0, 8.0]])
     check sin(m) == matrix(@[@[sin(1.0), sin(2.0)], @[sin(4.0), sin(8.0)]])
+  test "defining a new universal function":
+    proc plusFive(x: float64): float64 = x + 5
+    makeUniversalLocal(plusFive)
+    let v = @[1.0, 4.0, 9.0, 16.0]
+    check plusFive(v) == @[6.0, 9.0, 14.0, 21.0]

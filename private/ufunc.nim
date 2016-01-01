@@ -31,13 +31,40 @@ template makeUniversal*(fname: expr) =
       result.data[i] = fname(m.data[i])
 
   proc fname*(m: DMatrix64): DMatrix64 =
-    result.initLike(m)
+    result.data = newSeq[float64](m.len)
+    result.order = m.order
+    result.M = m.M
+    result.N = m.N
     for i in 0 .. < (m.len):
       result.data[i] = fname(m.data[i])
 
   export fname
 
 
+template makeUniversalLocal*(fname: expr) =
+  proc fname[N: static[int]](v: Vector64[N]): Vector64[N] =
+    new result
+    for i in 0 .. < N:
+      result[i] = fname(v[i])
+
+  proc fname(v: DVector64): DVector64 =
+    result = newSeq[float64](v.len)
+    for i in 0 .. < (v.len):
+      result[i] = fname(v[i])
+
+  proc fname[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
+    new result.data
+    result.order = m.order
+    for i in 0 .. < (M * N):
+      result.data[i] = fname(m.data[i])
+
+  proc fname(m: DMatrix64): DMatrix64 =
+    result.data = newSeq[float64](m.len)
+    result.order = m.order
+    result.M = m.M
+    result.N = m.N
+    for i in 0 .. < (m.len):
+      result.data[i] = fname(m.data[i])
 
 makeUniversal(sqrt)
 makeUniversal(cbrt)
