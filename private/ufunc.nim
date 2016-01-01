@@ -14,6 +14,32 @@
 
 
 template makeUniversal*(fname: expr) =
+  proc fname*(x: float32): float32 = fname(x.float64).float32
+
+  proc fname*[N: static[int]](v: Vector32[N]): Vector32[N] =
+    new result
+    for i in 0 .. < N:
+      result[i] = fname(v[i])
+
+  proc fname*(v: DVector32): DVector32 =
+    result = newSeq[float32](v.len)
+    for i in 0 .. < (v.len):
+      result[i] = fname(v[i])
+
+  proc fname*[M, N: static[int]](m: Matrix32[M, N]): Matrix32[M, N] =
+    new result.data
+    result.order = m.order
+    for i in 0 .. < (M * N):
+      result.data[i] = fname(m.data[i])
+
+  proc fname*(m: DMatrix32): DMatrix32 =
+    result.data = newSeq[float32](m.len)
+    result.order = m.order
+    result.M = m.M
+    result.N = m.N
+    for i in 0 .. < (m.len):
+      result.data[i] = fname(m.data[i])
+
   proc fname*[N: static[int]](v: Vector64[N]): Vector64[N] =
     new result
     for i in 0 .. < N:
@@ -42,6 +68,32 @@ template makeUniversal*(fname: expr) =
 
 
 template makeUniversalLocal*(fname: expr) =
+  proc fname(x: float32): float32 = fname(x.float64).float32
+
+  proc fname[N: static[int]](v: Vector32[N]): Vector32[N] =
+    new result
+    for i in 0 .. < N:
+      result[i] = fname(v[i])
+
+  proc fname(v: DVector32): DVector32 =
+    result = newSeq[float32](v.len)
+    for i in 0 .. < (v.len):
+      result[i] = fname(v[i])
+
+  proc fname[M, N: static[int]](m: Matrix32[M, N]): Matrix32[M, N] =
+    new result.data
+    result.order = m.order
+    for i in 0 .. < (M * N):
+      result.data[i] = fname(m.data[i])
+
+  proc fname(m: DMatrix32): DMatrix32 =
+    result.data = newSeq[float32](m.len)
+    result.order = m.order
+    result.M = m.M
+    result.N = m.N
+    for i in 0 .. < (m.len):
+      result.data[i] = fname(m.data[i])
+
   proc fname[N: static[int]](v: Vector64[N]): Vector64[N] =
     new result
     for i in 0 .. < N:
@@ -70,6 +122,7 @@ makeUniversal(sqrt)
 makeUniversal(cbrt)
 makeUniversal(log10)
 makeUniversal(log2)
+makeUniversal(log)
 makeUniversal(exp)
 makeUniversal(arccos)
 makeUniversal(arcsin)
