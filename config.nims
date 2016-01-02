@@ -16,10 +16,12 @@ proc configForTests() =
   --stacktrace: on
   --linetrace: on
   --debuginfo
+  --path: "."
   --run
 
 proc configForBenchmarks() =
   --define: release
+  --path: "."
   --run
 
 proc configForCuda() =
