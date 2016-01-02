@@ -103,18 +103,18 @@ suite "matrix accessors":
       c = m.column(1)
     check c[0] == -2.0
     check c[1] == 1.0
-  test "reading matrix rows without copy":
-    let
-      m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
-      r = m.row(1)
-      ru = m.rowUnsafe(1)
-    check r == ru
-  test "reading matrix columns without copy":
-    let
-      m = makeMatrix(3, 5, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-      c = m.column(1)
-      cu = m.columnUnsafe(1)
-    check c == cu
+  # test "reading matrix rows without copy":
+  #   let
+  #     m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
+  #     r = m.row(1)
+  #     ru = m.rowUnsafe(1)
+  #   check r == ru
+  # test "reading matrix columns without copy":
+  #   let
+  #     m = makeMatrix(3, 5, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+  #     c = m.column(1)
+  #     cu = m.columnUnsafe(1)
+  #   check c == cu
   test "cloning matrices":
     var m = randomMatrix(5, 5)
     let
@@ -158,18 +158,18 @@ suite "32-bit matrix accessors":
       c = m.column(1)
     check c[0] == -2'f32
     check c[1] == 1'f32
-  test "reading matrix rows without copy":
-    let
-      m = makeMatrix(4, 3, proc(i, j: int): float32 = (3 * i - 2 * j).float32, rowMajor)
-      r = m.row(1)
-      ru = m.rowUnsafe(1)
-    check r == ru
-  test "reading matrix columns without copy":
-    let
-      m = makeMatrix(3, 5, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
-      c = m.column(1)
-      cu = m.columnUnsafe(1)
-    check c == cu
+  # test "reading matrix rows without copy":
+  #   let
+  #     m = makeMatrix(4, 3, proc(i, j: int): float32 = (3 * i - 2 * j).float32, rowMajor)
+  #     r = m.row(1)
+  #     ru = m.rowUnsafe(1)
+  #   check r == ru
+  # test "reading matrix columns without copy":
+  #   let
+  #     m = makeMatrix(3, 5, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
+  #     c = m.column(1)
+  #     cu = m.columnUnsafe(1)
+  #   check c == cu
   test "cloning matrices":
     var m = randomMatrix(5, 5, max = 1'f32)
     let
