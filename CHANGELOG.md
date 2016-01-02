@@ -3,6 +3,11 @@
 
 First release
 
+0.1.5
+-----
+
+Added GPU support for static vectors and matrices in 32-bit precision
+
 0.2.0
 -----
 
