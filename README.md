@@ -65,16 +65,28 @@ let
   m4: Matrix64[3, 6] = ones(3, 6)
   m5: Matrix64[5, 2] = zeros(5, 2)
   m6: Matrix64[7, 7] = eye(7)
-  m7: Matrix64[2, 3] = Matrix(2, 3, @[
+  m7: Matrix64[2, 3] = matrix([
+    [1.2, 3.5, 4.3],
+    [1.1, 4.2, 1.7]
+  ])
+  m8: Matrix64[2, 3] = Matrix(2, 3, @[
     @[1.2, 3.5, 4.3],
     @[1.1, 4.2, 1.7]
   ])
 ```
 
-There should be a matrix constructor that takes an array of arrays, but at the
-moment this trips the Nim type inference. Hence there is the `Matrix`
-constructor that takes a `seq` of `seq`s, but also requires statically passing
-the dimensions to be used.
+The `Matrix` constructor that takes a `seq` of `seq`s, but also requires
+statically passing the dimensions to be used. The following are equivalent
+when `xs` is a `seq[seq[float64]]` and `M`, `N` are integers known at compile
+time:
+
+```nim
+let
+  m1 = matrix(xs).toStatic(M, N)
+  m2 = Matrix(M, N, xs)
+```
+
+but the latter form avoids the construction of an intermediate matrix.
 
 All constructors that take as input an existing array or seq perform a copy of
 the data for memory safety.
@@ -145,7 +157,11 @@ let
   m4: Matrix32[3, 6] = ones(3, 6, float32)
   m5: Matrix32[5, 2] = zeros(5, 2, float32)
   m6: Matrix32[7, 7] = eye(7, float32)
-  m7: Matrix32[2, 3] = Matrix(2, 3, @[
+  m7: Matrix32[2, 3] = matrix([
+    [1.2'f32, 3.5'f32, 4.3'f32],
+    [1.1'f32, 4.2'f32, 1.7'f32]
+  ])
+  m8: Matrix32[2, 3] = Matrix(2, 3, @[
     @[1.2'f32, 3.5'f32, 4.3'f32],
     @[1.1'f32, 4.2'f32, 1.7'f32]
   ])

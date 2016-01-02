@@ -83,6 +83,8 @@ proc ones*(N: int or static[int]): auto = constantVector(N, 1'f64)
 proc ones*(N: int or static[int], A: typedesc[float32]): auto = constantVector(N, 1'f32)
 
 type Array[N: static[int], A] = array[N, A]
+type DoubleArray32[M, N: static[int]] = array[M, array[N, float32]]
+type DoubleArray64[M, N: static[int]] = array[M, array[N, float64]]
 
 proc vector*[N: static[int]](xs: Array[N, float64]): Vector64[N] =
   new result
@@ -229,11 +231,17 @@ proc eye*(N: int or static[int], A: typedesc[float32], order: OrderType = colMaj
   when N.isStatic: eye32S(N, order)
   else: eye32D(N, order)
 
+proc matrix*(xs: seq[seq[float32]], order: OrderType = colMajor): DMatrix32 =
+  makeMatrix(xs.len, xs[0].len, proc(i, j: int): float32= xs[i][j], order)
+
 proc matrix*(xs: seq[seq[float64]], order: OrderType = colMajor): DMatrix64 =
   makeMatrix(xs.len, xs[0].len, proc(i, j: int): float64 = xs[i][j], order)
 
-proc matrix*(xs: seq[seq[float32]], order: OrderType = colMajor): DMatrix32 =
-  makeMatrix(xs.len, xs[0].len, proc(i, j: int): float32= xs[i][j], order)
+proc matrix*[M, N: static[int]](xs: DoubleArray32[M, N], order: OrderType = colMajor): Matrix32[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float32 = xs[i][j], order)
+
+proc matrix*[M, N: static[int]](xs: DoubleArray64[M, N], order: OrderType = colMajor): Matrix64[M, N] =
+  makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
 
 proc Matrix*(M, N: static[int], xs: seq[seq[float64]], order: OrderType = colMajor): Matrix64[M, N] =
   makeMatrix(M, N, proc(i, j: int): float64 = xs[i][j], order)
