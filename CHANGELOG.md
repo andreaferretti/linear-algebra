@@ -15,3 +15,8 @@ Added GPU support for static vectors and matrices in 32-bit precision
 * More consistent API
 * Improved type inference
 * Universal functions
+
+0.2.1
+
+Minor API improvement: no need to specify `float32` when creating literal
+instances of `Vector32`
