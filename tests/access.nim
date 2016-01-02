@@ -71,9 +71,9 @@ suite "32-bit vector accessors":
     v[0] = v[0] + 1
     check w[0] == f
   test "mapping vectors":
-    var v = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32)
+    var v = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32])
     check v.map(proc(x: float32): float32 = 2 * x) ==
-      vector([2'f32, 4'f32, 6'f32, 8'f32, 10'f32], float32)
+      vector([2'f32, 4'f32, 6'f32, 8'f32, 10'f32])
 
 suite "matrix accessors":
   test "reading matrix dimensions":

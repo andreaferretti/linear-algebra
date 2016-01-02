@@ -37,8 +37,8 @@ suite "universal functions":
 
 suite "32-bit universal functions":
   test "universal logarithm on static vectors":
-    let u = vector([1'f32, 2'f32, 4'f32, 8'f32], float32)
-    check log2(u) == vector([0'f32, 1'f32, 2'f32, 3'f32], float32)
+    let u = vector([1'f32, 2'f32, 4'f32, 8'f32])
+    check log2(u) == vector([0'f32, 1'f32, 2'f32, 3'f32])
   test "universal sqrt on dynamic vectors":
     let u = @[1'f32, 4'f32, 9'f32, 16'f32]
     check sqrt(u) == @[1'f32, 2'f32, 3'f32, 4'f32]

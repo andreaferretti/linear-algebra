@@ -150,7 +150,7 @@ let
   v3: Vector32[5] = constantVector(5, 3.5'f32)
   v4: Vector32[8] = zeros(8, float32)
   v5: Vector32[9] = ones(9, float32)
-  v6: Vector32[5] = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32) # unfortunately, here float32 is required
+  v6: Vector32[5] = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32])
   m1: Matrix32[6, 3] = makeMatrix(6, 3, proc(i, j: int): float32 = (i + j).float32)
   m2: Matrix32[2, 8] = randomMatrix(2, 8, max = 1.6'f32)
   m3: Matrix32[3, 5] = constantMatrix(3, 5, 1.8'f32, order = rowMajor) # order is optional, default colMajor

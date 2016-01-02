@@ -71,53 +71,53 @@ suite "vector operations":
 
 suite "32-bit vector operations":
   test "scalar vector multiplication":
-    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-    check((v * 2) == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32]))
-    check((-1 * v) == vector32([-1'f32, -3'f32, -2'f32, -8'f32, 2'f32]))
+    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    check((v * 2) == vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32]))
+    check((-1 * v) == vector([-1'f32, -3'f32, -2'f32, -8'f32, 2'f32]))
   test "in place scalar vector multiplication":
-    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
+    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
     v *= 2
-    check v == vector32([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+    check v == vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
   test "scalar vector division":
-    let v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
-    check((v / 2) == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32))
+    let v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
+    check((v / 2) == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32]))
   test "in place scalar vector division":
-    var v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32], float32)
+    var v = vector([2'f32, 6'f32, 4'f32, 16'f32, -4'f32])
     v /= 2'f32
-    check v == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
+    check v == vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
   test "vector sum":
     let
-      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
-    check((v + w) == vector32([3'f32, 2'f32, 4'f32, 8'f32, 2'f32]))
+      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check((v + w) == vector([3'f32, 2'f32, 4'f32, 8'f32, 2'f32]))
   test "in place vector sum":
-    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-    let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
+    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
     v += w
-    check v == vector32([3'f32, 2'f32, 4'f32, 8'f32, 2'f32])
+    check v == vector([3'f32, 2'f32, 4'f32, 8'f32, 2'f32])
   test "vector difference":
     let
-      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
-    check((v - w) == vector32([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32]))
+      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check((v - w) == vector([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32]))
   test "in place vector difference":
-    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-    let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
+    var v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+    let w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
     v -= w
-    check v == vector32([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32])
+    check v == vector([-1'f32, 4'f32, 0'f32, 8'f32, -6'f32])
   test "dot product":
     let
-      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
-      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32], float32)
+      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
     check(v * w == -5.0)
   test "ℓ² norm":
-    let v = vector([1'f32, 1'f32, 2'f32, 3'f32, -7'f32], float32)
+    let v = vector([1'f32, 1'f32, 2'f32, 3'f32, -7'f32])
     check l_2(v) == 8.0
   test "ℓ¹ norm":
-    let v = vector([1'f32, 1'f32, 2'f32, 3'f32, -7'f32], float32)
+    let v = vector([1'f32, 1'f32, 2'f32, 3'f32, -7'f32])
     check l_1(v) == 14.0
   test "max and min of vectors":
-    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
+    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
     check max(v) == 8.0
     check maxIndex(v) == (3, 8'f32)
     check min(v) == -2.0
@@ -142,8 +142,8 @@ suite "32-bit matrix/vector operations":
         [-1'f32, 1'f32, 3'f32, 1'f32],
         [3'f32, 2'f32, 2'f32, 4'f32]
       ])
-      v = vector([1'f32, 3'f32, 2'f32, -2'f32], float32)
-    check((m * v) == vector([7'f32, 6'f32, 5'f32], float32))
+      v = vector([1'f32, 3'f32, 2'f32, -2'f32])
+    check((m * v) == vector([7'f32, 6'f32, 5'f32]))
 
 suite "matrix operations":
   test "scalar matrix multiplication":

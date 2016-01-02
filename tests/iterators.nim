@@ -39,7 +39,7 @@ suite "iterators on vectors":
 
 suite "iterators on 32-bit vectors":
   test "items vector iterator":
-    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
+    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
     var
       sum = 0'f32
       count = 0
@@ -49,7 +49,7 @@ suite "iterators on 32-bit vectors":
     check sum == 12'f32
     check count == 5
   test "pairs vector iterator":
-    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32], float32)
+    let v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
     var
       sum = 0'f32
       sumI = 0

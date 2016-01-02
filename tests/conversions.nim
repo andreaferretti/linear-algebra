@@ -18,9 +18,9 @@ import unittest, linalg
 suite "precision conversions":
   test "Vector64 to Vector32":
     let v = vector([1.0, 3.5, 2.0, 4.5])
-    check v.to32 == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    check v.to32 == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
   test "Vector32 to Vector64":
-    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
     check v.to64 == vector([1.0, 3.5, 2.0, 4.5])
   test "Matrix64 to Matrix32":
     let
@@ -55,7 +55,7 @@ suite "precision conversions":
 
 suite "dynamism conversions":
   test "Vector32 to DVector32":
-    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
     check v.toDynamic == @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
   test "Vector64 to DVector64":
     let v = vector([1.0, 3.5, 2.0, 4.5])
@@ -76,7 +76,7 @@ suite "dynamism conversions":
     check m.toDynamic == n
   test "DVector32 to Vector32":
     let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
-    check v.toStatic(4) == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32], float32)
+    check v.toStatic(4) == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
   test "DVector64 to Vector64":
     let v = @[1.0, 3.5, 2.0, 4.5]
     check v.toStatic(4) == vector([1.0, 3.5, 2.0, 4.5])

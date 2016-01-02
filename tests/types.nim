@@ -82,7 +82,7 @@ suite "types of created vectors (32-bit)":
     when not (v is DVector32): fail()
   test "literal vectors should be of expected types":
     let
-      u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32], float32)
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32])
       v = @[1'f32, 2'f32, 3'f32, 4'f32, 5'f32]
     when not (u is Vector32[5]): fail()
     when not (v is DVector32): fail()
