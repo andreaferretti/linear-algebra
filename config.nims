@@ -29,11 +29,11 @@ proc configForCuda() =
   switch("clibdir", "/usr/local/cuda/targets/x86_64-linux/lib")
   --define: cublas
 
-task tests, "run standard tests":
+task test, "run standard tests":
   configForTests()
   setCommand "c", "tests/all"
 
-task testscuda, "run tests for the cuda implementation":
+task testcuda, "run tests for the cuda implementation":
   configForTests()
   configForCuda()
   setCommand "c", "tests/cublas"
