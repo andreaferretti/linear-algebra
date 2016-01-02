@@ -69,13 +69,13 @@ let
     [1.2, 3.5, 4.3],
     [1.1, 4.2, 1.7]
   ])
-  m8: Matrix64[2, 3] = Matrix(2, 3, @[
+  m8: Matrix64[2, 3] = matrix(@[
     @[1.2, 3.5, 4.3],
     @[1.1, 4.2, 1.7]
-  ])
+  ], 2, 3)
 ```
 
-The `Matrix` constructor that takes a `seq` of `seq`s, but also requires
+The last `matrix` constructor takes a `seq` of `seq`s, but also requires
 statically passing the dimensions to be used. The following are equivalent
 when `xs` is a `seq[seq[float64]]` and `M`, `N` are integers known at compile
 time:
@@ -83,7 +83,7 @@ time:
 ```nim
 let
   m1 = matrix(xs).toStatic(M, N)
-  m2 = Matrix(M, N, xs)
+  m2 = matrix(xs, M, N)
 ```
 
 but the latter form avoids the construction of an intermediate matrix.
@@ -161,10 +161,10 @@ let
     [1.2'f32, 3.5'f32, 4.3'f32],
     [1.1'f32, 4.2'f32, 1.7'f32]
   ])
-  m8: Matrix32[2, 3] = Matrix(2, 3, @[
+  m8: Matrix32[2, 3] = matrix(@[
     @[1.2'f32, 3.5'f32, 4.3'f32],
     @[1.1'f32, 4.2'f32, 1.7'f32]
-  ])
+  ], 2, 3)
 ```
 
 Similarly,
