@@ -24,6 +24,10 @@ iterator columns*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto 
   for i in 0 .. < N:
     yield m.column(i)
 
+iterator columns*(m: DMatrix32 or DMatrix64): auto {. inline .} =
+  for i in 0 .. < m.N:
+    yield m.column(i)
+
 # iterator columnsUnsafe*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M] {. inline .} =
 #   if m.order == colMajor:
 #     for i in 0 .. < N:
@@ -40,6 +44,10 @@ iterator columns*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto 
 
 iterator rows*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
+    yield m.row(i)
+
+iterator rows*(m: DMatrix32 or DMatrix64): auto {. inline .} =
+  for i in 0 .. < m.M:
     yield m.row(i)
 
 # iterator rowsUnsafe*[M, N: static[int]](m: Matrix32[M, N]): Vector32[N] {. inline .} =
@@ -59,6 +67,11 @@ iterator rows*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. 
 iterator items*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
   for i in 0 .. < M:
     for j in 0 .. < N:
+      yield m[i, j]
+
+iterator items*(m: DMatrix32 or DMatrix64): auto {. inline .} =
+  for i in 0 .. < m.M:
+    for j in 0 .. < m.N:
       yield m[i, j]
 
 iterator pairs*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
