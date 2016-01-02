@@ -1,6 +1,6 @@
 [Package]
 name          = "linalg"
-version       = "0.2.0"
+version       = "0.2.1"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
