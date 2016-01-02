@@ -197,54 +197,44 @@ suite "trivial operations should share storage":
     m2[1, 2] = 0.0
     check m1[2, 1] == 0.0
 
-# suite "trivial operations on 32-bit matrices":
-#   test "reshape of matrices":
-#     let
-#       m1 = Matrix(3, 4, @[
-#         @[1'f32, 0'f32, 2'f32, -1'f32],
-#         @[-1'f32, 1'f32, 3'f32, 1'f32],
-#         @[3'f32, 2'f32, 2'f32, 4'f32]
-#       ])
-#       m2 = Matrix(4, 3, @[
-#         @[1'f32, 1'f32, 2'f32],
-#         @[-1'f32, 2'f32, -1'f32],
-#         @[3'f32, 2'f32, 1'f32],
-#         @[0'f32, 3'f32, 4'f32]
-#       ])
-#     check m1.reshape(4, 3) == m2
-#   test "turn vectors into matrices":
-#     let
-#       v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
-#       m = Matrix(3, 4, @[
-#         @[1'f32, 0'f32, 2'f32, -1'f32],
-#         @[-1'f32, 1'f32, 3'f32, 1'f32],
-#         @[3'f32, 2'f32, 2'f32, 4'f32]
-#       ])
-#     check v.asMatrix(3, 4) == m
-#   test "turn matrices into vectors":
-#     let
-#       v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
-#       m = Matrix(3, 4, @[
-#         @[1'f32, 0'f32, 2'f32, -1'f32],
-#         @[-1'f32, 1'f32, 3'f32, 1'f32],
-#         @[3'f32, 2'f32, 2'f32, 4'f32]
-#       ])
-#     check m.asVector == v
-#   test "transpose of matrices":
-#     let
-#       m1 = Matrix(3, 4, @[
-#         @[1'f32, 0'f32, 2'f32, -1'f32],
-#         @[-1'f32, 1'f32, 3'f32, 1'f32],
-#         @[3'f32, 2'f32, 2'f32, 4'f32]
-#       ])
-#       m2 = Matrix(4, 3, @[
-#         @[1'f32, -1'f32, 3'f32],
-#         @[0'f32, 1'f32, 2'f32],
-#         @[2'f32, 3'f32, 2'f32],
-#         @[-1'f32, 1'f32, 4'f32]
-#       ])
-#     check m1.t == m2
-#
+suite "trivial operations on 32-bit matrices should share storage":
+  test "reshape of matrices":
+    var
+      m1 = matrix([
+        [1'f32, 0'f32, 2'f32, -1'f32],
+        [-1'f32, 1'f32, 3'f32, 1'f32],
+        [3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = m1.reshape(4, 3)
+    m2[2, 1] = 0'f32
+    check m1[0, 2] == 0'f32
+  test "turn vectors into matrices":
+    var
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32], float32)
+      m = v.asMatrix(3, 4)
+    m[2, 1] = 0'f32
+    check v[5] == 0'f32
+  test "turn matrices into vectors":
+    var
+      m = matrix([
+        [1'f32, 0'f32, 2'f32, -1'f32],
+        [-1'f32, 1'f32, 3'f32, 1'f32],
+        [3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      v = m.asVector
+    v[5] = 0'f32
+    check m[2, 1] == 0'f32
+  test "transpose of matrices":
+    var
+      m1 = Matrix(3, 4, @[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = m1.t
+    m2[1, 2] = 0'f32
+    check m1[2, 1] == 0'f32
+
 # suite "trivial dynamic operations":
 #   test "reshape of matrices":
 #     let
