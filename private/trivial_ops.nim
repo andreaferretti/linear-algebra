@@ -19,7 +19,8 @@ template transposeS(a, result: expr) =
 template transposeD(a, result: expr) =
   result.M = a.N
   result.N = a.M
-  transposeS(a, result)
+  result.order = if a.order == rowMajor: colMajor else: rowMajor
+  shallowCopy(result.data, a.data)
 
 proc t*[M, N: static[int]](a: Matrix32[M, N]): Matrix32[N, M] =
   transposeS(a, result)
@@ -41,7 +42,7 @@ template reshapeD(A, B, m , result: expr) =
   result.M = A
   result.N = B
   result.order = m.order
-  result.data = m.data
+  shallowCopy(result.data, m.data)
 
 proc reshape*[M, N: static[int]](m: Matrix32[M, N], A, B: static[int]): Matrix32[A, B] =
   reshapeS(M, N, A, B, m, result)
@@ -61,7 +62,7 @@ template asMatrixS(N, A, B, v, order, result: expr) =
 template asMatrixD(A, B, v, order, result: expr) =
   assert(v.len == A * B, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(A) & ", B = " & $(B))
   result.order = order
-  result.data = v
+  shallowCopy(result.data, v)
   result.M = A
   result.N = B
 
@@ -81,4 +82,8 @@ proc asVector*[M, N: static[int]](m: Matrix32[M, N]): Vector32[M * N] = m.data
 
 proc asVector*[M, N: static[int]](m: Matrix64[M, N]): Vector64[M * N] = m.data
 
-proc asVector*(m: DMatrix32 or DMatrix64): auto = m.data
+proc asVector*(m: DMatrix32): DVector32 =
+  shallowCopy(result, m.data)
+
+proc asVector*(m: DMatrix64): DVector64 =
+  shallowCopy(result, m.data)
