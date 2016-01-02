@@ -362,6 +362,63 @@ matrix, a `clone` operation is available:
 let m5 = m1.clone
 ```
 
+Universal functions
+-------------------
+
+Universal functions are real-valued functions that are extended to vectors
+and matrices by working element-wise. There are many common functions that are
+implemented as universal functions:
+
+```nim
+sqrt
+cbrt
+log10
+log2
+log
+exp
+arccos
+arcsin
+arctan
+cos
+cosh
+sin
+sinh
+tan
+tanh
+erf
+erfc
+lgamma
+tgamma
+trunc
+floor
+ceil
+degToRad
+radToDeg
+```
+
+This means that, for instance, the following check passes:
+
+```nim
+  let
+    v1 = vector([1.0, 2.3, 4.5, 3.2, 5.4])
+    v2 = log(v1)
+    v3 = v1.map(log)
+
+  assert v2 == v3
+```
+
+Universal functions work both on 32 and 64 bit precision, on vectors and
+matrices, both static and dynamic.
+
+If you have a function `f` of type `proc(x: float64): float64` you can use
+
+```nim
+makeUniversal(f)
+```
+
+to turn `f` into a (public) universal function. If you do not want to export
+`f`, there is the equivalent template `makeUniversalLocal`.
+
 Rewrite rules
 -------------
 
