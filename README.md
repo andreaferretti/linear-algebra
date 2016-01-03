@@ -553,4 +553,4 @@ to be written.
 API docs
 --------
 
-<iframe src="https://raw.githubusercontent.com/unicredit/linear-algebra/master/linalg.html" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://raw.githubusercontent.com/unicredit/linear-algebra/master/linalg.html" frameborder="0" allowfullscreen> </iframe>
