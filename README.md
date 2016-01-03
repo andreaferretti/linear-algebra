@@ -549,3 +549,8 @@ types differ in various axes:
 In order to avoid a combinatorial explosion of operations, a judicious use of
 templates and union types helps to limit the actual implementations that have
 to be written.
+
+API docs
+--------
+
+<iframe src="https://raw.githubusercontent.com/unicredit/linear-algebra/master/linalg.html" frameborder="0" allowfullscreen></iframe>
