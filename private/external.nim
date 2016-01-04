@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+when defined(windows):
+  const libSuffix = ".dll"
+elif defined(macosx):
+  const libSuffix = ".dylib"
+else:
+  const libSuffix = ".so"
+
 when defined(mkl):
-  const header = "mkl.h"
+  const libName = "libmkl_core" & libSuffix
   when defined(threaded):
     {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" passl: "-lm" .}
   # {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_intel_thread" passl: "-lmpi" .}
@@ -24,14 +31,14 @@ when defined(mkl):
 else:
   when defined(atlas):
     {.passl: "-lcblas".}
-    const header = "atlas/cblas.h"
+    const libName = "libcblas" & libSuffix
     static: echo "--USING ATLAS--"
   else:
     when defined(openblas):
       {.passl: "-lopenblas".}
-      const header = "cblas.h"
+      const libName = "libopenblas" & libSuffix
       static: echo "--USING OPENBLAS--"
     else:
       {.passl: "-lblas".}
-      const header = "cblas.h"
+      const libName = "libblas" & libSuffix
       static: echo "--USING DEFAULT BLAS--"
