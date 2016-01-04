@@ -538,6 +538,7 @@ For more information, look at the tests in `tests/cuda`.
 
 * Add support for matrices and vector on the stack
 * Add more functional interfaces (foldl, scanl)
+* Add more common operations (cumsum, mean, stdv...)
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * 64-bit and dynamic GPU support
 * More specialized BLAS operations
