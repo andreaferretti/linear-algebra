@@ -83,9 +83,9 @@ suite "matrix/vector operations":
         [-1'f32, 1'f32, 3'f32, 1'f32],
         [3'f32, 2'f32, 2'f32, 4'f32]
       ]).gpu()
-      v = vector([1'f32, 3'f32, 2'f32, -2'f32], float32).gpu()
+      v = vector([1'f32, 3'f32, 2'f32, -2'f32]).gpu()
 
-    check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32], float32))
+    check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32]))
 
 suite "matrix operations":
   test "scalar matrix multiplication":

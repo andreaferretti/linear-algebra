@@ -18,17 +18,17 @@ import unittest, linalg
 suite "vector and matrix equality":
   test "strict 32-bit vector equality":
     let
-      u = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
-      v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
-      w = vector([1'f32, 3'f32, 3'f32, 4'f32], float32).gpu()
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      w = vector([1'f32, 3'f32, 3'f32, 4'f32]).gpu()
     check u == v
     check v != w
   test "approximate 32-bit vector equality":
     let
-      u = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
-      v = vector([1'f32, 2'f32, 3'f32, 4'f32], float32).gpu()
-      w = vector([1'f32, 2'f32, 2.999999'f32, 4.000001'f32], float32).gpu()
-      z = vector([1'f32, 3'f32, 3'f32, 4'f32], float32).gpu()
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      w = vector([1'f32, 2'f32, 2.999999'f32, 4.000001'f32]).gpu()
+      z = vector([1'f32, 3'f32, 3'f32, 4'f32]).gpu()
     check u =~ v
     check v =~ w
     check v != w
