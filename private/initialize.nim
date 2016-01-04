@@ -125,16 +125,6 @@ template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
       for j in 0 .. < N:
         result.data[i * N + j] = f(i, j)
 
-proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float64, order: OrderType): Matrix64[M, N] =
-  makeSMatrixPrivate(M, N, f, order, result, float64)
-
-proc makeDMatrix(M, N: int, f: proc (i, j: int): float64, order: OrderType): DMatrix64 =
-  makeDMatrixPrivate(M, N, f, order, result, float64)
-
-proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): auto =
-  when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
-  else: makeDMatrix(M, N, f, order)
-
 proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float32, order: OrderType): Matrix32[M, N] =
   makeSMatrixPrivate(M, N, f, order, result, float32)
 
@@ -145,13 +135,23 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
   else: makeDMatrix(M, N, f, order)
 
+proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float64, order: OrderType): Matrix64[M, N] =
+  makeSMatrixPrivate(M, N, f, order, result, float64)
+
+proc makeDMatrix(M, N: int, f: proc (i, j: int): float64, order: OrderType): DMatrix64 =
+  makeDMatrixPrivate(M, N, f, order, result, float64)
+
+proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): auto =
+  when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
+  else: makeDMatrix(M, N, f, order)
+
 proc randomMatrix*(M: int or static[int], N: int or static[int], max: float64 = 1, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)
 
 proc randomMatrix*(M: int or static[int], N: int or static[int], max: float32, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
-template constantMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
+template constantSMatrixPrivate(M, N, x, order, result: expr) =
   new result.data
   result.order = order
   for i in 0 .. < (M * N):
@@ -166,13 +166,13 @@ template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
     result.data[i] = x
 
 proc constantSMatrix(M: static[int], N: static[int], x: float64, order: OrderType = colMajor): Matrix64[M, N] =
-  constantMatrixPrivate(M, N, x, order, result, float64)
+  constantSMatrixPrivate(M, N, x, order, result)
 
 proc constantDMatrix(M, N: int, x: float64, order: OrderType = colMajor): DMatrix64 =
   constantDMatrixPrivate(M, N, x, order, result, float64)
 
 proc constantSMatrix(M, N: static[int], x: float32, order: OrderType = colMajor): Matrix32[M, N] =
-  constantMatrixPrivate(M, N, x, order, result, float32)
+  constantSMatrixPrivate(M, N, x, order, result)
 
 proc constantDMatrix(M, N: int, x: float32, order: OrderType = colMajor): DMatrix32 =
   constantDMatrixPrivate(M, N, x, order, result, float32)
