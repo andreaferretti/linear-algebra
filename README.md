@@ -5,8 +5,8 @@ applications. The ambition would be to become a stable basis on which to
 develop a scientific ecosystem for Nim, much like Numpy does for Python.
 
 The library has been tested on Ubuntu Linux 14.10 through 15.10 64-bit using
-either ATLAS, OpenBlas or Intel MKL. The GPU support has been tested using
-NVIDIA CUDA 7.0 and 7.5.
+either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite. The
+GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.
 
 API documentation is [here](http://unicredit.github.io/linear-algebra/api.html)
 
@@ -468,6 +468,19 @@ A few compile flags are available to link specific BLAS implementations
     -d:openblas
     -d:mkl
     -d:mkl -d:threaded
+
+Packages for various BLAS implementations are available from the package
+managers of many Linux distributions. On OSX one can add the brew formulas
+from [Homebrew Science](https://github.com/Homebrew/homebrew-science), such
+as `brew install homebrew/science/openblas`.
+
+You may also need to add suitable paths for the includes and library dirs.
+On OSX, this should do the trick
+
+```nim
+switch("clibdir", "/usr/local/opt/openblas/lib")
+switch("cincludes", "/usr/local/opt/openblas/include")
+```
 
 ##GPU support
 
