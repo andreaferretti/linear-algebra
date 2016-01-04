@@ -10,6 +10,8 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.
 
 API documentation is [here](http://unicredit.github.io/linear-algebra/api.html)
 
+A lot of examples are available in the tests.
+
 Table of contents
 -----------------
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -535,6 +537,7 @@ For more information, look at the tests in `tests/cuda`.
 ##TODO
 
 * Add support for matrices and vector on the stack
+* Add more functional interfaces (foldl, scanl)
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * 64-bit and dynamic GPU support
 * More specialized BLAS operations
@@ -543,6 +546,7 @@ For more information, look at the tests in `tests/cuda`.
 * Make `row` and `column` operations non-copying
 * Better types to avoid out of bounds exceptions when statically checkable
 * Add a fallback Nim implementation, that is valid over other rings
+* Move BLAS and CUBLAS to separate libraries required via nimble
 * Try on more platforms/configurations
 * Make a proper benchmark
 * Improve documentation
