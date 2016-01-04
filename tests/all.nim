@@ -12,5 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{.push warning[ProveInit]: off .}
+
 import initialize, access, equality, conversions, iterators, trivial_ops, ops,
   row_major_ops, mixed_ops, compilation, types, ufunc
+
+{. pop .}

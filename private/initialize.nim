@@ -97,25 +97,8 @@ proc vector*[N: static[int]](xs: Array64[N]): Vector64[N] =
   for i in 0 .. < N:
     result[i] = xs[i]
 
-template makeSMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
-  new result.data
+template makeMatrixPrivate(M, N, f, order, result: expr) =
   result.order = order
-  if order == colMajor:
-    var data = cast[ref array[N, array[M, A]]](result.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        data[j][i] = f(i, j)
-  else:
-    var data = cast[ref array[M, array[N, A]]](result.data)
-    for i in 0 .. < M:
-      for j in 0 .. < N:
-        data[i][j] = f(i, j)
-
-template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
-  result.data = newSeq[A](M * N)
-  result.order = order
-  result.M = M
-  result.N = N
   if order == colMajor:
     for i in 0 .. < M:
       for j in 0 .. < N:
@@ -125,8 +108,19 @@ template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
       for j in 0 .. < N:
         result.data[i * N + j] = f(i, j)
 
+template makeSMatrixPrivate(M, N, f, order, result: expr) =
+  new result.data
+  result.order = order
+  makeMatrixPrivate(M, N, f, order, result)
+
+template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
+  result.data = newSeq[A](M * N)
+  result.M = M
+  result.N = N
+  makeMatrixPrivate(M, N, f, order, result)
+
 proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float32, order: OrderType): Matrix32[M, N] =
-  makeSMatrixPrivate(M, N, f, order, result, float32)
+  makeSMatrixPrivate(M, N, f, order, result)
 
 proc makeDMatrix(M, N: int, f: proc (i, j: int): float32, order: OrderType): DMatrix32 =
   makeDMatrixPrivate(M, N, f, order, result, float32)
@@ -136,7 +130,7 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   else: makeDMatrix(M, N, f, order)
 
 proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float64, order: OrderType): Matrix64[M, N] =
-  makeSMatrixPrivate(M, N, f, order, result, float64)
+  makeSMatrixPrivate(M, N, f, order, result)
 
 proc makeDMatrix(M, N: int, f: proc (i, j: int): float64, order: OrderType): DMatrix64 =
   makeDMatrixPrivate(M, N, f, order, result, float64)
@@ -197,35 +191,15 @@ proc ones*(M: int or static[int], N: int or static[int], order: OrderType = colM
 proc ones*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
   constantMatrix(M, N, 1'f32, order)
 
-template eyePrivateS(N, order, result: expr, A: typedesc) =
-  new result.data
-  result.order = order
-  var data = cast[ref array[N, array[N, A]]](result.data)
-  for i in 0 .. < N:
-    for j in 0 .. < N:
-      data[i][j] = if i == j: 1 else: 0
-
-proc eye32S(N: static[int], order: OrderType): Matrix32[N, N] = eyePrivateS(N, order, result, float32)
-
-proc eye64S(N: static[int], order: OrderType): Matrix64[N, N] = eyePrivateS(N, order, result, float64)
-
-proc eye32D(N: int, order: OrderType): DMatrix32 =
-  result = zeros(N, N, float32, order)
-  for i in 0 .. < N:
-    result.data[i + N * i] = 1'f32
-
-proc eye64D(N: int, order: OrderType): DMatrix64 =
+proc eye*(N: int or static[int], order: OrderType = colMajor): auto =
   result = zeros(N, N, order)
   for i in 0 .. < N:
     result.data[i + N * i] = 1'f64
 
-proc eye*(N: int or static[int], order: OrderType = colMajor): auto =
-  when N.isStatic: eye64S(N, order)
-  else: eye64D(N, order)
-
 proc eye*(N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
-  when N.isStatic: eye32S(N, order)
-  else: eye32D(N, order)
+  result = zeros(N, N, float32, order)
+  for i in 0 .. < N:
+    result.data[i + N * i] = 1'f32
 
 proc matrix*(xs: seq[seq[float32]], order: OrderType = colMajor): DMatrix32 =
   makeMatrix(xs.len, xs[0].len, proc(i, j: int): float32= xs[i][j], order)
