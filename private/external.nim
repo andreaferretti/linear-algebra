@@ -20,25 +20,20 @@ else:
   const libSuffix = ".so"
 
 when defined(mkl):
-  const libName = "libmkl_core" & libSuffix
+  const libName = "libmkl_intel_lp64" & libSuffix
   when defined(threaded):
-    {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" passl: "-lm" .}
+    {. passl: "-lmkl_core" passl: "-lmkl_gnu_thread" passl: "-lgomp" passl: "-lm" .}
   # {. passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_intel_thread" passl: "-lmpi" .}
     static: echo "--USING MKL THREADED--"
   else:
-    {.passl: "-lmkl_intel_lp64" passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" passl: "-lm" .}
+    {. passl: "-lmkl_core" passl: "-lmkl_sequential" passl: "-lpthread" passl: "-lm" .}
     static: echo "--USING MKL SEQUENTIAL--"
+elif defined(atlas):
+  const libName = "libcblas" & libSuffix
+  static: echo "--USING ATLAS--"
+elif  defined(openblas):
+  const libName = "libopenblas" & libSuffix
+  static: echo "--USING OPENBLAS--"
 else:
-  when defined(atlas):
-    {.passl: "-lcblas".}
-    const libName = "libcblas" & libSuffix
-    static: echo "--USING ATLAS--"
-  else:
-    when defined(openblas):
-      {.passl: "-lopenblas".}
-      const libName = "libopenblas" & libSuffix
-      static: echo "--USING OPENBLAS--"
-    else:
-      {.passl: "-lblas".}
-      const libName = "libblas" & libSuffix
-      static: echo "--USING DEFAULT BLAS--"
+  const libName = "libblas" & libSuffix
+  static: echo "--USING DEFAULT BLAS--"
