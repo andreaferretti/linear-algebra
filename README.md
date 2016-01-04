@@ -10,6 +10,8 @@ NVIDIA CUDA 7.0 and 7.5.
 
 API documentation is [here](http://unicredit.github.io/linear-algebra/api.html)
 
+Table of contents
+-----------------
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Introduction](#introduction)
