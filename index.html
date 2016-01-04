@@ -27,8 +27,8 @@ applications. The ambition would be to become a stable basis on which to
 develop a scientific ecosystem for Nim, much like Numpy does for Python.</p>
 
 <p>The library has been tested on Ubuntu Linux 14.10 through 15.10 64-bit using
-either ATLAS, OpenBlas or Intel MKL. The GPU support has been tested using
-NVIDIA CUDA 7.0 and 7.5.</p>
+either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite. The
+GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 
 <p>API documentation is <a href="http://unicredit.github.io/linear-algebra/api.html">here</a></p>
 
@@ -463,6 +463,17 @@ system-wide BLAS implementation.</p>
 -d:mkl
 -d:mkl -d:threaded
 </code></pre>
+
+<p>Packages for various BLAS implementations are available from the package
+managers of many Linux distributions. On OSX one can add the brew formulas
+from <a href="https://github.com/Homebrew/homebrew-science">Homebrew Science</a>, such
+as <code>brew install homebrew/science/openblas</code>.</p>
+
+<p>You may also need to add suitable paths for the includes and library dirs.
+On OSX, this should do the trick</p>
+
+<div class="highlight highlight-source-nim"><pre><span class="pl-c1">switch</span>(<span class="pl-s">"clibdir"</span>, <span class="pl-s">"/usr/local/opt/openblas/lib"</span>)
+<span class="pl-c1">switch</span>(<span class="pl-s">"cincludes"</span>, <span class="pl-s">"/usr/local/opt/openblas/include"</span>)</pre></div>
 
 <h2>
 <a id="gpu-support" class="anchor" href="#gpu-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>GPU support</h2>
