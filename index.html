@@ -32,6 +32,8 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 
 <p>API documentation is <a href="http://unicredit.github.io/linear-algebra/api.html">here</a></p>
 
+<p>A lot of examples are available in the tests.</p>
+
 <h2>
 <a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of contents</h2>
 
@@ -529,6 +531,8 @@ m * n</pre></div>
 
 <ul>
 <li>Add support for matrices and vector on the stack</li>
+<li>Add more functional interfaces (foldl, scanl)</li>
+<li>Add more common operations (cumsum, mean, stdv...)</li>
 <li>Use rewrite rules to optimize complex operations into a single BLAS call</li>
 <li>64-bit and dynamic GPU support</li>
 <li>More specialized BLAS operations</li>
@@ -537,6 +541,7 @@ m * n</pre></div>
 <li>Make <code>row</code> and <code>column</code> operations non-copying</li>
 <li>Better types to avoid out of bounds exceptions when statically checkable</li>
 <li>Add a fallback Nim implementation, that is valid over other rings</li>
+<li>Move BLAS and CUBLAS to separate libraries required via nimble</li>
 <li>Try on more platforms/configurations</li>
 <li>Make a proper benchmark</li>
 <li>Improve documentation</li>
