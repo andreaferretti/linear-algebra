@@ -1,5 +1,7 @@
 #Linear Algebra for Nim
 
+[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://github.com/yglukhov/nimble-tag)
+
 This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
 develop a scientific ecosystem for Nim, much like Numpy does for Python.
