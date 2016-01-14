@@ -98,7 +98,6 @@ proc vector*[N: static[int]](xs: Array64[N]): Vector64[N] =
     result[i] = xs[i]
 
 template makeMatrixPrivate(M, N, f, order, result: expr) =
-  result.order = order
   if order == colMajor:
     for i in 0 .. < M:
       for j in 0 .. < N:
@@ -109,14 +108,16 @@ template makeMatrixPrivate(M, N, f, order, result: expr) =
         result.data[i * N + j] = f(i, j)
 
 template makeSMatrixPrivate(M, N, f, order, result: expr) =
-  new result.data
-  result.order = order
+  result = type(result)(data: new type(result.data), order: order)
   makeMatrixPrivate(M, N, f, order, result)
 
 template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
-  result.data = newSeq[A](M * N)
-  result.M = M
-  result.N = N
+  result = type(result)(
+    data: newSeq[A](M * N),
+    order: order,
+    M: M,
+    N: N
+  )
   makeMatrixPrivate(M, N, f, order, result)
 
 proc makeSMatrix(M, N: static[int], f: proc (i, j: int): float32, order: OrderType): Matrix32[M, N] =
@@ -146,16 +147,17 @@ proc randomMatrix*(M: int or static[int], N: int or static[int], max: float32, o
   makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
 template constantSMatrixPrivate(M, N, x, order, result: expr) =
-  new result.data
-  result.order = order
+  result = type(result)(data: new type(result.data), order: order)
   for i in 0 .. < (M * N):
     result.data[i] = x
 
 template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
-  result.data = newSeq[A](M * N)
-  result.order = order
-  result.M = M
-  result.N = N
+  result = type(result)(
+    data: newSeq[A](M * N),
+    order: order,
+    M: M,
+    N: N
+  )
   for i in 0 .. < (M * N):
     result.data[i] = x
 
