@@ -62,60 +62,73 @@ proc cublasGetMatrix(rows, cols, elemSize: int, a: pointer, lda: int,
   b: pointer, ldb: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasGetMatrix" .}
 
-proc cublasScopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
+proc cublasCopy(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasScopy" .}
 
-proc rawCublasSscal(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32,
+proc cublasCopy(handle: cublasHandle, n: int, x: ptr float64, incx: int,
+  y: ptr float64, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDcopy" .}
+
+proc rawCublasScal(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32,
   incx: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSscal" .}
 
-proc cublasSscal(handle: cublasHandle, n: int, alpha: float32, x: ptr float32): cublasStatus =
+proc rawCublasScal(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64,
+  incx: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDscal" .}
+
+proc cublasScal(handle: cublasHandle, n: int, alpha: float32, x: ptr float32): cublasStatus =
   var al: ptr float32
   {.emit: """al = &alpha; """.}
-  rawCublasSscal(handle, n, al, x, 1)
+  rawCublasScal(handle, n, al, x, 1)
 
-proc rawCublasSaxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
+proc cublasScal(handle: cublasHandle, n: int, alpha: float64, x: ptr float64): cublasStatus =
+  var al: ptr float64
+  {.emit: """al = &alpha; """.}
+  rawCublasScal(handle, n, al, x, 1)
+
+proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
 
-proc cublasSaxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
+proc cublasAxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
   var al: ptr float32
   {.emit: """al = &alpha; """.}
-  rawCublasSaxpy(handle, n, al, x, 1, y, 1)
+  rawCublasAxpy(handle, n, al, x, 1, y, 1)
 
-proc cublasSnrm2(handle: cublasHandle, n: int, x: ptr float32,
+proc cublasNrm2(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSnrm2" .}
 
-proc cublasSasum(handle: cublasHandle, n: int, x: ptr float32,
+proc cublasAsum(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSasum" .}
 
-proc cublasSdot(handle: cublasHandle, n: int, x: ptr float32, incx: int,
+proc cublasDot(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSdot" .}
 
-proc rawCublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
+proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: ptr float32, A: ptr float32, lda: int, x: ptr float32,
   incx: int, beta: ptr float32, y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemv" .}
 
-proc cublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
+proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: float32, A: ptr float32, lda: int, x: ptr float32, incx: int,
   beta: float32, y: ptr float32, incy: int): cublasStatus =
   var al, be: ptr float32
   {.emit: """al = &alpha; be = &beta; """.}
-  rawCublasSgemv(handle, trans, m, n, al, A, lda, x, incx, be, y, incy)
+  rawCublasGemv(handle, trans, m, n, al, A, lda, x, incx, be, y, incy)
 
-proc rawCublasSgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: ptr float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: ptr float32, C: ptr float32, ldc: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemm" .}
 
-proc cublasSgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: float32, C: ptr float32, ldc: int): cublasStatus =
   var al, be: ptr float32
   {.emit: """al = &alpha; be = &beta; """.}
-  rawCublasSgemm(handle, transa, transb, m, n, k, al, A, lda, B, ldb, be, C, ldc)
+  rawCublasGemm(handle, transa, transb, m, n, k, al, A, lda, B, ldb, be, C, ldc)
