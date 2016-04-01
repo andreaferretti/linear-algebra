@@ -17,9 +17,18 @@ let handle {.global.} = cublasCreate()
 proc `*=`*[N: static[int]](v: var CudaVector32[N], k: float32) {. inline .} =
   check cublasScal(handle, N, k, v[])
 
+proc `*=`*[N: static[int]](v: var CudaVector64[N], k: float64) {. inline .} =
+  check cublasScal(handle, N, k, v[])
+
 proc `*`*[N: static[int]](v: CudaVector32[N], k: float32): CudaVector32[N]  {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(N)
+  check cublasCopy(handle, N, v[], 1, result[], 1)
+  check cublasScal(handle, N, k, result[])
+
+proc `*`*[N: static[int]](v: CudaVector64[N], k: float64): CudaVector64[N]  {. inline .} =
+  new result, freeDeviceMemory
+  result[] = cudaMalloc64(N)
   check cublasCopy(handle, N, v[], 1, result[], 1)
   check cublasScal(handle, N, k, result[])
 
@@ -83,6 +92,8 @@ proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M,
   check cublasScal(handle, M * N, k, result.fp)
 
 template `*`*(k: float32, v: CudaVector32 or CudaMatrix32): expr = v * k
+
+template `*`*(k: float64, v: CudaVector64 or CudaMatrix64): expr = v * k
 
 template `/`*(v: CudaVector32 or CudaMatrix32, k: float32): expr = v * (1 / k)
 

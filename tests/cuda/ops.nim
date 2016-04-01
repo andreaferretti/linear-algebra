@@ -75,6 +75,68 @@ suite "vector 32 operations":
     let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
     check l_1(v) == 14.0
 
+suite "vector 64 operations":
+  test "scalar vector multiplication":
+    let
+      v1 = randomVector(10, max=1.0)
+      p1: CudaVector64[10] = v1.gpu()
+      p2: CudaVector64[10] = 2 * p1
+      p3: CudaVector64[10] = p1 * 3
+    check(v1 * 3 == p3.cpu())
+    check(2 * v1 == p2.cpu())
+  test "in place scalar vector multiplication":
+    var
+      v1 = randomVector(10, max=1.0)
+      p1: CudaVector64[10] = v1.gpu()
+    v1 *= 5
+    p1 *= 5
+    check(v1 == p1.cpu())
+#   test "vector sum":
+#     let
+#       v1 = randomVector(10, max=1.0)
+#       v2 = randomVector(10, max=1.0)
+#       p1 = v1.gpu()
+#       p2 = v2.gpu()
+#       p3 = p1 + p2
+#       v3 = p3.cpu()
+#     check(v1 + v2 == v3)
+#   test "in place vector sum":
+#     var v1 = randomVector(10, max=1.0)
+#     let v2 = randomVector(10, max=1.0)
+#     var p1 = v1.gpu()
+#     let p2 = v2.gpu()
+#     v1 += v2
+#     p1 += p2
+#     check(v1 == p1.cpu())
+#   test "vector difference":
+#     let
+#       v1 = randomVector(10, max=1.0)
+#       v2 = randomVector(10, max=1.0)
+#       p1 = v1.gpu()
+#       p2 = v2.gpu()
+#       p3 = p1 - p2
+#       v3 = p3.cpu()
+#     check(v1 - v2 == v3)
+#   test "in place vector difference":
+#     var v1 = randomVector(10, max=1.0)
+#     let v2 = randomVector(10, max=1.0)
+#     var p1 = v1.gpu()
+#     let p2 = v2.gpu()
+#     v1 -= v2
+#     p1 -= p2
+#     check(v1 == p1.cpu())
+#   test "dot product":
+#     let
+#       v = vector([1.0, 3.0, 2.0, 8.0, -2.0]).gpu()
+#       w = vector([2.0, -1.0, 2.0, 0.0, 4.0]).gpu()
+#     check(v * w == -5.0)
+#   test "ℓ² norm":
+#     let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
+#     check l_2(v) == 8.0
+#   test "ℓ¹ norm":
+#     let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
+#     check l_1(v) == 14.0
+
 suite "matrix/vector operations":
   test "multiplication of matrix and vector":
     let

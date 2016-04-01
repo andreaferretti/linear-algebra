@@ -92,8 +92,17 @@ proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr floa
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
 
+proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64, incx: int,
+  y: ptr float64, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDaxpy" .}
+
 proc cublasAxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
   var al: ptr float32
+  {.emit: """al = &alpha; """.}
+  rawCublasAxpy(handle, n, al, x, 1, y, 1)
+
+proc cublasAxpy(handle: cublasHandle, n: int, alpha: float64, x, y: ptr float64): cublasStatus =
+  var al: ptr float64
   {.emit: """al = &alpha; """.}
   rawCublasAxpy(handle, n, al, x, 1, y, 1)
 
