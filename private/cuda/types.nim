@@ -114,10 +114,14 @@ type
   CublasException = object of IOError
     error: cublasStatus
   CudaVector32*[N: static[int]] = ref[ptr float32]
+  CudaVector64*[N: static[int]] = ref[ptr float64]
   CudaMatrix32*[M, N: static[int]] = object
     data: ref[ptr float32]
+  CudaMatrix64*[M, N: static[int]] = object
+    data: ref[ptr float64]
 
 template fp(c: CudaMatrix32): ptr float32 = c.data[]
+template fp(c: CudaMatrix64): ptr float64 = c.data[]
 
 proc newCudaError(error: cudaError): ref CudaException =
   new result

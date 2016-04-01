@@ -19,7 +19,7 @@ proc `*=`*[N: static[int]](v: var CudaVector32[N], k: float32) {. inline .} =
 
 proc `*`*[N: static[int]](v: CudaVector32[N], k: float32): CudaVector32[N]  {. inline .} =
   new result, freeDeviceMemory
-  result[] = cudaMalloc(N * sizeof(float32))
+  result[] = cudaMalloc32(N)
   check cublasScopy(handle, N, v[], 1, result[], 1)
   check cublasSscal(handle, N, k, result[])
 
@@ -28,7 +28,7 @@ proc `+=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline
 
 proc `+`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   new result, freeDeviceMemory
-  result[] = cudaMalloc(N * sizeof(float32))
+  result[] = cudaMalloc32(N)
   check cublasScopy(handle, N, v[], 1, result[], 1)
   check cublasSaxpy(handle, N, 1, w[], result[])
 
@@ -37,7 +37,7 @@ proc `-=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline
 
 proc `-`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   new result, freeDeviceMemory
-  result[] = cudaMalloc(N * sizeof(float32))
+  result[] = cudaMalloc32(N)
   check cublasScopy(handle, N, v[], 1, result[], 1)
   check cublasSaxpy(handle, N, -1, w[], result[])
 
@@ -67,7 +67,7 @@ proc `=~`*[N: static[int]](v, w: CudaVector32[N]): bool = compareApprox(v, w)
 
 proc `*`*[M, N: static[int]](a: CudaMatrix32[M, N], v: CudaVector32[N]): CudaVector32[M]  {. inline .} =
   new result, freeDeviceMemory
-  result[] = cudaMalloc(M * sizeof(float32))
+  result[] = cudaMalloc32(M)
   check cublasSgemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
 
 proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
@@ -78,7 +78,7 @@ proc `==`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool =
 
 proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M, N]  {. inline .} =
   new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  result.data[] = cudaMalloc32(M * N)
   check cublasScopy(handle, M * N, m.fp, 1, result.fp, 1)
   check cublasSscal(handle, M * N, k, result.fp)
 
@@ -93,7 +93,7 @@ proc `+=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) 
 
 proc `+`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
   new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  result.data[] = cudaMalloc32(M * N)
   check cublasScopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasSaxpy(handle, M * N, 1, b.fp, result.fp)
 
@@ -102,13 +102,13 @@ proc `-=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) 
 
 proc `-`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
   new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  result.data[] = cudaMalloc32(M * N)
   check cublasScopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasSaxpy(handle, M * N, -1, b.fp, result.fp)
 
 proc `*`*[M, N, K: static[int]](a: CudaMatrix32[M, K], b: CudaMatrix32[K, N]): CudaMatrix32[M, N] {. inline .} =
   new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc(M * N * sizeof(float32))
+  result.data[] = cudaMalloc32(M * N)
   check cublasSgemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
     a.fp, M, b.fp, K, 0, result.fp, M)
 

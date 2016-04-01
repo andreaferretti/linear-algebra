@@ -22,9 +22,22 @@ suite "copying back and forth":
       v2 = v1.gpu()
       v3 = v2.cpu()
     check v1 == v3
+  test "copy of a Vector64":
+    let
+      v1 = randomVector(10, max=1.0)
+      # FIXME: there should be no need for type annotations
+      v2: CudaVector64[10] = v1.gpu()
+      v3 = v2.cpu()
+    check v1 == v3
   test "copy of a Matrix32":
     let
       m1 = randomMatrix(10, 7, max=1'f32)
+      m2 = m1.gpu()
+      m3 = m2.cpu()
+    check m1 == m3
+  test "copy of a Matrix64":
+    let
+      m1 = randomMatrix(10, 7, max=1.0)
       m2 = m1.gpu()
       m3 = m2.cpu()
     check m1 == m3

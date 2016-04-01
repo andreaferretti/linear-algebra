@@ -16,17 +16,26 @@ type
   cublasTransposeType = enum
     cuNoTranspose = 0, cuTranspose = 1, cuConjTranspose = 2
 
-proc cudaMalloc(size: int): ptr float32 =
+proc cudaMalloc32(size: int): ptr float32 =
   var error: cudaError
-  {.emit: """error = cudaMalloc((void**)&`result`, `size`); """.}
+  let s = size * sizeof(float32)
+  {.emit: """error = cudaMalloc((void**)&`result`, `s`); """.}
   check error
 
-proc cudaFree(p: ptr float32) =
+proc cudaMalloc64(size: int): ptr float64 =
+  var error: cudaError
+  let s = size * sizeof(float64)
+  {.emit: """error = cudaMalloc((void**)&`result`, `s`); """.}
+  check error
+
+proc cudaFree(p: ptr float32 or ptr float64) =
   var error: cudaError
   {.emit: """error = cudaFree(p); """.}
   check error
 
 proc freeDeviceMemory(p: ref[ptr float32]) = cudaFree(p[])
+
+proc freeDeviceMemory(p: ref[ptr float64]) = cudaFree(p[])
 
 proc cublasCreate(): cublasHandle =
   var stat: cublasStatus
