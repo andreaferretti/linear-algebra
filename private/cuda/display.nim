@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc `$`*[N: static[int]](v: CudaVector[N]): string = $(v.cpu())
+proc `$`*[N: static[int]](v: CudaVector32[N]): string = $(v.cpu())
 
-proc `$`*[M, N: static[int]](m: CudaMatrix[M, N]): string = $(m.cpu())
+proc `$`*[M, N: static[int]](m: CudaMatrix32[M, N]): string = $(m.cpu())

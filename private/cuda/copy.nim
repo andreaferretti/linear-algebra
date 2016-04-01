@@ -12,22 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proc gpu*[N: static[int]](v: Vector32[N]): CudaVector[N] =
+proc gpu*[N: static[int]](v: Vector32[N]): CudaVector32[N] =
   new result, freeDeviceMemory
   result[] = cudaMalloc(N * sizeof(float32))
   check cublasSetVector(N, sizeof(float32), v.fp, 1, result[], 1)
 
-proc cpu*[N: static[int]](v: CudaVector[N]): Vector32[N] =
+proc cpu*[N: static[int]](v: CudaVector32[N]): Vector32[N] =
   new result
   check cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
 
-proc gpu*[M, N: static[int]](m: Matrix32[M, N]): CudaMatrix[M, N] =
+proc gpu*[M, N: static[int]](m: Matrix32[M, N]): CudaMatrix32[M, N] =
   if m.order == rowMajor: quit("wrong order")
   new result.data, freeDeviceMemory
   result.data[] = cudaMalloc(M * N * sizeof(float32))
   check cublasSetMatrix(M, N, sizeof(float32), m.fp, M, result.fp, M)
 
-proc cpu*[M, N: static[int]](m: CudaMatrix[M, N]): Matrix32[M, N] =
+proc cpu*[M, N: static[int]](m: CudaMatrix32[M, N]): Matrix32[M, N] =
   result.order = colMajor
   new result.data
   check cublasGetMatrix(M, N, sizeof(float32), m.fp, M, result.fp, M)
