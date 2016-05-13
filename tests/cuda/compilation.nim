@@ -67,3 +67,56 @@ suite "compilation errors":
       m = randomMatrix(6, 7, max = 1'f32).gpu()
       n = randomMatrix(8, 18, max = 1'f32).gpu()
     when compiles(m * n): fail()
+
+suite "compilation errors for 64 bit":
+  test "vector dimension should agree in a sum":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      u1 = u.gpu()
+      v1 = v.gpu()
+    when compiles(u1 + v1): fail()
+    when compiles(u1 - v1): fail()
+  test "vector dimension should agree in a mutating sum":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      v1 = v.gpu()
+    var u1 = u.gpu()
+    when compiles(u1 += v1): fail()
+    when compiles(u1 -= v1): fail()
+  test "in place sum should not work for immutable vectors":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      u1 = u.gpu()
+      v1 = v.gpu()
+    when compiles(u1 += v1): fail()
+    when compiles(u1 -= v1): fail()
+  test "vector dimension should agree in a dot product":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0, 5.0]).gpu()
+      v = vector([1.0, 2.0, 3.0, 4.0]).gpu()
+    when compiles(u * v): fail()
+  test "matrix dimensions should agree in a sum":
+    let
+      m = randomMatrix(3, 6, max = 1.0).gpu()
+      n = randomMatrix(4, 5, max = 1.0).gpu()
+    when compiles(m + n): fail()
+    when compiles(m - n): fail()
+  test "matrix dimensions should agree in an in place sum":
+    var m = randomMatrix(3, 6, max = 1.0).gpu()
+    let n = randomMatrix(4, 5, max = 1.0).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "in place sum should not work for immutable matrices":
+    let
+      m = randomMatrix(3, 6, max = 1.0).gpu()
+      n = randomMatrix(3, 6, max = 1.0).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+  test "matrix multiplication should not work for wrong dimensions":
+    let
+      m = randomMatrix(6, 7, max = 1.0).gpu()
+      n = randomMatrix(8, 18, max = 1.0).gpu()
+    when compiles(m * n): fail()
