@@ -28,10 +28,11 @@ proc cudaMalloc64(size: int): ptr float64 =
   {.emit: """error = cudaMalloc((void**)&`result`, `s`); """.}
   check error
 
+proc rawCudaFree(p: pointer): cublasStatus
+  {. header: "cublas_v2.h", importc: "cudaFree" .}
+
 proc cudaFree(p: ptr float32 or ptr float64) =
-  var error: cudaError
-  {.emit: """error = cudaFree(p); """.}
-  check error
+  check rawCudaFree(p)
 
 proc freeDeviceMemory(p: ref[ptr float32]) = cudaFree(p[])
 
