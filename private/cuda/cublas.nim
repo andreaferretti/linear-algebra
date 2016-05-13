@@ -16,17 +16,16 @@ type
   cublasTransposeType = enum
     cuNoTranspose = 0, cuTranspose = 1, cuConjTranspose = 2
 
+proc cudaMalloc(p: ptr pointer, size: int): cudaError
+  {. header: "cublas_v2.h", importc: "cudaMalloc" .}
+
 proc cudaMalloc32(size: int): ptr float32 =
-  var error: cudaError
   let s = size * sizeof(float32)
-  {.emit: """error = cudaMalloc((void**)&`result`, `s`); """.}
-  check error
+  check cudaMalloc(cast[ptr pointer](addr result), s)
 
 proc cudaMalloc64(size: int): ptr float64 =
-  var error: cudaError
   let s = size * sizeof(float64)
-  {.emit: """error = cudaMalloc((void**)&`result`, `s`); """.}
-  check error
+  check cudaMalloc(cast[ptr pointer](addr result), s)
 
 proc rawCudaFree(p: pointer): cublasStatus
   {. header: "cublas_v2.h", importc: "cudaFree" .}
@@ -38,10 +37,11 @@ proc freeDeviceMemory(p: ref[ptr float32]) = cudaFree(p[])
 
 proc freeDeviceMemory(p: ref[ptr float64]) = cudaFree(p[])
 
+proc cublasCreate_v2(h: ptr cublasHandle): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasCreate_v2" .}
+
 proc cublasCreate(): cublasHandle =
-  var stat: cublasStatus
-  {.emit: """stat = cublasCreate_v2(& `result`); """.}
-  check stat
+  check cublasCreate_v2(addr result)
 
 # y is on device
 proc cublasSetVector(n, elemSize: int, x: pointer, incx: int,
@@ -80,14 +80,10 @@ proc rawCublasScal(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr floa
   {. header: "cublas_v2.h", importc: "cublasDscal" .}
 
 proc cublasScal(handle: cublasHandle, n: int, alpha: float32, x: ptr float32): cublasStatus =
-  var al: ptr float32
-  {.emit: """al = &alpha; """.}
-  rawCublasScal(handle, n, al, x, 1)
+  rawCublasScal(handle, n, unsafeAddr(alpha), x, 1)
 
 proc cublasScal(handle: cublasHandle, n: int, alpha: float64, x: ptr float64): cublasStatus =
-  var al: ptr float64
-  {.emit: """al = &alpha; """.}
-  rawCublasScal(handle, n, al, x, 1)
+  rawCublasScal(handle, n, unsafeAddr(alpha), x, 1)
 
 proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
@@ -98,14 +94,10 @@ proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr floa
   {. header: "cublas_v2.h", importc: "cublasDaxpy" .}
 
 proc cublasAxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
-  var al: ptr float32
-  {.emit: """al = &alpha; """.}
-  rawCublasAxpy(handle, n, al, x, 1, y, 1)
+  rawCublasAxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
 
 proc cublasAxpy(handle: cublasHandle, n: int, alpha: float64, x, y: ptr float64): cublasStatus =
-  var al: ptr float64
-  {.emit: """al = &alpha; """.}
-  rawCublasAxpy(handle, n, al, x, 1, y, 1)
+  rawCublasAxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
 
 proc cublasNrm2(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
@@ -127,9 +119,7 @@ proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
 proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: float32, A: ptr float32, lda: int, x: ptr float32, incx: int,
   beta: float32, y: ptr float32, incy: int): cublasStatus =
-  var al, be: ptr float32
-  {.emit: """al = &alpha; be = &beta; """.}
-  rawCublasGemv(handle, trans, m, n, al, A, lda, x, incx, be, y, incy)
+  rawCublasGemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
 
 proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: ptr float32, A: ptr float32, lda: int, B: ptr float32,
@@ -139,6 +129,4 @@ proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
 proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: float32, C: ptr float32, ldc: int): cublasStatus =
-  var al, be: ptr float32
-  {.emit: """al = &alpha; be = &beta; """.}
-  rawCublasGemm(handle, transa, transb, m, n, k, al, A, lda, B, ldb, be, C, ldc)
+  rawCublasGemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
