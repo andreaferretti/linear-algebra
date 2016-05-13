@@ -91,40 +91,40 @@ suite "vector 64 operations":
     v1 *= 5
     p1 *= 5
     check(v1 == p1.cpu())
-#   test "vector sum":
-#     let
-#       v1 = randomVector(10, max=1.0)
-#       v2 = randomVector(10, max=1.0)
-#       p1 = v1.gpu()
-#       p2 = v2.gpu()
-#       p3 = p1 + p2
-#       v3 = p3.cpu()
-#     check(v1 + v2 == v3)
-#   test "in place vector sum":
-#     var v1 = randomVector(10, max=1.0)
-#     let v2 = randomVector(10, max=1.0)
-#     var p1 = v1.gpu()
-#     let p2 = v2.gpu()
-#     v1 += v2
-#     p1 += p2
-#     check(v1 == p1.cpu())
-#   test "vector difference":
-#     let
-#       v1 = randomVector(10, max=1.0)
-#       v2 = randomVector(10, max=1.0)
-#       p1 = v1.gpu()
-#       p2 = v2.gpu()
-#       p3 = p1 - p2
-#       v3 = p3.cpu()
-#     check(v1 - v2 == v3)
-#   test "in place vector difference":
-#     var v1 = randomVector(10, max=1.0)
-#     let v2 = randomVector(10, max=1.0)
-#     var p1 = v1.gpu()
-#     let p2 = v2.gpu()
-#     v1 -= v2
-#     p1 -= p2
-#     check(v1 == p1.cpu())
+  test "vector sum":
+    let
+      v1 = randomVector(10, max=1.0)
+      v2 = randomVector(10, max=1.0)
+      p1 = v1.gpu()
+      p2 = v2.gpu()
+      p3 = p1 + p2
+      v3 = p3.cpu()
+    check(v1 + v2 == v3)
+  test "in place vector sum":
+    var v1 = randomVector(10, max=1.0)
+    let v2 = randomVector(10, max=1.0)
+    var p1 = v1.gpu()
+    let p2 = v2.gpu()
+    v1 += v2
+    p1 += p2
+    check(v1 == p1.cpu())
+  test "vector difference":
+    let
+      v1 = randomVector(10, max=1.0)
+      v2 = randomVector(10, max=1.0)
+      p1 = v1.gpu()
+      p2 = v2.gpu()
+      p3 = p1 - p2
+      v3 = p3.cpu()
+    check(v1 - v2 == v3)
+  test "in place vector difference":
+    var v1 = randomVector(10, max=1.0)
+    let v2 = randomVector(10, max=1.0)
+    var p1 = v1.gpu()
+    let p2 = v2.gpu()
+    v1 -= v2
+    p1 -= p2
+    check(v1 == p1.cpu())
 #   test "dot product":
 #     let
 #       v = vector([1.0, 3.0, 2.0, 8.0, -2.0]).gpu()

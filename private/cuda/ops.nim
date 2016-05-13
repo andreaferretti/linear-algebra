@@ -35,18 +35,36 @@ proc `*`*[N: static[int]](v: CudaVector64[N], k: float64): CudaVector64[N]  {. i
 proc `+=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline .} =
   check cublasAxpy(handle, N, 1, w[], v[])
 
+proc `+=`*[N: static[int]](v: var CudaVector64[N], w: CudaVector64[N]) {. inline .} =
+  check cublasAxpy(handle, N, 1, w[], v[])
+
 proc `+`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(N)
   check cublasCopy(handle, N, v[], 1, result[], 1)
   check cublasAxpy(handle, N, 1, w[], result[])
 
+proc `+`*[N: static[int]](v, w: CudaVector64[N]): CudaVector64[N] {. inline .} =
+  new result, freeDeviceMemory
+  result[] = cudaMalloc64(N)
+  check cublasCopy(handle, N, v[], 1, result[], 1)
+  check cublasAxpy(handle, N, 1, w[], result[])
+
 proc `-=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline .} =
+  check cublasAxpy(handle, N, -1, w[], v[])
+
+proc `-=`*[N: static[int]](v: var CudaVector64[N], w: CudaVector64[N]) {. inline .} =
   check cublasAxpy(handle, N, -1, w[], v[])
 
 proc `-`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(N)
+  check cublasCopy(handle, N, v[], 1, result[], 1)
+  check cublasAxpy(handle, N, -1, w[], result[])
+
+proc `-`*[N: static[int]](v, w: CudaVector64[N]): CudaVector64[N] {. inline .} =
+  new result, freeDeviceMemory
+  result[] = cudaMalloc64(N)
   check cublasCopy(handle, N, v[], 1, result[], 1)
   check cublasAxpy(handle, N, -1, w[], result[])
 
