@@ -103,13 +103,25 @@ proc cublasNrm2(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSnrm2" .}
 
+proc cublasNrm2(handle: cublasHandle, n: int, x: ptr float64,
+  incx: int, res: ptr float64): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDnrm2" .}
+
 proc cublasAsum(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSasum" .}
 
+proc cublasAsum(handle: cublasHandle, n: int, x: ptr float64,
+  incx: int, res: ptr float64): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDasum" .}
+
 proc cublasDot(handle: cublasHandle, n: int, x: ptr float32, incx: int,
   y: ptr float32, incy: int, res: ptr float32): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSdot" .}
+
+proc cublasDot(handle: cublasHandle, n: int, x: ptr float64, incx: int,
+  y: ptr float64, incy: int, res: ptr float64): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDdot" .}
 
 proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: ptr float32, A: ptr float32, lda: int, x: ptr float32,

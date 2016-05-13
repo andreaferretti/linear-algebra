@@ -71,13 +71,25 @@ proc `-`*[N: static[int]](v, w: CudaVector64[N]): CudaVector64[N] {. inline .} =
 proc `*`*[N: static[int]](v, w: CudaVector32[N]): float32 {. inline .} =
   check cublasDot(handle, N, v[], 1, w[], 1, addr(result))
 
+proc `*`*[N: static[int]](v, w: CudaVector64[N]): float64 {. inline .} =
+  check cublasDot(handle, N, v[], 1, w[], 1, addr(result))
+
 proc l_2*[N: static[int]](v: CudaVector32[N]): float32 {. inline .} =
+  check cublasNrm2(handle, N, v[], 1, addr(result))
+
+proc l_2*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
   check cublasNrm2(handle, N, v[], 1, addr(result))
 
 proc l_1*[N: static[int]](v: CudaVector32[N]): float32 {. inline .} =
   check cublasAsum(handle, N, v[], 1, addr(result))
 
+proc l_1*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
+  check cublasAsum(handle, N, v[], 1, addr(result))
+
 proc `==`*[N: static[int]](v, w: CudaVector32[N]): bool =
+  v.cpu() == w.cpu()
+
+proc `==`*[N: static[int]](v, w: CudaVector64[N]): bool =
   v.cpu() == w.cpu()
 
 proc compareApprox(a, b: CudaVector32 or CudaMatrix32): bool =
