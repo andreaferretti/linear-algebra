@@ -128,9 +128,19 @@ proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   incx: int, beta: ptr float32, y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemv" .}
 
+proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
+  m, n: int, alpha: ptr float64, A: ptr float64, lda: int, x: ptr float64,
+  incx: int, beta: ptr float64, y: ptr float64, incy: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDgemv" .}
+
 proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: float32, A: ptr float32, lda: int, x: ptr float32, incx: int,
   beta: float32, y: ptr float32, incy: int): cublasStatus =
+  rawCublasGemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
+
+proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
+  m, n: int, alpha: float64, A: ptr float64, lda: int, x: ptr float64, incx: int,
+  beta: float64, y: ptr float64, incy: int): cublasStatus =
   rawCublasGemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
 
 proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
@@ -138,7 +148,17 @@ proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   ldb: int, beta: ptr float32, C: ptr float32, ldc: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemm" .}
 
+proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+  m, n, k: int, alpha: ptr float64, A: ptr float64, lda: int, B: ptr float64,
+  ldb: int, beta: ptr float64, C: ptr float64, ldc: int): cublasStatus
+  {. header: "cublas_v2.h", importc: "cublasDgemm" .}
+
 proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: float32, C: ptr float32, ldc: int): cublasStatus =
+  rawCublasGemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
+
+proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+  m, n, k: int, alpha: float64, A: ptr float64, lda: int, B: ptr float64,
+  ldb: int, beta: float64, C: ptr float64, ldc: int): cublasStatus =
   rawCublasGemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)

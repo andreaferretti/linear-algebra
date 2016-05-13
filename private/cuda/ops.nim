@@ -92,7 +92,7 @@ proc `==`*[N: static[int]](v, w: CudaVector32[N]): bool =
 proc `==`*[N: static[int]](v, w: CudaVector64[N]): bool =
   v.cpu() == w.cpu()
 
-proc compareApprox(a, b: CudaVector32 or CudaMatrix32): bool =
+proc compareApprox(a, b: CudaVector32 or CudaMatrix32 or CudaVector64 or CudaMatrix64): bool =
   mixin l_1
   const epsilon = 0.000001
   let
@@ -104,15 +104,28 @@ proc compareApprox(a, b: CudaVector32 or CudaMatrix32): bool =
 
 proc `=~`*[N: static[int]](v, w: CudaVector32[N]): bool = compareApprox(v, w)
 
+proc `=~`*[N: static[int]](v, w: CudaVector64[N]): bool = compareApprox(v, w)
+
 proc `*`*[M, N: static[int]](a: CudaMatrix32[M, N], v: CudaVector32[N]): CudaVector32[M]  {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(M)
   check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
 
+proc `*`*[M, N: static[int]](a: CudaMatrix64[M, N], v: CudaVector64[N]): CudaVector64[M]  {. inline .} =
+  new result, freeDeviceMemory
+  result[] = cudaMalloc64(M)
+  check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
+
 proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
   check cublasScal(handle, M * N, k, m.fp)
 
+proc `*=`*[M, N: static[int]](m: var CudaMatrix64[M, N], k: float64) {. inline .} =
+  check cublasScal(handle, M * N, k, m.fp)
+
 proc `==`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool =
   m.cpu() == n.cpu()
 
 proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M, N]  {. inline .} =

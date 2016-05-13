@@ -149,6 +149,18 @@ suite "matrix/vector operations":
 
     check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32]))
 
+suite "matrix/vector 64 operations":
+  test "multiplication of matrix and vector":
+    let
+      m = matrix([
+        [1.0, 0.0, 2.0, -1.0],
+        [-1.0, 1.0, 3.0, 1.0],
+        [3.0, 2.0, 2.0, 4.0]
+      ]).gpu()
+      v = vector([1.0, 3.0, 2.0, -2.0]).gpu()
+
+    check((m * v).cpu() == vector([7.0, 6.0, 5.0]))
+
 suite "matrix operations":
   test "scalar matrix multiplication":
     let
