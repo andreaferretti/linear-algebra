@@ -71,33 +71,33 @@ proc cublasCopy(handle: cublasHandle, n: int, x: ptr float64, incx: int,
   y: ptr float64, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDcopy" .}
 
-proc rawCublasScal(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32,
+proc cublasSscal(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32,
   incx: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSscal" .}
 
-proc rawCublasScal(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64,
+proc cublasDscal(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64,
   incx: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDscal" .}
 
 proc cublasScal(handle: cublasHandle, n: int, alpha: float32, x: ptr float32): cublasStatus =
-  rawCublasScal(handle, n, unsafeAddr(alpha), x, 1)
+  cublasSscal(handle, n, unsafeAddr(alpha), x, 1)
 
 proc cublasScal(handle: cublasHandle, n: int, alpha: float64, x: ptr float64): cublasStatus =
-  rawCublasScal(handle, n, unsafeAddr(alpha), x, 1)
+  cublasDscal(handle, n, unsafeAddr(alpha), x, 1)
 
-proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
+proc cublasSaxpy(handle: cublasHandle, n: int, alpha: ptr float32, x: ptr float32, incx: int,
   y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSaxpy" .}
 
-proc rawCublasAxpy(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64, incx: int,
+proc cublasDaxpy(handle: cublasHandle, n: int, alpha: ptr float64, x: ptr float64, incx: int,
   y: ptr float64, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDaxpy" .}
 
 proc cublasAxpy(handle: cublasHandle, n: int, alpha: float32, x, y: ptr float32): cublasStatus =
-  rawCublasAxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
+  cublasSaxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
 
 proc cublasAxpy(handle: cublasHandle, n: int, alpha: float64, x, y: ptr float64): cublasStatus =
-  rawCublasAxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
+  cublasDaxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
 
 proc cublasNrm2(handle: cublasHandle, n: int, x: ptr float32,
   incx: int, res: ptr float32): cublasStatus
@@ -123,12 +123,12 @@ proc cublasDot(handle: cublasHandle, n: int, x: ptr float64, incx: int,
   y: ptr float64, incy: int, res: ptr float64): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDdot" .}
 
-proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
+proc cublasSgemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: ptr float32, A: ptr float32, lda: int, x: ptr float32,
   incx: int, beta: ptr float32, y: ptr float32, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemv" .}
 
-proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
+proc cublasDgemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: ptr float64, A: ptr float64, lda: int, x: ptr float64,
   incx: int, beta: ptr float64, y: ptr float64, incy: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDgemv" .}
@@ -136,19 +136,19 @@ proc rawCublasGemv(handle: cublasHandle, trans: cublasTransposeType,
 proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: float32, A: ptr float32, lda: int, x: ptr float32, incx: int,
   beta: float32, y: ptr float32, incy: int): cublasStatus =
-  rawCublasGemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
+  cublasSgemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
 
 proc cublasGemv(handle: cublasHandle, trans: cublasTransposeType,
   m, n: int, alpha: float64, A: ptr float64, lda: int, x: ptr float64, incx: int,
   beta: float64, y: ptr float64, incy: int): cublasStatus =
-  rawCublasGemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
+  cublasDgemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
 
-proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+proc cublasSgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: ptr float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: ptr float32, C: ptr float32, ldc: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasSgemm" .}
 
-proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
+proc cublasDgemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: ptr float64, A: ptr float64, lda: int, B: ptr float64,
   ldb: int, beta: ptr float64, C: ptr float64, ldc: int): cublasStatus
   {. header: "cublas_v2.h", importc: "cublasDgemm" .}
@@ -156,9 +156,9 @@ proc rawCublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
 proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: float32, A: ptr float32, lda: int, B: ptr float32,
   ldb: int, beta: float32, C: ptr float32, ldc: int): cublasStatus =
-  rawCublasGemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
+  cublasSgemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
 
 proc cublasGemm(handle: cublasHandle, transa, transb: cublasTransposeType,
   m, n, k: int, alpha: float64, A: ptr float64, lda: int, B: ptr float64,
   ldb: int, beta: float64, C: ptr float64, ldc: int): cublasStatus =
-  rawCublasGemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
+  cublasDgemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
