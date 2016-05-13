@@ -25,7 +25,6 @@ suite "copying back and forth":
   test "copy of a Vector64":
     let
       v1 = randomVector(10, max=1.0)
-      # FIXME: there should be no need for type annotations
       v2 = v1.gpu()
       v3 = v2.cpu()
     check v1 == v3
