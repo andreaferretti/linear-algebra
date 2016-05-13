@@ -194,12 +194,26 @@ proc `*`*[M, N, K: static[int]](a: CudaMatrix32[M, K], b: CudaMatrix32[K, N]): C
   check cublasGemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
     a.fp, M, b.fp, K, 0, result.fp, M)
 
+proc `*`*[M, N, K: static[int]](a: CudaMatrix64[M, K], b: CudaMatrix64[K, N]): CudaMatrix64[M, N] {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc64(M * N)
+  check cublasGemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
+    a.fp, M, b.fp, K, 0, result.fp, M)
+
 proc l_2*[M, N: static[int]](m: CudaMatrix32[M, N]): float32 {. inline .} =
+  check cublasNrm2(handle, M * N, m.fp, 1, addr(result))
+
+proc l_2*[M, N: static[int]](m: CudaMatrix64[M, N]): float64 {. inline .} =
   check cublasNrm2(handle, M * N, m.fp, 1, addr(result))
 
 proc l_1*[M, N: static[int]](m: CudaMatrix32[M, N]): float32 {. inline .} =
   check cublasAsum(handle, M * N, m.fp, 1, addr(result))
 
+proc l_1*[M, N: static[int]](m: CudaMatrix64[M, N]): float64 {. inline .} =
+  check cublasAsum(handle, M * N, m.fp, 1, addr(result))
+
 proc `=~`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool = compareApprox(m, n)
 
-template `!=~`*(a, b: CudaVector32 or CudaMatrix32): bool = not (a =~ b)
+proc `=~`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool = compareApprox(m, n)
+
+template `!=~`*(a, b: CudaVector32 or CudaMatrix32 or CudaVector64 or CudaMatrix64): bool = not (a =~ b)
