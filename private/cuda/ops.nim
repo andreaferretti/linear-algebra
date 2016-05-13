@@ -155,9 +155,18 @@ template `/=`*(v: var CudaVector64 or var CudaMatrix64, k: float64): expr = v *=
 proc `+=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
 
+proc `+=`*[M, N: static[int]](a: var CudaMatrix64[M, N], b: CudaMatrix64[M, N]) {. inline .} =
+  check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
+
 proc `+`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
   new result.data, freeDeviceMemory
   result.data[] = cudaMalloc32(M * N)
+  check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
+  check cublasAxpy(handle, M * N, 1, b.fp, result.fp)
+
+proc `+`*[M, N: static[int]](a, b: CudaMatrix64[M, N]): CudaMatrix64[M, N]  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc64(M * N)
   check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasAxpy(handle, M * N, 1, b.fp, result.fp)
 
