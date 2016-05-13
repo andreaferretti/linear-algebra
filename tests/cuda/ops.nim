@@ -79,15 +79,15 @@ suite "vector 64 operations":
   test "scalar vector multiplication":
     let
       v1 = randomVector(10, max=1.0)
-      p1: CudaVector64[10] = v1.gpu()
-      p2: CudaVector64[10] = 2 * p1
-      p3: CudaVector64[10] = p1 * 3
+      p1 = v1.gpu()
+      p2 = 2 * p1
+      p3 = p1 * 3
     check(v1 * 3 == p3.cpu())
     check(2 * v1 == p2.cpu())
   test "in place scalar vector multiplication":
     var
       v1 = randomVector(10, max=1.0)
-      p1: CudaVector64[10] = v1.gpu()
+      p1 = v1.gpu()
     v1 *= 5
     p1 *= 5
     check(v1 == p1.cpu())
