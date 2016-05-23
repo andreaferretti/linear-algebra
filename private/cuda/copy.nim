@@ -15,12 +15,12 @@
 proc gpu*[N: static[int]](v: Vector32[N]): CudaVector32[N] =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(N)
-  check cublasSetVector(N, sizeof(float32), v.fp, 1, result[], 1)
+  check cublasSetVector(N, sizeof(float32), v.fp, 1, result.fp, 1)
 
 proc gpu*[N: static[int]](v: Vector64[N]): CudaVector64[N] =
   new result, freeDeviceMemory
   result[] = cudaMalloc64(N)
-  check cublasSetVector(N, sizeof(float64), v.fp, 1, result[], 1)
+  check cublasSetVector(N, sizeof(float64), v.fp, 1, result.fp, 1)
 
 proc gpu*(v: DVector32): CudaDVector32 =
   new result.data, freeDeviceMemory
@@ -62,6 +62,22 @@ proc gpu*[M, N: static[int]](m: Matrix64[M, N]): CudaMatrix64[M, N] =
   result.data[] = cudaMalloc64(M * N)
   check cublasSetMatrix(M, N, sizeof(float64), m.fp, M, result.fp, M)
 
+proc gpu*(m: DMatrix32): CudaDMatrix32 =
+  if m.order == rowMajor: quit("wrong order")
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc32(m.M * m.N)
+  result.M = m.M
+  result.N = m.N
+  check cublasSetMatrix(m.M, m.N, sizeof(float32), m.fp, m.M, result.fp, m.M)
+
+proc gpu*(m: DMatrix64): CudaDMatrix64 =
+  if m.order == rowMajor: quit("wrong order")
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc64(m.M * m.N)
+  result.M = m.M
+  result.N = m.N
+  check cublasSetMatrix(m.M, m.N, sizeof(float64), m.fp, m.M, result.fp, m.M)
+
 proc cpu*[M, N: static[int]](m: CudaMatrix32[M, N]): Matrix32[M, N] =
   result.order = colMajor
   new result.data
@@ -71,3 +87,17 @@ proc cpu*[M, N: static[int]](m: CudaMatrix64[M, N]): Matrix64[M, N] =
   result.order = colMajor
   new result.data
   check cublasGetMatrix(M, N, sizeof(float64), m.fp, M, result.fp, M)
+
+proc cpu*(m: CudaDMatrix32): DMatrix32 =
+  result.order = colMajor
+  result.data = newSeq[float32](m.M * m.N)
+  result.M = m.M
+  result.N = m.N
+  check cublasGetMatrix(m.M, m.N, sizeof(float32), m.fp, m.M, result.fp, m.M)
+
+proc cpu*(m: CudaDMatrix64): DMatrix64 =
+  result.order = colMajor
+  result.data = newSeq[float64](m.M * m.N)
+  result.M = m.M
+  result.N = m.N
+  check cublasGetMatrix(m.M, m.N, sizeof(float64), m.fp, m.M, result.fp, m.M)

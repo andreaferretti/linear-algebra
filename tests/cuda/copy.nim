@@ -42,15 +42,31 @@ suite "copying back and forth":
     check m1 == m3
   test "copy of a DVector32":
     let
-      L = 10
-      v1 = randomVector(L, max=1'f32)
+      N = 10
+      v1 = randomVector(N, max=1'f32)
       v2 = v1.gpu()
       v3 = v2.cpu()
     check v1 == v3
   test "copy of a DVector64":
     let
-      L = 10
-      v1 = randomVector(L, max=1.0)
+      N = 10
+      v1 = randomVector(N, max=1.0)
       v2 = v1.gpu()
       v3 = v2.cpu()
     check v1 == v3
+  test "copy of a DMatrix32":
+    let
+      M = 10
+      N = 7
+      m1 = randomMatrix(M, N, max=1'f32)
+      m2 = m1.gpu()
+      m3 = m2.cpu()
+    check m1 == m3
+  test "copy of a DMatrix64":
+    let
+      M = 10
+      N = 7
+      m1 = randomMatrix(M, N, max=1.0)
+      m2 = m1.gpu()
+      m3 = m2.cpu()
+    check m1 == m3
