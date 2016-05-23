@@ -8,7 +8,7 @@ license       = "Apache2"
 skipDirs      = @["tests", "bench"]
 skipFiles     = @["linalg.html"]
 
-requires "nim >= 0.11.2"
+requires "nim >= 0.11.2", "nimblas >= 0.1.1"
 
 --forceBuild
 
@@ -33,6 +33,18 @@ proc configForCuda() =
 
 task test, "run standard tests":
   configForTests()
+  setCommand "c", "tests/all"
+
+task testopenblas, "run standard tests on openblas":
+  configForTests()
+  --define: openblas
+  setCommand "c", "tests/all"
+
+task testmkl, "run standard tests on mkl":
+  configForTests()
+  --dynlibOverride:mkl_intel_lp64
+  --passL:"/home/papillon/.intel/mkl/lib/intel64/libmkl_intel_lp64.a"
+  --define: mkl
   setCommand "c", "tests/all"
 
 task testcuda, "run tests for the cuda implementation":

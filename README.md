@@ -486,6 +486,16 @@ switch("clibdir", "/usr/local/opt/openblas/lib")
 switch("cincludes", "/usr/local/opt/openblas/include")
 ```
 
+If you have problems with MKL, you may want to link it statically. Just pass
+the options
+
+```nim
+--dynlibOverride:mkl_intel_lp64
+--passL:${PATH_TO_MKL}/libmkl_intel_lp64.a
+```
+
+to enable static linking.
+
 ##GPU support
 
 It is possible to delegate work to the GPU using CUDA. The library has been
