@@ -21,3 +21,13 @@ Added GPU support for static vectors and matrices in 32-bit precision
 
 Minor API improvement: no need to specify `float32` when creating literal
 instances of `Vector32`
+
+0.2.2
+-----
+
+Started adding 64-bit operations on GPU
+
+0.3.0
+-----
+
+Support for (static) 64-bit operations on GPU
