@@ -14,4 +14,16 @@
 
 proc `$`*[N: static[int]](v: CudaVector32[N]): string = $(v.cpu())
 
+proc `$`*[N: static[int]](v: CudaVector64[N]): string = $(v.cpu())
+
 proc `$`*[M, N: static[int]](m: CudaMatrix32[M, N]): string = $(m.cpu())
+
+proc `$`*[M, N: static[int]](m: CudaMatrix64[M, N]): string = $(m.cpu())
+
+proc `$`*(v: CudaDVector32): string = $(v.cpu())
+
+proc `$`*(v: CudaDVector64): string = $(v.cpu())
+
+proc `$`*(m: CudaDMatrix32): string = $(m.cpu())
+
+proc `$`*(m: CudaDMatrix64): string = $(m.cpu())
