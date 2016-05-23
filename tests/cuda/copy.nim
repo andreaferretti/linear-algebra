@@ -40,3 +40,17 @@ suite "copying back and forth":
       m2 = m1.gpu()
       m3 = m2.cpu()
     check m1 == m3
+  test "copy of a DVector32":
+    let
+      L = 10
+      v1 = randomVector(L, max=1'f32)
+      v2 = v1.gpu()
+      v3 = v2.cpu()
+    check v1 == v3
+  test "copy of a DVector64":
+    let
+      L = 10
+      v1 = randomVector(L, max=1.0)
+      v2 = v1.gpu()
+      v3 = v2.cpu()
+    check v1 == v3

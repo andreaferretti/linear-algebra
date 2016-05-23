@@ -22,6 +22,18 @@ proc gpu*[N: static[int]](v: Vector64[N]): CudaVector64[N] =
   result[] = cudaMalloc64(N)
   check cublasSetVector(N, sizeof(float64), v.fp, 1, result[], 1)
 
+proc gpu*(v: DVector32): CudaDVector32 =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc32(v.len)
+  result.N = v.len
+  check cublasSetVector(v.len, sizeof(float32), v.fp, 1, result.fp, 1)
+
+proc gpu*(v: DVector64): CudaDVector64 =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc64(v.len)
+  result.N = v.len
+  check cublasSetVector(v.len, sizeof(float64), v.fp, 1, result.fp, 1)
+
 proc cpu*[N: static[int]](v: CudaVector32[N]): Vector32[N] =
   new result
   check cublasGetVector(N, sizeof(float32), v[], 1, result.fp, 1)
@@ -29,6 +41,14 @@ proc cpu*[N: static[int]](v: CudaVector32[N]): Vector32[N] =
 proc cpu*[N: static[int]](v: CudaVector64[N]): Vector64[N] =
   new result
   check cublasGetVector(N, sizeof(float64), v[], 1, result.fp, 1)
+
+proc cpu*(v: CudaDVector32): DVector32 =
+  result = newSeq[float32](v.N)
+  check cublasGetVector(v.N, sizeof(float32), v.fp, 1, result.fp, 1)
+
+proc cpu*(v: CudaDVector64): DVector64 =
+  result = newSeq[float64](v.N)
+  check cublasGetVector(v.N, sizeof(float64), v.fp, 1, result.fp, 1)
 
 proc gpu*[M, N: static[int]](m: Matrix32[M, N]): CudaMatrix32[M, N] =
   if m.order == rowMajor: quit("wrong order")

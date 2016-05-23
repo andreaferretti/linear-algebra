@@ -119,9 +119,17 @@ type
     data: ref[ptr float32]
   CudaMatrix64*[M, N: static[int]] = object
     data: ref[ptr float64]
+  CudaDVector32* = object
+    N: int
+    data: ref[ptr float32]
+  CudaDVector64* = object
+    N: int
+    data: ref[ptr float64]
 
 template fp(c: CudaMatrix32): ptr float32 = c.data[]
 template fp(c: CudaMatrix64): ptr float64 = c.data[]
+template fp(c: CudaDVector32): ptr float32 = c.data[]
+template fp(c: CudaDVector64): ptr float64 = c.data[]
 
 proc newCudaError(error: cudaError): ref CudaException =
   new result
