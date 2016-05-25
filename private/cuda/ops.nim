@@ -244,13 +244,13 @@ template `*`*(k: float32, v: CudaVector32 or CudaMatrix32 or CudaDVector32 or Cu
 
 template `*`*(k: float64, v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64): expr = v * k
 
-template `/`*(v: CudaVector32 or CudaMatrix32, k: float32): expr = v * (1 / k)
+template `/`*(v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32, k: float32): expr = v * (1 / k)
 
-template `/`*(v: CudaVector64 or CudaMatrix64, k: float64): expr = v * (1 / k)
+template `/`*(v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64, k: float64): expr = v * (1 / k)
 
-template `/=`*(v: var CudaVector32 or var CudaMatrix32, k: float32): expr = v *= (1 / k)
+template `/=`*(v: var CudaVector32 or var CudaMatrix32 or var CudaDVector32 or var CudaDMatrix32, k: float32): expr = v *= (1 / k)
 
-template `/=`*(v: var CudaVector64 or var CudaMatrix64, k: float64): expr = v *= (1 / k)
+template `/=`*(v: var CudaVector64 or var CudaMatrix64 or var CudaDVector64 or var CudaDMatrix64, k: float64): expr = v *= (1 / k)
 
 proc `+=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
