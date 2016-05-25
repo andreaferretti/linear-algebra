@@ -612,3 +612,27 @@ suite "dynamic vector 64 operations":
   test "ℓ¹ norm":
     let v = @[1.0, 1.0, 2.0, 3.0, -7.0].gpu()
     check l_1(v) == 14.0
+
+suite "dynamic matrix/vector operations":
+  test "multiplication of matrix and vector":
+    let
+      m = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ]).gpu()
+      v = @[1'f32, 3'f32, 2'f32, -2'f32].gpu()
+
+    check((m * v).cpu() == @[7'f32, 6'f32, 5'f32])
+
+suite "dynamic matrix/vector 64 operations":
+  test "multiplication of matrix and vector":
+    let
+      m = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).gpu()
+      v = @[1.0, 3.0, 2.0, -2.0].gpu()
+
+    check((m * v).cpu() == @[7.0, 6.0, 5.0])

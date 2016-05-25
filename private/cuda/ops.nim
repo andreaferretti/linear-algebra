@@ -14,20 +14,20 @@
 
 let handle {.global.} = cublasCreate()
 
-template initDynamic(v, N: expr) =
+template initDynamic(v, n: expr) =
   new v.data, freeDeviceMemory
   when v is CudaDVector32:
-    v.data[] = cudaMalloc32(N)
+    v.data[] = cudaMalloc32(n)
   when result is CudaDVector64:
-    v.data[] = cudaMalloc64(N)
-  v.N = N
+    v.data[] = cudaMalloc64(n)
+  v.N = n
 
-template initStatic(v, N: expr) =
+template initStatic(v, n: expr) =
   new v, freeDeviceMemory
   when v is CudaVector32:
-    v[] = cudaMalloc32(N)
+    v[] = cudaMalloc32(n)
   when result is CudaVector64:
-    v[] = cudaMalloc64(N)
+    v[] = cudaMalloc64(n)
 
 template init(v, N: expr) =
   when v is CudaDVector32 or v is CudaDVector64:
@@ -194,15 +194,27 @@ proc `=~`*[N: static[int]](v, w: CudaVector32[N]): bool = compareApprox(v, w)
 
 proc `=~`*[N: static[int]](v, w: CudaVector64[N]): bool = compareApprox(v, w)
 
+template matVec(result, a, v, M, N: expr) =
+  init(result, M)
+  check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
+
 proc `*`*[M, N: static[int]](a: CudaMatrix32[M, N], v: CudaVector32[N]): CudaVector32[M]  {. inline .} =
-  new result, freeDeviceMemory
-  result[] = cudaMalloc32(M)
-  check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
+  matVec(result, a, v, M, N)
+
+proc `*`*(a: CudaDMatrix32, v: CudaDVector32): CudaDVector32  {. inline .} =
+  let M = a.M
+  let N = a.N
+  assert(N == v.N)
+  matVec(result, a, v, M, N)
 
 proc `*`*[M, N: static[int]](a: CudaMatrix64[M, N], v: CudaVector64[N]): CudaVector64[M]  {. inline .} =
-  new result, freeDeviceMemory
-  result[] = cudaMalloc64(M)
-  check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v[], 1, 0, result[], 1)
+  matVec(result, a, v, M, N)
+
+proc `*`*(a: CudaDMatrix64, v: CudaDVector64): CudaDVector64  {. inline .} =
+  let M = a.M
+  let N = a.N
+  assert(N == v.N)
+  matVec(result, a, v, M, N)
 
 proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
   check cublasScal(handle, M * N, k, m.fp)
