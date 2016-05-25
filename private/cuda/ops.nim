@@ -29,11 +29,33 @@ template initStatic(v, n: expr) =
   when result is CudaVector64:
     v[] = cudaMalloc64(n)
 
+template initMDynamic(v, m, n: expr) =
+  new v.data, freeDeviceMemory
+  when v is CudaDMatrix32:
+    v.data[] = cudaMalloc32(m * n)
+  when result is CudaDMatrix64:
+    v.data[] = cudaMalloc64(m * n)
+  v.M = m
+  v.N = n
+
+template initMStatic(v, m, n: expr) =
+  new v.data, freeDeviceMemory
+  when v is CudaMatrix32:
+    v.data[] = cudaMalloc32(m * n)
+  when result is CudaMatrix64:
+    v.data[] = cudaMalloc64(m * n)
+
 template init(v, N: expr) =
   when v is CudaDVector32 or v is CudaDVector64:
     initDynamic(v, N)
   when v is CudaVector32 or v is CudaVector64:
     initStatic(v, N)
+
+template initM(v, M, N: expr) =
+  when v is CudaDMatrix32 or v is CudaDMatrix64:
+    initMDynamic(v, M, N)
+  when v is CudaMatrix32 or v is CudaMatrix64:
+    initMStatic(v, M, N)
 
 proc `*=`*[N: static[int]](v: var CudaVector32[N], k: float32) {. inline .} =
   check cublasScal(handle, N, k, v.fp)
@@ -56,15 +78,13 @@ proc `*`*[N: static[int]](v: CudaVector32[N], k: float32): CudaVector32[N]  {. i
   multiply(result, v, k, N)
 
 proc `*`*(v: CudaDVector32, k: float32): CudaDVector32  {. inline .} =
-  let N = v.N
-  multiply(result, v, k, N)
+  multiply(result, v, k, v.N)
 
 proc `*`*[N: static[int]](v: CudaVector64[N], k: float64): CudaVector64[N]  {. inline .} =
   multiply(result, v, k, N)
 
 proc `*`*(v: CudaDVector64, k: float64): CudaDVector64  {. inline .} =
-  let N = v.N
-  multiply(result, v, k, N)
+  multiply(result, v, k, v.N)
 
 proc `+=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline .} =
   check cublasAxpy(handle, N, 1, w.fp, v.fp)
@@ -89,17 +109,15 @@ proc `+`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   sum(result, v, w, N)
 
 proc `+`*(v, w: CudaDVector32): CudaDVector32 {. inline .} =
-  let N = v.N
   assert(v.N == w.N)
-  sum(result, v, w, N)
+  sum(result, v, w, v.N)
 
 proc `+`*[N: static[int]](v, w: CudaVector64[N]): CudaVector64[N] {. inline .} =
   sum(result, v, w, N)
 
 proc `+`*(v, w: CudaDVector64): CudaDVector64 {. inline .} =
-  let N = v.N
   assert(v.N == w.N)
-  sum(result, v, w, N)
+  sum(result, v, w, v.N)
 
 proc `-=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline .} =
   check cublasAxpy(handle, N, -1, w.fp, v.fp)
@@ -124,17 +142,15 @@ proc `-`*[N: static[int]](v, w: CudaVector32[N]): CudaVector32[N] {. inline .} =
   diff(result, v, w, N)
 
 proc `-`*(v, w: CudaDVector32): CudaDVector32 {. inline .} =
-  let N = v.N
   assert(v.N == w.N)
-  diff(result, v, w, N)
+  diff(result, v, w, v.N)
 
 proc `-`*[N: static[int]](v, w: CudaVector64[N]): CudaVector64[N] {. inline .} =
   diff(result, v, w, N)
 
 proc `-`*(v, w: CudaDVector64): CudaDVector64 {. inline .} =
-  let N = v.N
   assert(v.N == w.N)
-  diff(result, v, w, N)
+  diff(result, v, w, v.N)
 
 proc `*`*[N: static[int]](v, w: CudaVector32[N]): float32 {. inline .} =
   check cublasDot(handle, N, v.fp, 1, w.fp, 1, addr(result))
@@ -202,19 +218,15 @@ proc `*`*[M, N: static[int]](a: CudaMatrix32[M, N], v: CudaVector32[N]): CudaVec
   matVec(result, a, v, M, N)
 
 proc `*`*(a: CudaDMatrix32, v: CudaDVector32): CudaDVector32  {. inline .} =
-  let M = a.M
-  let N = a.N
-  assert(N == v.N)
-  matVec(result, a, v, M, N)
+  assert(a.N == v.N)
+  matVec(result, a, v, a.M, a.N)
 
 proc `*`*[M, N: static[int]](a: CudaMatrix64[M, N], v: CudaVector64[N]): CudaVector64[M]  {. inline .} =
   matVec(result, a, v, M, N)
 
 proc `*`*(a: CudaDMatrix64, v: CudaDVector64): CudaDVector64  {. inline .} =
-  let M = a.M
-  let N = a.N
-  assert(N == v.N)
-  matVec(result, a, v, M, N)
+  assert(a.N == v.N)
+  matVec(result, a, v, a.M, a.N)
 
 proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
   check cublasScal(handle, M * N, k, m.fp)
@@ -255,20 +267,35 @@ template `/=`*(v: var CudaVector64 or var CudaMatrix64 or var CudaDVector64 or v
 proc `+=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
 
+proc `+=`*(a: var CudaDMatrix32, b: CudaDMatrix32) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  check cublasAxpy(handle, a.M * a.N, 1, b.fp, a.fp)
+
 proc `+=`*[M, N: static[int]](a: var CudaMatrix64[M, N], b: CudaMatrix64[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
 
-proc `+`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc32(M * N)
+proc `+=`*(a: var CudaDMatrix64, b: CudaDMatrix64) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  check cublasAxpy(handle, a.M * a.N, 1, b.fp, a.fp)
+
+template matSum(result, a, b, M, N: expr) =
+  initM(result, M, N)
   check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasAxpy(handle, M * N, 1, b.fp, result.fp)
 
+proc `+`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
+  matSum(result, a, b, M, N)
+
+proc `+`*(a, b: CudaDMatrix32): CudaDMatrix32  {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  matSum(result, a, b, a.M, a.N)
+
 proc `+`*[M, N: static[int]](a, b: CudaMatrix64[M, N]): CudaMatrix64[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc64(M * N)
-  check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
-  check cublasAxpy(handle, M * N, 1, b.fp, result.fp)
+  matSum(result, a, b, M, N)
+
+proc `+`*(a, b: CudaDMatrix64): CudaDMatrix64  {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  matSum(result, a, b, a.M, a.N)
 
 proc `-=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, -1, b.fp, a.fp)
