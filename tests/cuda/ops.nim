@@ -538,12 +538,12 @@ suite "dynamic vector 32 operations":
       v = @[1.0, 3.0, 2.0, 8.0, -2.0].to32().gpu()
       w = @[2.0, -1.0, 2.0, 0.0, 4.0].to32().gpu()
     check(v * w == -5.0)
-  # test "ℓ² norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
-  #   check l_2(v) == 8.0
-  # test "ℓ¹ norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
-  #   check l_1(v) == 14.0
+  test "ℓ² norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].to32().gpu()
+    check l_2(v) == 8.0
+  test "ℓ¹ norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].to32().gpu()
+    check l_1(v) == 14.0
 
 suite "dynamic vector 64 operations":
   test "scalar vector multiplication":
@@ -606,9 +606,9 @@ suite "dynamic vector 64 operations":
       v = @[1.0, 3.0, 2.0, 8.0, -2.0].gpu()
       w = @[2.0, -1.0, 2.0, 0.0, 4.0].gpu()
     check(v * w == -5.0)
-  # test "ℓ² norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
-  #   check l_2(v) == 8.0
-  # test "ℓ¹ norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
-  #   check l_1(v) == 14.0
+  test "ℓ² norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].gpu()
+    check l_2(v) == 8.0
+  test "ℓ¹ norm":
+    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].gpu()
+    check l_1(v) == 14.0

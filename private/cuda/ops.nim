@@ -151,16 +151,28 @@ proc `*`*(v, w: CudaDVector64): float64 {. inline .} =
   check cublasDot(handle, v.N, v.fp, 1, w.fp, 1, addr(result))
 
 proc l_2*[N: static[int]](v: CudaVector32[N]): float32 {. inline .} =
-  check cublasNrm2(handle, N, v[], 1, addr(result))
+  check cublasNrm2(handle, N, v.fp, 1, addr(result))
+
+proc l_2*(v: CudaDVector32): float32 {. inline .} =
+  check cublasNrm2(handle, v.N, v.fp, 1, addr(result))
 
 proc l_2*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
-  check cublasNrm2(handle, N, v[], 1, addr(result))
+  check cublasNrm2(handle, N, v.fp, 1, addr(result))
+
+proc l_2*(v: CudaDVector64): float64 {. inline .} =
+  check cublasNrm2(handle, v.N, v.fp, 1, addr(result))
 
 proc l_1*[N: static[int]](v: CudaVector32[N]): float32 {. inline .} =
-  check cublasAsum(handle, N, v[], 1, addr(result))
+  check cublasAsum(handle, N, v.fp, 1, addr(result))
+
+proc l_1*(v: CudaDVector32): float32 {. inline .} =
+  check cublasAsum(handle, v.N, v.fp, 1, addr(result))
 
 proc l_1*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
-  check cublasAsum(handle, N, v[], 1, addr(result))
+  check cublasAsum(handle, N, v.fp, 1, addr(result))
+
+proc l_1*(v: CudaDVector64): float64 {. inline .} =
+  check cublasAsum(handle, v.N, v.fp, 1, addr(result))
 
 proc `==`*[N: static[int]](v, w: CudaVector32[N]): bool =
   v.cpu() == w.cpu()
