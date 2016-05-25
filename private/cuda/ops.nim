@@ -137,10 +137,18 @@ proc `-`*(v, w: CudaDVector64): CudaDVector64 {. inline .} =
   diff(result, v, w, N)
 
 proc `*`*[N: static[int]](v, w: CudaVector32[N]): float32 {. inline .} =
-  check cublasDot(handle, N, v[], 1, w[], 1, addr(result))
+  check cublasDot(handle, N, v.fp, 1, w.fp, 1, addr(result))
+
+proc `*`*(v, w: CudaDVector32): float32 {. inline .} =
+  assert(v.N == w.N)
+  check cublasDot(handle, v.N, v.fp, 1, w.fp, 1, addr(result))
 
 proc `*`*[N: static[int]](v, w: CudaVector64[N]): float64 {. inline .} =
-  check cublasDot(handle, N, v[], 1, w[], 1, addr(result))
+  check cublasDot(handle, N, v.fp, 1, w.fp, 1, addr(result))
+
+proc `*`*(v, w: CudaDVector64): float64 {. inline .} =
+  assert(v.N == w.N)
+  check cublasDot(handle, v.N, v.fp, 1, w.fp, 1, addr(result))
 
 proc l_2*[N: static[int]](v: CudaVector32[N]): float32 {. inline .} =
   check cublasNrm2(handle, N, v[], 1, addr(result))
@@ -208,9 +216,9 @@ proc `*`*[M, N: static[int]](m: CudaMatrix64[M, N], k: float64): CudaMatrix64[M,
   check cublasCopy(handle, M * N, m.fp, 1, result.fp, 1)
   check cublasScal(handle, M * N, k, result.fp)
 
-template `*`*(k: float32, v: CudaVector32 or CudaMatrix32): expr = v * k
+template `*`*(k: float32, v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32): expr = v * k
 
-template `*`*(k: float64, v: CudaVector64 or CudaMatrix64): expr = v * k
+template `*`*(k: float64, v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64): expr = v * k
 
 template `/`*(v: CudaVector32 or CudaMatrix32, k: float32): expr = v * (1 / k)
 
