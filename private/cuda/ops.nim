@@ -317,20 +317,35 @@ proc `+`*(a, b: CudaDMatrix64): CudaDMatrix64  {. inline .} =
 proc `-=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, -1, b.fp, a.fp)
 
+proc `-=`*(a: var CudaDMatrix32, b: CudaDMatrix32) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  check cublasAxpy(handle, a.M * a.N, -1, b.fp, a.fp)
+
 proc `-=`*[M, N: static[int]](a: var CudaMatrix64[M, N], b: CudaMatrix64[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, -1, b.fp, a.fp)
 
-proc `-`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc32(M * N)
+proc `-=`*(a: var CudaDMatrix64, b: CudaDMatrix64) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  check cublasAxpy(handle, a.M * a.N, -1, b.fp, a.fp)
+
+template matDiff(result, a, b, M, N: expr) =
+  initM(result, M, N)
   check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasAxpy(handle, M * N, -1, b.fp, result.fp)
 
+proc `-`*[M, N: static[int]](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]  {. inline .} =
+  matDiff(result, a, b, a.M, a.N)
+
+proc `-`*(a, b: CudaDMatrix32): CudaDMatrix32  {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  matDiff(result, a, b, a.M, a.N)
+
 proc `-`*[M, N: static[int]](a, b: CudaMatrix64[M, N]): CudaMatrix64[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc64(M * N)
-  check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
-  check cublasAxpy(handle, M * N, -1, b.fp, result.fp)
+  matDiff(result, a, b, a.M, a.N)
+
+proc `-`*(a, b: CudaDMatrix64): CudaDMatrix64  {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  matDiff(result, a, b, a.M, a.N)
 
 proc `*`*[M, N, K: static[int]](a: CudaMatrix32[M, K], b: CudaMatrix32[K, N]): CudaMatrix32[M, N] {. inline .} =
   new result.data, freeDeviceMemory
