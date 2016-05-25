@@ -252,17 +252,22 @@ proc `*=`*[M, N: static[int]](m: var CudaMatrix64[M, N], k: float64) {. inline .
 proc `*=`*(m: var CudaDMatrix64, k: float64) {. inline .} =
   check cublasScal(handle, m.M * m.N, k, m.fp)
 
-proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc32(M * N)
+template matScal(result, m, k, M, N: expr) =
+  initM(result, M, N)
   check cublasCopy(handle, M * N, m.fp, 1, result.fp, 1)
   check cublasScal(handle, M * N, k, result.fp)
 
+proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M, N]  {. inline .} =
+  matScal(result, m, k, M, N)
+
+proc `*`*(m: CudaDMatrix32, k: float32): CudaDMatrix32  {. inline .} =
+  matScal(result, m, k, m.M, m.N)
+
 proc `*`*[M, N: static[int]](m: CudaMatrix64[M, N], k: float64): CudaMatrix64[M, N]  {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc64(M * N)
-  check cublasCopy(handle, M * N, m.fp, 1, result.fp, 1)
-  check cublasScal(handle, M * N, k, result.fp)
+  matScal(result, m, k, M, N)
+
+proc `*`*(m: CudaDMatrix64, k: float64): CudaDMatrix64  {. inline .} =
+  matScal(result, m, k, m.M, m.N)
 
 template `*`*(k: float32, v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32): expr = v * k
 
