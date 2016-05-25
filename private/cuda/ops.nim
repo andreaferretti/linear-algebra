@@ -15,22 +15,42 @@
 let handle {.global.} = cublasCreate()
 
 proc `*=`*[N: static[int]](v: var CudaVector32[N], k: float32) {. inline .} =
-  check cublasScal(handle, N, k, v[])
+  check cublasScal(handle, N, k, v.fp)
+
+proc `*=`*(v: var CudaDVector32, k: float32) {. inline .} =
+  check cublasScal(handle, v.N, k, v.fp)
 
 proc `*=`*[N: static[int]](v: var CudaVector64[N], k: float64) {. inline .} =
-  check cublasScal(handle, N, k, v[])
+  check cublasScal(handle, N, k, v.fp)
+
+proc `*=`*(v: var CudaDVector64, k: float64) {. inline .} =
+  check cublasScal(handle, v.N, k, v.fp)
 
 proc `*`*[N: static[int]](v: CudaVector32[N], k: float32): CudaVector32[N]  {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc32(N)
-  check cublasCopy(handle, N, v[], 1, result[], 1)
-  check cublasScal(handle, N, k, result[])
+  check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
+  check cublasScal(handle, N, k, result.fp)
+
+proc `*`*(v: CudaDVector32, k: float32): CudaDVector32  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc32(v.N)
+  result.N = v.N
+  check cublasCopy(handle, v.N, v.fp, 1, result.fp, 1)
+  check cublasScal(handle, v.N, k, result.fp)
 
 proc `*`*[N: static[int]](v: CudaVector64[N], k: float64): CudaVector64[N]  {. inline .} =
   new result, freeDeviceMemory
   result[] = cudaMalloc64(N)
-  check cublasCopy(handle, N, v[], 1, result[], 1)
-  check cublasScal(handle, N, k, result[])
+  check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
+  check cublasScal(handle, N, k, result.fp)
+
+proc `*`*(v: CudaDVector64, k: float64): CudaDVector64  {. inline .} =
+  new result.data, freeDeviceMemory
+  result.data[] = cudaMalloc64(v.N)
+  result.N = v.N
+  check cublasCopy(handle, v.N, v.fp, 1, result.fp, 1)
+  check cublasScal(handle, v.N, k, result.fp)
 
 proc `+=`*[N: static[int]](v: var CudaVector32[N], w: CudaVector32[N]) {. inline .} =
   check cublasAxpy(handle, N, 1, w[], v[])
