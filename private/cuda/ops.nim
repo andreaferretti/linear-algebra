@@ -228,17 +228,29 @@ proc `*`*(a: CudaDMatrix64, v: CudaDVector64): CudaDVector64  {. inline .} =
   assert(a.N == v.N)
   matVec(result, a, v, a.M, a.N)
 
-proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
-  check cublasScal(handle, M * N, k, m.fp)
-
-proc `*=`*[M, N: static[int]](m: var CudaMatrix64[M, N], k: float64) {. inline .} =
-  check cublasScal(handle, M * N, k, m.fp)
-
 proc `==`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*(m, n: CudaDMatrix32): bool =
   m.cpu() == n.cpu()
 
 proc `==`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool =
   m.cpu() == n.cpu()
+
+proc `==`*(m, n: CudaDMatrix64): bool =
+  m.cpu() == n.cpu()
+
+proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
+  check cublasScal(handle, M * N, k, m.fp)
+
+proc `*=`*(m: var CudaDMatrix32, k: float32) {. inline .} =
+  check cublasScal(handle, m.M * m.N, k, m.fp)
+
+proc `*=`*[M, N: static[int]](m: var CudaMatrix64[M, N], k: float64) {. inline .} =
+  check cublasScal(handle, M * N, k, m.fp)
+
+proc `*=`*(m: var CudaDMatrix64, k: float64) {. inline .} =
+  check cublasScal(handle, m.M * m.N, k, m.fp)
 
 proc `*`*[M, N: static[int]](m: CudaMatrix32[M, N], k: float32): CudaMatrix32[M, N]  {. inline .} =
   new result.data, freeDeviceMemory

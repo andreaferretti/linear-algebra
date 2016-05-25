@@ -637,7 +637,7 @@ suite "dynamic matrix/vector 64 operations":
 
     check((m * v).cpu() == @[7.0, 6.0, 5.0])
 
-# suite "dynamic matrix 32-bit operations":
+suite "dynamic matrix 32-bit operations":
   # test "scalar matrix multiplication":
   #   let
   #     m1 = matrix([
@@ -652,19 +652,19 @@ suite "dynamic matrix/vector 64 operations":
   #     ]).to32().gpu()
   #   check(m1 * 3'f32 == m2)
   #   check(3'f32 * m1 == m2)
-  # test "in place scalar multiplication":
-  #   var m1 = matrix([
-  #       [1.0, 3.0],
-  #       [2.0, 8.0],
-  #       [-2.0, 3.0]
-  #     ]).to32().gpu()
-  #   let m2 = matrix([
-  #       [3.0, 9.0],
-  #       [6.0, 24.0],
-  #       [-6.0, 9.0]
-  #     ]).to32().gpu()
-  #   m1 *= 3.0
-  #   check(m1 == m2)
+  test "in place scalar multiplication":
+    var m1 = matrix(@[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
+      ]).to32().gpu()
+    let m2 = matrix(@[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
+      ]).to32().gpu()
+    m1 *= 3.0
+    check(m1 == m2)
   # test "scalar matrix division":
   #   let
   #     m1 = matrix([
@@ -691,43 +691,43 @@ suite "dynamic matrix/vector 64 operations":
   #     ]).to32().gpu()
   #   m2 /= 3.0
   #   check(m1 == m2)
-  # test "matrix sum":
-  #   let
-  #     m1 = matrix(@[
-  #       @[1.0, 0.0, 2.0, -1.0],
-  #       @[-1.0, 1.0, 3.0, 1.0],
-  #       @[3.0, 2.0, 2.0, 4.0]
-  #     ]).to32().gpu()
-  #     m2 = matrix(@[
-  #       @[3.0, 1.0, -1.0, 1.0],
-  #       @[2.0, 1.0, -3.0, 0.0],
-  #       @[4.0, 1.0, 2.0, 2.0]
-  #     ]).to32().gpu()
-  #     m3 = matrix(@[
-  #       @[4.0, 1.0, 1.0, 0.0],
-  #       @[1.0, 2.0, 0.0, 1.0],
-  #       @[7.0, 3.0, 4.0, 6.0]
-  #     ]).to32().gpu()
-  #   check(m1 + m2 == m3)
-  # test "in place matrix sum":
-  #   var m1 = matrix(@[
-  #       @[1.0, 0.0, 2.0, -1.0],
-  #       @[-1.0, 1.0, 3.0, 1.0],
-  #       @[3.0, 2.0, 2.0, 4.0]
-  #     ]).to32().gpu()
-  #   let
-  #     m2 = matrix(@[
-  #       @[3.0, 1.0, -1.0, 1.0],
-  #       @[2.0, 1.0, -3.0, 0.0],
-  #       @[4.0, 1.0, 2.0, 2.0]
-  #     ]).to32().gpu()
-  #     m3 = matrix(@[
-  #       @[4.0, 1.0, 1.0, 0.0],
-  #       @[1.0, 2.0, 0.0, 1.0],
-  #       @[7.0, 3.0, 4.0, 6.0]
-  #     ]).to32().gpu()
-  #   m1 += m2
-  #   check m1 == m3
+  test "matrix sum":
+    let
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).to32().gpu()
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ]).to32().gpu()
+      m3 = matrix(@[
+        @[4.0, 1.0, 1.0, 0.0],
+        @[1.0, 2.0, 0.0, 1.0],
+        @[7.0, 3.0, 4.0, 6.0]
+      ]).to32().gpu()
+    check(m1 + m2 == m3)
+  test "in place matrix sum":
+    var m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).to32().gpu()
+    let
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ]).to32().gpu()
+      m3 = matrix(@[
+        @[4.0, 1.0, 1.0, 0.0],
+        @[1.0, 2.0, 0.0, 1.0],
+        @[7.0, 3.0, 4.0, 6.0]
+      ]).to32().gpu()
+    m1 += m2
+    check m1 == m3
   # test "matrix difference":
   #   let
   #     m1 = matrix([
@@ -796,7 +796,7 @@ suite "dynamic matrix/vector 64 operations":
   #     ]).gpu()
   #   check(m1 * m2 == m3)
 
-# suite "dynamic matrix 64-bit operations":
+suite "dynamic matrix 64-bit operations":
   # test "scalar matrix multiplication":
   #   let
   #     m1 = matrix([
@@ -811,19 +811,19 @@ suite "dynamic matrix/vector 64 operations":
   #     ]).gpu()
   #   check(m1 * 3.0 == m2)
   #   check(3.0 * m1 == m2)
-  # test "in place scalar multiplication":
-  #   var m1 = matrix([
-  #       [1.0, 3.0],
-  #       [2.0, 8.0],
-  #       [-2.0, 3.0]
-  #     ]).gpu()
-  #   let m2 = matrix([
-  #       [3.0, 9.0],
-  #       [6.0, 24.0],
-  #       [-6.0, 9.0]
-  #     ]).gpu()
-  #   m1 *= 3.0
-  #   check(m1 == m2)
+  test "in place scalar multiplication":
+    var m1 = matrix([
+        [1.0, 3.0],
+        [2.0, 8.0],
+        [-2.0, 3.0]
+      ]).gpu()
+    let m2 = matrix([
+        [3.0, 9.0],
+        [6.0, 24.0],
+        [-6.0, 9.0]
+      ]).gpu()
+    m1 *= 3.0
+    check(m1 == m2)
   # test "scalar matrix division":
   #   let
   #     m1 = matrix([
@@ -850,43 +850,43 @@ suite "dynamic matrix/vector 64 operations":
   #     ]).gpu()
   #   m2 /= 3.0
   #   check(m1 == m2)
-  # test "matrix sum":
-  #   let
-  #     m1 = matrix(@[
-  #       @[1.0, 0.0, 2.0, -1.0],
-  #       @[-1.0, 1.0, 3.0, 1.0],
-  #       @[3.0, 2.0, 2.0, 4.0]
-  #     ]).gpu()
-  #     m2 = matrix(@[
-  #       @[3.0, 1.0, -1.0, 1.0],
-  #       @[2.0, 1.0, -3.0, 0.0],
-  #       @[4.0, 1.0, 2.0, 2.0]
-  #     ]).gpu()
-  #     m3 = matrix(@[
-  #       @[4.0, 1.0, 1.0, 0.0],
-  #       @[1.0, 2.0, 0.0, 1.0],
-  #       @[7.0, 3.0, 4.0, 6.0]
-  #     ]).gpu()
-  #   check(m1 + m2 == m3)
-  # test "in place matrix sum":
-  #   var m1 = matrix(@[
-  #       @[1.0, 0.0, 2.0, -1.0],
-  #       @[-1.0, 1.0, 3.0, 1.0],
-  #       @[3.0, 2.0, 2.0, 4.0]
-  #     ]).gpu()
-  #   let
-  #     m2 = matrix(@[
-  #       @[3.0, 1.0, -1.0, 1.0],
-  #       @[2.0, 1.0, -3.0, 0.0],
-  #       @[4.0, 1.0, 2.0, 2.0]
-  #     ]).gpu()
-  #     m3 = matrix(@[
-  #       @[4.0, 1.0, 1.0, 0.0],
-  #       @[1.0, 2.0, 0.0, 1.0],
-  #       @[7.0, 3.0, 4.0, 6.0]
-  #     ]).gpu()
-  #   m1 += m2
-  #   check m1 == m3
+  test "matrix sum":
+    let
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).gpu()
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ]).gpu()
+      m3 = matrix(@[
+        @[4.0, 1.0, 1.0, 0.0],
+        @[1.0, 2.0, 0.0, 1.0],
+        @[7.0, 3.0, 4.0, 6.0]
+      ]).gpu()
+    check(m1 + m2 == m3)
+  test "in place matrix sum":
+    var m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).gpu()
+    let
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ]).gpu()
+      m3 = matrix(@[
+        @[4.0, 1.0, 1.0, 0.0],
+        @[1.0, 2.0, 0.0, 1.0],
+        @[7.0, 3.0, 4.0, 6.0]
+      ]).gpu()
+    m1 += m2
+    check m1 == m3
   # test "matrix difference":
   #   let
   #     m1 = matrix([
