@@ -15,7 +15,7 @@
 import unittest, linalg
 
 
-suite "compilation errors":
+suite "compilation errors for 32 bit types":
   test "vector dimension should agree in a sum":
     let
       u = vector([1'f32, 2'f32, 3'f32, 4'f32, 5'f32])
@@ -68,7 +68,7 @@ suite "compilation errors":
       n = randomMatrix(8, 18, max = 1'f32).gpu()
     when compiles(m * n): fail()
 
-suite "compilation errors for 64 bit":
+suite "compilation errors for 64 bit types":
   test "vector dimension should agree in a sum":
     let
       u = vector([1.0, 2.0, 3.0, 4.0, 5.0])
@@ -120,3 +120,39 @@ suite "compilation errors for 64 bit":
       m = randomMatrix(6, 7, max = 1.0).gpu()
       n = randomMatrix(8, 18, max = 1.0).gpu()
     when compiles(m * n): fail()
+
+suite "compilation errors for dynamic 32 bit types":
+  test "in place sum should not work for immutable vectors":
+    let
+      u = @[1'f32, 2'f32, 3'f32, 4'f32]
+      v = @[1'f32, 2'f32, 3'f32, 4'f32]
+      u1 = u.gpu()
+      v1 = v.gpu()
+    when compiles(u1 += v1): fail()
+    when compiles(u1 -= v1): fail()
+  test "in place sum should not work for immutable matrices":
+    let
+      M = 3
+      N = 6
+      m = randomMatrix(M, N, max = 1'f32).gpu()
+      n = randomMatrix(M, N, max = 1'f32).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
+
+suite "compilation errors for 64 bit types":
+  test "in place sum should not work for immutable vectors":
+    let
+      u = @[1.0, 2.0, 3.0, 4.0]
+      v = @[1.0, 2.0, 3.0, 4.0]
+      u1 = u.gpu()
+      v1 = v.gpu()
+    when compiles(u1 += v1): fail()
+    when compiles(u1 -= v1): fail()
+  test "in place sum should not work for immutable matrices":
+    let
+      M = 3
+      N = 6
+      m = randomMatrix(M, N, max = 1.0).gpu()
+      n = randomMatrix(M, N, max = 1.0).gpu()
+    when compiles(m += n): fail()
+    when compiles(m -= n): fail()
