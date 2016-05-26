@@ -765,19 +765,19 @@ suite "dynamic matrix 32-bit operations":
       ]).to32().gpu()
     m1 -= m2
     check m1 == m3
-  # test "matrix ℓ² norm":
-  #   let m = matrix([
-  #     [1'f32, 1'f32, 2'f32],
-  #     [3'f32, 0'f32, -7'f32]
-  #   ]).gpu()
-  #   check l_2(m) == 8'f32
-  # test "matrix ℓ¹ norm":
-  #   let m = matrix([
-  #     [1'f32, 1'f32, 2'f32],
-  #     [3'f32, 0'f32, -7'f32],
-  #     [2.5'f32, 3.1'f32, -1.4'f32]
-  #   ]).gpu()
-  #   check l_1(m) == 21'f32
+  test "matrix ℓ² norm":
+    let m = matrix(@[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32]
+    ]).gpu()
+    check l_2(m) == 8'f32
+  test "matrix ℓ¹ norm":
+    let m = matrix(@[
+      @[1'f32, 1'f32, 2'f32],
+      @[3'f32, 0'f32, -7'f32],
+      @[2.5'f32, 3.1'f32, -1.4'f32]
+    ]).gpu()
+    check l_1(m) == 21'f32
   # test "matrix multiplication":
   #   let
   #     m1 = matrix([
@@ -924,19 +924,19 @@ suite "dynamic matrix 64-bit operations":
       ]).gpu()
     m1 -= m2
     check m1 == m3
-  # test "matrix ℓ² norm":
-  #   let m = matrix([
-  #     [1.0, 1.0, 2.0],
-  #     [3.0, 0.0, -7.0]
-  #   ]).gpu()
-  #   check l_2(m) == 8.0
-  # test "matrix ℓ¹ norm":
-  #   let m = matrix([
-  #     [1.0, 1.0, 2.0],
-  #     [3.0, 0.0, -7.0],
-  #     [2.5, 3.1, -1.4]
-  #   ]).gpu()
-  #   check l_1(m) == 21.0
+  test "matrix ℓ² norm":
+    let m = matrix(@[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0]
+    ]).gpu()
+    check l_2(m) == 8.0
+  test "matrix ℓ¹ norm":
+    let m = matrix(@[
+      @[1.0, 1.0, 2.0],
+      @[3.0, 0.0, -7.0],
+      @[2.5, 3.1, -1.4]
+    ]).gpu()
+    check l_1(m) == 21.0
   # test "matrix multiplication":
   #   let
   #     m1 = matrix([

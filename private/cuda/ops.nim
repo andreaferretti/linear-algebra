@@ -362,14 +362,26 @@ proc `*`*[M, N, K: static[int]](a: CudaMatrix64[M, K], b: CudaMatrix64[K, N]): C
 proc l_2*[M, N: static[int]](m: CudaMatrix32[M, N]): float32 {. inline .} =
   check cublasNrm2(handle, M * N, m.fp, 1, addr(result))
 
+proc l_2*(m: CudaDMatrix32): float32 {. inline .} =
+  check cublasNrm2(handle, m.M * m.N, m.fp, 1, addr(result))
+
 proc l_2*[M, N: static[int]](m: CudaMatrix64[M, N]): float64 {. inline .} =
   check cublasNrm2(handle, M * N, m.fp, 1, addr(result))
+
+proc l_2*(m: CudaDMatrix64): float64 {. inline .} =
+  check cublasNrm2(handle, m.M * m.N, m.fp, 1, addr(result))
 
 proc l_1*[M, N: static[int]](m: CudaMatrix32[M, N]): float32 {. inline .} =
   check cublasAsum(handle, M * N, m.fp, 1, addr(result))
 
+proc l_1*(m: CudaDMatrix32): float32 {. inline .} =
+  check cublasAsum(handle, m.M * m.N, m.fp, 1, addr(result))
+
 proc l_1*[M, N: static[int]](m: CudaMatrix64[M, N]): float64 {. inline .} =
   check cublasAsum(handle, M * N, m.fp, 1, addr(result))
+
+proc l_1*(m: CudaDMatrix64): float64 {. inline .} =
+  check cublasAsum(handle, m.M * m.N, m.fp, 1, addr(result))
 
 proc `=~`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool = compareApprox(m, n)
 
