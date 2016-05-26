@@ -30,4 +30,9 @@ Started adding 64-bit operations on GPU
 0.3.0
 -----
 
-Support for (static) 64-bit operations on GPU
+Support for (static) 64-bit types on the GPU
+
+0.4.0
+-----
+
+Support for dynamic types (32 or 64-bit) on the GPU
