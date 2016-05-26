@@ -69,7 +69,7 @@ proc `*=`*[N: static[int]](v: var CudaVector64[N], k: float64) {. inline .} =
 proc `*=`*(v: var CudaDVector64, k: float64) {. inline .} =
   check cublasScal(handle, v.N, k, v.fp)
 
-template multiply(result, v, k, N) =
+template multiply(result, v, k, N: expr) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasScal(handle, N, k, result.fp)
@@ -100,7 +100,7 @@ proc `+=`*(v: var CudaDVector64, w: CudaDVector64) {. inline .} =
   assert(v.N == w.N)
   check cublasAxpy(handle, v.N, 1, w.fp, v.fp)
 
-template sum(result, v, w, N) =
+template sum(result, v, w, N: expr) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasAxpy(handle, N, 1, w.fp, result.fp)
@@ -133,7 +133,7 @@ proc `-=`*(v: var CudaDVector64, w: CudaDVector64) {. inline .} =
   assert(v.N == w.N)
   check cublasAxpy(handle, v.N, -1, w.fp, v.fp)
 
-template diff(result, v, w, N) =
+template diff(result, v, w, N: expr) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasAxpy(handle, N, -1, w.fp, result.fp)
@@ -190,26 +190,6 @@ proc l_1*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
 proc l_1*(v: CudaDVector64): float64 {. inline .} =
   check cublasAsum(handle, v.N, v.fp, 1, addr(result))
 
-proc `==`*[N: static[int]](v, w: CudaVector32[N]): bool =
-  v.cpu() == w.cpu()
-
-proc `==`*[N: static[int]](v, w: CudaVector64[N]): bool =
-  v.cpu() == w.cpu()
-
-proc compareApprox(a, b: CudaVector32 or CudaMatrix32 or CudaVector64 or CudaMatrix64): bool =
-  mixin l_1
-  const epsilon = 0.000001
-  let
-    aNorm = l_1(a)
-    bNorm = l_1(b)
-    dNorm = l_1(a - b)
-  return (dNorm / (aNorm + bNorm)) < epsilon
-
-
-proc `=~`*[N: static[int]](v, w: CudaVector32[N]): bool = compareApprox(v, w)
-
-proc `=~`*[N: static[int]](v, w: CudaVector64[N]): bool = compareApprox(v, w)
-
 template matVec(result, a, v, M, N: expr) =
   init(result, M)
   check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
@@ -227,18 +207,6 @@ proc `*`*[M, N: static[int]](a: CudaMatrix64[M, N], v: CudaVector64[N]): CudaVec
 proc `*`*(a: CudaDMatrix64, v: CudaDVector64): CudaDVector64  {. inline .} =
   assert(a.N == v.N)
   matVec(result, a, v, a.M, a.N)
-
-proc `==`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool =
-  m.cpu() == n.cpu()
-
-proc `==`*(m, n: CudaDMatrix32): bool =
-  m.cpu() == n.cpu()
-
-proc `==`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool =
-  m.cpu() == n.cpu()
-
-proc `==`*(m, n: CudaDMatrix64): bool =
-  m.cpu() == n.cpu()
 
 proc `*=`*[M, N: static[int]](m: var CudaMatrix32[M, N], k: float32) {. inline .} =
   check cublasScal(handle, M * N, k, m.fp)
@@ -390,8 +358,56 @@ proc l_1*[M, N: static[int]](m: CudaMatrix64[M, N]): float64 {. inline .} =
 proc l_1*(m: CudaDMatrix64): float64 {. inline .} =
   check cublasAsum(handle, m.M * m.N, m.fp, 1, addr(result))
 
+proc `==`*[N: static[int]](v, w: CudaVector32[N]): bool =
+  v.cpu() == w.cpu()
+
+proc `==`*(m, n: CudaDVector32): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*[N: static[int]](v, w: CudaVector64[N]): bool =
+  v.cpu() == w.cpu()
+
+proc `==`*(m, n: CudaDVector64): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*(m, n: CudaDMatrix32): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool =
+  m.cpu() == n.cpu()
+
+proc `==`*(m, n: CudaDMatrix64): bool =
+  m.cpu() == n.cpu()
+
+type AnyCuda = CudaVector32 or CudaMatrix32 or CudaVector64 or
+  CudaMatrix64 or CudaDVector32 or CudaDMatrix32 or CudaDVector64 or
+  CudaDMatrix64
+
+proc compareApprox(a, b: AnyCuda): bool =
+  const epsilon = 0.000001
+  let
+    aNorm = l_1(a)
+    bNorm = l_1(b)
+    dNorm = l_1(a - b)
+  return (dNorm / (aNorm + bNorm)) < epsilon
+
+proc `=~`*[N: static[int]](v, w: CudaVector32[N]): bool = compareApprox(v, w)
+
+proc `=~`*(v, w: CudaDVector32): bool = compareApprox(v, w)
+
+proc `=~`*[N: static[int]](v, w: CudaVector64[N]): bool = compareApprox(v, w)
+
+proc `=~`*(v, w: CudaDVector64): bool = compareApprox(v, w)
+
 proc `=~`*[M, N: static[int]](m, n: CudaMatrix32[M, N]): bool = compareApprox(m, n)
+
+proc `=~`*(v, w: CudaDMatrix32): bool = compareApprox(v, w)
 
 proc `=~`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool = compareApprox(m, n)
 
-template `!=~`*(a, b: CudaVector32 or CudaMatrix32 or CudaVector64 or CudaMatrix64): bool = not (a =~ b)
+proc `=~`*(v, w: CudaDMatrix64): bool = compareApprox(v, w)
+
+template `!=~`*(a, b: AnyCuda): bool = not (a =~ b)
