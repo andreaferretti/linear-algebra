@@ -1162,10 +1162,7 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#OrderType"
-    title="OrderType = enum
-  rowMajor = 101, colMajor = 102"><wbr />Order<wbr />Type</a></li>
-  <li><a class="reference" href="#Vector32"
+      <li><a class="reference" href="#Vector32"
     title="Vector32[N] = ref array[N, float32]"><wbr />Vector32</a></li>
   <li><a class="reference" href="#Vector64"
     title="Vector64[N] = ref array[N, float64]"><wbr />Vector64</a></li>
@@ -1201,6 +1198,22 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
   <li><a class="reference" href="#CudaMatrix64"
     title="CudaMatrix64[M, N] = object
   data: ref [ptr float64]"><wbr />Cuda<wbr />Matrix64</a></li>
+  <li><a class="reference" href="#CudaDVector32"
+    title="CudaDVector32 = object
+  N: int
+  data: ref [ptr float32]"><wbr />Cuda<wbr />DVector32</a></li>
+  <li><a class="reference" href="#CudaDVector64"
+    title="CudaDVector64 = object
+  N: int
+  data: ref [ptr float64]"><wbr />Cuda<wbr />DVector64</a></li>
+  <li><a class="reference" href="#CudaDMatrix32"
+    title="CudaDMatrix32 = object
+  M, N: int
+  data: ref [ptr float32]"><wbr />Cuda<wbr />DMatrix32</a></li>
+  <li><a class="reference" href="#CudaDMatrix64"
+    title="CudaDMatrix64 = object
+  M, N: int
+  data: ref [ptr float64]"><wbr />Cuda<wbr />DMatrix64</a></li>
 
   </ul>
 </li>
@@ -1247,114 +1260,234 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="gpu[N](v: Vector32[N]): CudaVector32[N]"><wbr />gpu</a></li>
   <li><a class="reference" href="#gpu,Vector64[N]"
     title="gpu[N](v: Vector64[N]): CudaVector64[N]"><wbr />gpu</a></li>
+  <li><a class="reference" href="#gpu,DVector32"
+    title="gpu(v: DVector32): CudaDVector32"><wbr />gpu</a></li>
+  <li><a class="reference" href="#gpu,DVector64"
+    title="gpu(v: DVector64): CudaDVector64"><wbr />gpu</a></li>
   <li><a class="reference" href="#cpu,CudaVector32[N]"
     title="cpu[N](v: CudaVector32[N]): Vector32[N]"><wbr />cpu</a></li>
   <li><a class="reference" href="#cpu,CudaVector64[N]"
     title="cpu[N](v: CudaVector64[N]): Vector64[N]"><wbr />cpu</a></li>
+  <li><a class="reference" href="#cpu,CudaDVector32"
+    title="cpu(v: CudaDVector32): DVector32"><wbr />cpu</a></li>
+  <li><a class="reference" href="#cpu,CudaDVector64"
+    title="cpu(v: CudaDVector64): DVector64"><wbr />cpu</a></li>
   <li><a class="reference" href="#gpu,Matrix32[M,N]"
     title="gpu[M, N](m: Matrix32[M, N]): CudaMatrix32[M, N]"><wbr />gpu</a></li>
   <li><a class="reference" href="#gpu,Matrix64[M,N]"
     title="gpu[M, N](m: Matrix64[M, N]): CudaMatrix64[M, N]"><wbr />gpu</a></li>
+  <li><a class="reference" href="#gpu,DMatrix32"
+    title="gpu(m: DMatrix32): CudaDMatrix32"><wbr />gpu</a></li>
+  <li><a class="reference" href="#gpu,DMatrix64"
+    title="gpu(m: DMatrix64): CudaDMatrix64"><wbr />gpu</a></li>
   <li><a class="reference" href="#cpu,CudaMatrix32[M,N]"
     title="cpu[M, N](m: CudaMatrix32[M, N]): Matrix32[M, N]"><wbr />cpu</a></li>
   <li><a class="reference" href="#cpu,CudaMatrix64[M,N]"
     title="cpu[M, N](m: CudaMatrix64[M, N]): Matrix64[M, N]"><wbr />cpu</a></li>
+  <li><a class="reference" href="#cpu,CudaDMatrix32"
+    title="cpu(m: CudaDMatrix32): DMatrix32"><wbr />cpu</a></li>
+  <li><a class="reference" href="#cpu,CudaDMatrix64"
+    title="cpu(m: CudaDMatrix64): DMatrix64"><wbr />cpu</a></li>
   <li><a class="reference" href="#*=,CudaVector32[N],float32"
     title="`*=`[N](v: var CudaVector32[N]; k: float32)"><wbr />`*=`</a></li>
+  <li><a class="reference" href="#*=,CudaDVector32,float32"
+    title="`*=`(v: var CudaDVector32; k: float32)"><wbr />`*=`</a></li>
   <li><a class="reference" href="#*=,CudaVector64[N],float64"
     title="`*=`[N](v: var CudaVector64[N]; k: float64)"><wbr />`*=`</a></li>
+  <li><a class="reference" href="#*=,CudaDVector64,float64"
+    title="`*=`(v: var CudaDVector64; k: float64)"><wbr />`*=`</a></li>
   <li><a class="reference" href="#*,CudaVector32[N],float32"
     title="`*`[N](v: CudaVector32[N]; k: float32): CudaVector32[N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDVector32,float32"
+    title="`*`(v: CudaDVector32; k: float32): CudaDVector32"><wbr />`*`</a></li>
   <li><a class="reference" href="#*,CudaVector64[N],float64"
     title="`*`[N](v: CudaVector64[N]; k: float64): CudaVector64[N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDVector64,float64"
+    title="`*`(v: CudaDVector64; k: float64): CudaDVector64"><wbr />`*`</a></li>
   <li><a class="reference" href="#+=,CudaVector32[N],CudaVector32[N]"
     title="`+=`[N](v: var CudaVector32[N]; w: CudaVector32[N])"><wbr />`+=`</a></li>
+  <li><a class="reference" href="#+=,CudaDVector32,CudaDVector32"
+    title="`+=`(v: var CudaDVector32; w: CudaDVector32)"><wbr />`+=`</a></li>
   <li><a class="reference" href="#+=,CudaVector64[N],CudaVector64[N]"
     title="`+=`[N](v: var CudaVector64[N]; w: CudaVector64[N])"><wbr />`+=`</a></li>
+  <li><a class="reference" href="#+=,CudaDVector64,CudaDVector64"
+    title="`+=`(v: var CudaDVector64; w: CudaDVector64)"><wbr />`+=`</a></li>
   <li><a class="reference" href="#+,CudaVector32[N],CudaVector32[N]"
     title="`+`[N](v, w: CudaVector32[N]): CudaVector32[N]"><wbr />`+`</a></li>
+  <li><a class="reference" href="#+,CudaDVector32,CudaDVector32"
+    title="`+`(v, w: CudaDVector32): CudaDVector32"><wbr />`+`</a></li>
   <li><a class="reference" href="#+,CudaVector64[N],CudaVector64[N]"
     title="`+`[N](v, w: CudaVector64[N]): CudaVector64[N]"><wbr />`+`</a></li>
+  <li><a class="reference" href="#+,CudaDVector64,CudaDVector64"
+    title="`+`(v, w: CudaDVector64): CudaDVector64"><wbr />`+`</a></li>
   <li><a class="reference" href="#-=,CudaVector32[N],CudaVector32[N]"
     title="`-=`[N](v: var CudaVector32[N]; w: CudaVector32[N])"><wbr />`-=`</a></li>
+  <li><a class="reference" href="#-=,CudaDVector32,CudaDVector32"
+    title="`-=`(v: var CudaDVector32; w: CudaDVector32)"><wbr />`-=`</a></li>
   <li><a class="reference" href="#-=,CudaVector64[N],CudaVector64[N]"
     title="`-=`[N](v: var CudaVector64[N]; w: CudaVector64[N])"><wbr />`-=`</a></li>
+  <li><a class="reference" href="#-=,CudaDVector64,CudaDVector64"
+    title="`-=`(v: var CudaDVector64; w: CudaDVector64)"><wbr />`-=`</a></li>
   <li><a class="reference" href="#-,CudaVector32[N],CudaVector32[N]"
     title="`-`[N](v, w: CudaVector32[N]): CudaVector32[N]"><wbr />`-`</a></li>
+  <li><a class="reference" href="#-,CudaDVector32,CudaDVector32"
+    title="`-`(v, w: CudaDVector32): CudaDVector32"><wbr />`-`</a></li>
   <li><a class="reference" href="#-,CudaVector64[N],CudaVector64[N]"
     title="`-`[N](v, w: CudaVector64[N]): CudaVector64[N]"><wbr />`-`</a></li>
+  <li><a class="reference" href="#-,CudaDVector64,CudaDVector64"
+    title="`-`(v, w: CudaDVector64): CudaDVector64"><wbr />`-`</a></li>
   <li><a class="reference" href="#*,CudaVector32[N],CudaVector32[N]"
     title="`*`[N](v, w: CudaVector32[N]): float32"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDVector32,CudaDVector32"
+    title="`*`(v, w: CudaDVector32): float32"><wbr />`*`</a></li>
   <li><a class="reference" href="#*,CudaVector64[N],CudaVector64[N]"
     title="`*`[N](v, w: CudaVector64[N]): float64"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDVector64,CudaDVector64"
+    title="`*`(v, w: CudaDVector64): float64"><wbr />`*`</a></li>
   <li><a class="reference" href="#l_2,CudaVector32[N]"
     title="l_2[N](v: CudaVector32[N]): float32"><wbr />l_<wbr />2</a></li>
+  <li><a class="reference" href="#l_2,CudaDVector32"
+    title="l_2(v: CudaDVector32): float32"><wbr />l_<wbr />2</a></li>
   <li><a class="reference" href="#l_2,CudaVector64[N]"
     title="l_2[N](v: CudaVector64[N]): float64"><wbr />l_<wbr />2</a></li>
+  <li><a class="reference" href="#l_2,CudaDVector64"
+    title="l_2(v: CudaDVector64): float64"><wbr />l_<wbr />2</a></li>
   <li><a class="reference" href="#l_1,CudaVector32[N]"
     title="l_1[N](v: CudaVector32[N]): float32"><wbr />l_<wbr />1</a></li>
+  <li><a class="reference" href="#l_1,CudaDVector32"
+    title="l_1(v: CudaDVector32): float32"><wbr />l_<wbr />1</a></li>
   <li><a class="reference" href="#l_1,CudaVector64[N]"
     title="l_1[N](v: CudaVector64[N]): float64"><wbr />l_<wbr />1</a></li>
-  <li><a class="reference" href="#==,CudaVector32[N],CudaVector32[N]"
-    title="`==`[N](v, w: CudaVector32[N]): bool"><wbr />`==`</a></li>
-  <li><a class="reference" href="#==,CudaVector64[N],CudaVector64[N]"
-    title="`==`[N](v, w: CudaVector64[N]): bool"><wbr />`==`</a></li>
-  <li><a class="reference" href="#=~,CudaVector32[N],CudaVector32[N]"
-    title="`=~`[N](v, w: CudaVector32[N]): bool"><wbr />`=~`</a></li>
-  <li><a class="reference" href="#=~,CudaVector64[N],CudaVector64[N]"
-    title="`=~`[N](v, w: CudaVector64[N]): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#l_1,CudaDVector64"
+    title="l_1(v: CudaDVector64): float64"><wbr />l_<wbr />1</a></li>
   <li><a class="reference" href="#*,CudaMatrix32[M,N],CudaVector32[N]"
     title="`*`[M, N](a: CudaMatrix32[M, N]; v: CudaVector32[N]): CudaVector32[M]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix32,CudaDVector32"
+    title="`*`(a: CudaDMatrix32; v: CudaDVector32): CudaDVector32"><wbr />`*`</a></li>
   <li><a class="reference" href="#*,CudaMatrix64[M,N],CudaVector64[N]"
     title="`*`[M, N](a: CudaMatrix64[M, N]; v: CudaVector64[N]): CudaVector64[M]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix64,CudaDVector64"
+    title="`*`(a: CudaDMatrix64; v: CudaDVector64): CudaDVector64"><wbr />`*`</a></li>
   <li><a class="reference" href="#*=,CudaMatrix32[M,N],float32"
     title="`*=`[M, N](m: var CudaMatrix32[M, N]; k: float32)"><wbr />`*=`</a></li>
+  <li><a class="reference" href="#*=,CudaDMatrix32,float32"
+    title="`*=`(m: var CudaDMatrix32; k: float32)"><wbr />`*=`</a></li>
   <li><a class="reference" href="#*=,CudaMatrix64[M,N],float64"
     title="`*=`[M, N](m: var CudaMatrix64[M, N]; k: float64)"><wbr />`*=`</a></li>
-  <li><a class="reference" href="#==,CudaMatrix32[M,N],CudaMatrix32[M,N]"
-    title="`==`[M, N](m, n: CudaMatrix32[M, N]): bool"><wbr />`==`</a></li>
-  <li><a class="reference" href="#==,CudaMatrix64[M,N],CudaMatrix64[M,N]"
-    title="`==`[M, N](m, n: CudaMatrix64[M, N]): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#*=,CudaDMatrix64,float64"
+    title="`*=`(m: var CudaDMatrix64; k: float64)"><wbr />`*=`</a></li>
   <li><a class="reference" href="#*,CudaMatrix32[M,N],float32"
     title="`*`[M, N](m: CudaMatrix32[M, N]; k: float32): CudaMatrix32[M, N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix32,float32"
+    title="`*`(m: CudaDMatrix32; k: float32): CudaDMatrix32"><wbr />`*`</a></li>
   <li><a class="reference" href="#*,CudaMatrix64[M,N],float64"
     title="`*`[M, N](m: CudaMatrix64[M, N]; k: float64): CudaMatrix64[M, N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix64,float64"
+    title="`*`(m: CudaDMatrix64; k: float64): CudaDMatrix64"><wbr />`*`</a></li>
   <li><a class="reference" href="#+=,CudaMatrix32[M,N],CudaMatrix32[M,N]"
     title="`+=`[M, N](a: var CudaMatrix32[M, N]; b: CudaMatrix32[M, N])"><wbr />`+=`</a></li>
+  <li><a class="reference" href="#+=,CudaDMatrix32,CudaDMatrix32"
+    title="`+=`(a: var CudaDMatrix32; b: CudaDMatrix32)"><wbr />`+=`</a></li>
   <li><a class="reference" href="#+=,CudaMatrix64[M,N],CudaMatrix64[M,N]"
     title="`+=`[M, N](a: var CudaMatrix64[M, N]; b: CudaMatrix64[M, N])"><wbr />`+=`</a></li>
+  <li><a class="reference" href="#+=,CudaDMatrix64,CudaDMatrix64"
+    title="`+=`(a: var CudaDMatrix64; b: CudaDMatrix64)"><wbr />`+=`</a></li>
   <li><a class="reference" href="#+,CudaMatrix32[M,N],CudaMatrix32[M,N]"
     title="`+`[M, N](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]"><wbr />`+`</a></li>
+  <li><a class="reference" href="#+,CudaDMatrix32,CudaDMatrix32"
+    title="`+`(a, b: CudaDMatrix32): CudaDMatrix32"><wbr />`+`</a></li>
   <li><a class="reference" href="#+,CudaMatrix64[M,N],CudaMatrix64[M,N]"
     title="`+`[M, N](a, b: CudaMatrix64[M, N]): CudaMatrix64[M, N]"><wbr />`+`</a></li>
+  <li><a class="reference" href="#+,CudaDMatrix64,CudaDMatrix64"
+    title="`+`(a, b: CudaDMatrix64): CudaDMatrix64"><wbr />`+`</a></li>
   <li><a class="reference" href="#-=,CudaMatrix32[M,N],CudaMatrix32[M,N]"
     title="`-=`[M, N](a: var CudaMatrix32[M, N]; b: CudaMatrix32[M, N])"><wbr />`-=`</a></li>
+  <li><a class="reference" href="#-=,CudaDMatrix32,CudaDMatrix32"
+    title="`-=`(a: var CudaDMatrix32; b: CudaDMatrix32)"><wbr />`-=`</a></li>
   <li><a class="reference" href="#-=,CudaMatrix64[M,N],CudaMatrix64[M,N]"
     title="`-=`[M, N](a: var CudaMatrix64[M, N]; b: CudaMatrix64[M, N])"><wbr />`-=`</a></li>
+  <li><a class="reference" href="#-=,CudaDMatrix64,CudaDMatrix64"
+    title="`-=`(a: var CudaDMatrix64; b: CudaDMatrix64)"><wbr />`-=`</a></li>
   <li><a class="reference" href="#-,CudaMatrix32[M,N],CudaMatrix32[M,N]"
     title="`-`[M, N](a, b: CudaMatrix32[M, N]): CudaMatrix32[M, N]"><wbr />`-`</a></li>
+  <li><a class="reference" href="#-,CudaDMatrix32,CudaDMatrix32"
+    title="`-`(a, b: CudaDMatrix32): CudaDMatrix32"><wbr />`-`</a></li>
   <li><a class="reference" href="#-,CudaMatrix64[M,N],CudaMatrix64[M,N]"
     title="`-`[M, N](a, b: CudaMatrix64[M, N]): CudaMatrix64[M, N]"><wbr />`-`</a></li>
+  <li><a class="reference" href="#-,CudaDMatrix64,CudaDMatrix64"
+    title="`-`(a, b: CudaDMatrix64): CudaDMatrix64"><wbr />`-`</a></li>
   <li><a class="reference" href="#*,CudaMatrix32[M,K],CudaMatrix32[K,N]"
     title="`*`[M, N, K](a: CudaMatrix32[M, K]; b: CudaMatrix32[K, N]): CudaMatrix32[M, N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix32,CudaDMatrix32"
+    title="`*`(a: CudaDMatrix32; b: CudaDMatrix32): CudaDMatrix32"><wbr />`*`</a></li>
   <li><a class="reference" href="#*,CudaMatrix64[M,K],CudaMatrix64[K,N]"
     title="`*`[M, N, K](a: CudaMatrix64[M, K]; b: CudaMatrix64[K, N]): CudaMatrix64[M, N]"><wbr />`*`</a></li>
+  <li><a class="reference" href="#*,CudaDMatrix64,CudaDMatrix64"
+    title="`*`(a: CudaDMatrix64; b: CudaDMatrix64): CudaDMatrix64"><wbr />`*`</a></li>
   <li><a class="reference" href="#l_2,CudaMatrix32[M,N]"
     title="l_2[M, N](m: CudaMatrix32[M, N]): float32"><wbr />l_<wbr />2</a></li>
+  <li><a class="reference" href="#l_2,CudaDMatrix32"
+    title="l_2(m: CudaDMatrix32): float32"><wbr />l_<wbr />2</a></li>
   <li><a class="reference" href="#l_2,CudaMatrix64[M,N]"
     title="l_2[M, N](m: CudaMatrix64[M, N]): float64"><wbr />l_<wbr />2</a></li>
+  <li><a class="reference" href="#l_2,CudaDMatrix64"
+    title="l_2(m: CudaDMatrix64): float64"><wbr />l_<wbr />2</a></li>
   <li><a class="reference" href="#l_1,CudaMatrix32[M,N]"
     title="l_1[M, N](m: CudaMatrix32[M, N]): float32"><wbr />l_<wbr />1</a></li>
+  <li><a class="reference" href="#l_1,CudaDMatrix32"
+    title="l_1(m: CudaDMatrix32): float32"><wbr />l_<wbr />1</a></li>
   <li><a class="reference" href="#l_1,CudaMatrix64[M,N]"
     title="l_1[M, N](m: CudaMatrix64[M, N]): float64"><wbr />l_<wbr />1</a></li>
+  <li><a class="reference" href="#l_1,CudaDMatrix64"
+    title="l_1(m: CudaDMatrix64): float64"><wbr />l_<wbr />1</a></li>
+  <li><a class="reference" href="#==,CudaVector32[N],CudaVector32[N]"
+    title="`==`[N](v, w: CudaVector32[N]): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaDVector32,CudaDVector32"
+    title="`==`(m, n: CudaDVector32): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaVector64[N],CudaVector64[N]"
+    title="`==`[N](v, w: CudaVector64[N]): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaDVector64,CudaDVector64"
+    title="`==`(m, n: CudaDVector64): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaMatrix32[M,N],CudaMatrix32[M,N]"
+    title="`==`[M, N](m, n: CudaMatrix32[M, N]): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaDMatrix32,CudaDMatrix32"
+    title="`==`(m, n: CudaDMatrix32): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaMatrix64[M,N],CudaMatrix64[M,N]"
+    title="`==`[M, N](m, n: CudaMatrix64[M, N]): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#==,CudaDMatrix64,CudaDMatrix64"
+    title="`==`(m, n: CudaDMatrix64): bool"><wbr />`==`</a></li>
+  <li><a class="reference" href="#=~,CudaVector32[N],CudaVector32[N]"
+    title="`=~`[N](v, w: CudaVector32[N]): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#=~,CudaDVector32,CudaDVector32"
+    title="`=~`(v, w: CudaDVector32): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#=~,CudaVector64[N],CudaVector64[N]"
+    title="`=~`[N](v, w: CudaVector64[N]): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#=~,CudaDVector64,CudaDVector64"
+    title="`=~`(v, w: CudaDVector64): bool"><wbr />`=~`</a></li>
   <li><a class="reference" href="#=~,CudaMatrix32[M,N],CudaMatrix32[M,N]"
     title="`=~`[M, N](m, n: CudaMatrix32[M, N]): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#=~,CudaDMatrix32,CudaDMatrix32"
+    title="`=~`(v, w: CudaDMatrix32): bool"><wbr />`=~`</a></li>
   <li><a class="reference" href="#=~,CudaMatrix64[M,N],CudaMatrix64[M,N]"
     title="`=~`[M, N](m, n: CudaMatrix64[M, N]): bool"><wbr />`=~`</a></li>
+  <li><a class="reference" href="#=~,CudaDMatrix64,CudaDMatrix64"
+    title="`=~`(v, w: CudaDMatrix64): bool"><wbr />`=~`</a></li>
   <li><a class="reference" href="#$,CudaVector32[N]"
     title="`$`[N](v: CudaVector32[N]): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaVector64[N]"
+    title="`$`[N](v: CudaVector64[N]): string"><wbr />`$`</a></li>
   <li><a class="reference" href="#$,CudaMatrix32[M,N]"
     title="`$`[M, N](m: CudaMatrix32[M, N]): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaMatrix64[M,N]"
+    title="`$`[M, N](m: CudaMatrix64[M, N]): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaDVector32"
+    title="`$`(v: CudaDVector32): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaDVector64"
+    title="`$`(v: CudaDVector64): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaDMatrix32"
+    title="`$`(m: CudaDMatrix32): string"><wbr />`$`</a></li>
+  <li><a class="reference" href="#$,CudaDMatrix64"
+    title="`$`(m: CudaDMatrix64): string"><wbr />`$`</a></li>
   <li><a class="reference" href="#makeVector,,proc(int)"
     title="makeVector[](N: int or static[int]; f: proc (i: int): float64): auto"><wbr />make<wbr />Vector</a></li>
   <li><a class="reference" href="#makeVector,,proc(int)_2"
@@ -2158,19 +2291,23 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
   <a class="reference reference-toplevel" href="#17" id="67">Templates</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#*.t,float32,"
-    title="`*`[](k: float32; v: CudaVector32 or CudaMatrix32): expr"><wbr />`*`</a></li>
+    title="`*`[](k: float32;
+      v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32): expr"><wbr />`*`</a></li>
   <li><a class="reference" href="#*.t,float64,"
-    title="`*`[](k: float64; v: CudaVector64 or CudaMatrix64): expr"><wbr />`*`</a></li>
+    title="`*`[](k: float64;
+      v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64): expr"><wbr />`*`</a></li>
   <li><a class="reference" href="#/.t,,float32"
-    title="`&#x2F;`[](v: CudaVector32 or CudaMatrix32; k: float32): expr"><wbr />`/`</a></li>
+    title="`&#x2F;`[](v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32; k: float32): expr"><wbr />`/`</a></li>
   <li><a class="reference" href="#/.t,,float64"
-    title="`&#x2F;`[](v: CudaVector64 or CudaMatrix64; k: float64): expr"><wbr />`/`</a></li>
+    title="`&#x2F;`[](v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64; k: float64): expr"><wbr />`/`</a></li>
   <li><a class="reference" href="#/=.t,,float32"
-    title="`&#x2F;=`[](v: var CudaVector32 or var CudaMatrix32; k: float32): expr"><wbr />`/=`</a></li>
+    title="`&#x2F;=`[](v: var CudaVector32 or var CudaMatrix32 or var CudaDVector32 or
+    var CudaDMatrix32; k: float32): expr"><wbr />`/=`</a></li>
   <li><a class="reference" href="#/=.t,,float64"
-    title="`&#x2F;=`[](v: var CudaVector64 or var CudaMatrix64; k: float64): expr"><wbr />`/=`</a></li>
-  <li><a class="reference" href="#!=~.t,,"
-    title="`!=~`[](a, b: CudaVector32 or CudaMatrix32 or CudaVector64 or CudaMatrix64): bool"><wbr />`!=~`</a></li>
+    title="`&#x2F;=`[](v: var CudaVector64 or var CudaMatrix64 or var CudaDVector64 or
+    var CudaDMatrix64; k: float64): expr"><wbr />`/=`</a></li>
+  <li><a class="reference" href="#!=~.t,AnyCuda,AnyCuda"
+    title="`!=~`[AnyCuda](a, b: AnyCuda): bool"><wbr />`!=~`</a></li>
   <li><a class="reference" href="#[].t,,int,int"
     title="`[]`[](m: Matrix64 or DMatrix64; i, j: int): float64"><wbr />`[]`</a></li>
   <li><a class="reference" href="#[].t,,int,int_2"
@@ -2207,7 +2344,7 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
     title="`=~`(v, w: DMatrix32): bool"><wbr />`=~`</a></li>
   <li><a class="reference" href="#=~.t,DMatrix64,DMatrix64"
     title="`=~`(v, w: DMatrix64): bool"><wbr />`=~`</a></li>
-  <li><a class="reference" href="#!=~.t,,_2"
+  <li><a class="reference" href="#!=~.t,,"
     title="`!=~`[](a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or
     DMatrix32 or DMatrix64): bool"><wbr />`!=~`</a></li>
   <li><a class="reference" href="#makeUniversal.t,expr"
@@ -2238,19 +2375,11 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="math.html">math</a>, <a class="reference external" href="sequtils.html">sequtils</a>
+<a class="reference external" href="math.html">math</a>, <a class="reference external" href="nimblas.html">nimblas</a>, <a class="reference external" href="sequtils.html">sequtils</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<dt id="OrderType"><a name="OrderType"></a><pre><span class="Identifier">OrderType</span> <span class="Other">=</span> <span class="Keyword">enum</span>
-  <span class="Identifier">rowMajor</span> <span class="Other">=</span> <span class="DecNumber">101</span><span class="Other">,</span> <span class="Identifier">colMajor</span> <span class="Other">=</span> <span class="DecNumber">102</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/blas.nim#L18"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
 <dt id="Vector32"><a name="Vector32"></a><pre><span class="Identifier">Vector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Identifier">array</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">,</span> <span class="Identifier">float32</span><span class="Other">]</span></pre></dt>
 <dd>
 
@@ -2351,6 +2480,46 @@ class="link-seesrc" target="_blank">Source</a>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/types.nim#L120"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="CudaDVector32"><a name="CudaDVector32"></a><pre><span class="Identifier">CudaDVector32</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">float32</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/types.nim#L122"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="CudaDVector64"><a name="CudaDVector64"></a><pre><span class="Identifier">CudaDVector64</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">float64</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/types.nim#L125"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="CudaDMatrix32"><a name="CudaDMatrix32"></a><pre><span class="Identifier">CudaDMatrix32</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">float32</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/types.nim#L128"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="CudaDMatrix64"><a name="CudaDMatrix64"></a><pre><span class="Identifier">CudaDMatrix64</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int</span>
+  <span class="Identifier">data</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">float64</span><span class="Other">]</span>
+</pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/types.nim#L131"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 
@@ -2498,312 +2667,576 @@ class="link-seesrc" target="_blank">Source</a>
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L20"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="cpu"><a name="cpu,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Vector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dt id="gpu"><a name="gpu,DVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">DVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span>
+    <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L25"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
+<dt id="gpu"><a name="gpu,DVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">DVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span>
+    <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L31"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="cpu"><a name="cpu,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Vector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L37"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
 <dt id="cpu"><a name="cpu,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Vector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L29"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L41"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="gpu"><a name="gpu,Matrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L33"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="gpu"><a name="gpu,Matrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L39"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="cpu"><a name="cpu,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Matrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dt id="cpu"><a name="cpu,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">DVector32</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
+<dt id="cpu"><a name="cpu,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">DVector64</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L49"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="gpu"><a name="gpu,Matrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L53"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="gpu"><a name="gpu,Matrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L59"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="gpu"><a name="gpu,DMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">DMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span>
+    <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L65"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="gpu"><a name="gpu,DMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">DMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span>
+    <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L73"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="cpu"><a name="cpu,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Matrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L81"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
 <dt id="cpu"><a name="cpu,CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Matrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L50"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L86"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="cpu"><a name="cpu,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">DMatrix32</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L91"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="cpu"><a name="cpu,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">DMatrix64</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/copy.nim#L98"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="*="><a name="*=,CudaVector32[N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L17"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L60"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaDVector32,float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="*="><a name="*=,CudaVector64[N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L20"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L66"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaDVector64,float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L69"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="*"><a name="*,CudaVector32[N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L23"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="*"><a name="*,CudaVector64[N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L29"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="+="><a name="+=,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L35"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="+="><a name="+=,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L38"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="+"><a name="+,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L41"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="+"><a name="+,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L47"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="-="><a name="-=,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L53"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="-="><a name="-=,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L56"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="-"><a name="-,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L59"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="-"><a name="-,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L65"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="*"><a name="*,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L71"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="*"><a name="*,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L74"
-class="link-seesrc" target="_blank">Source</a>
-</dd>
-<dt id="l_2"><a name="l_2,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
-<dd>
-
-&nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L77"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="l_2"><a name="l_2,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="*"><a name="*,CudaDVector32,float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L80"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="l_1"><a name="l_1,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="*"><a name="*,CudaVector64[N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L83"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="l_1"><a name="l_1,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="*"><a name="*,CudaDVector64,float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L86"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=="><a name="==,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="+="><a name="+=,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L89"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=="><a name="==,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="+="><a name="+=,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector32</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L92"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=~"><a name="=~,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="+="><a name="+=,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L105"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L96"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=~"><a name="=~,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="+="><a name="+=,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector64</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L107"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L99"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*"><a name="*,CudaMatrix32[M,N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="+"><a name="+,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L109"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L108"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*"><a name="*,CudaMatrix64[M,N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="+"><a name="+,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L114"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L111"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*="><a name="*=,CudaMatrix32[M,N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="+"><a name="+,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L119"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L115"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*="><a name="*=,CudaMatrix64[M,N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="+"><a name="+,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L118"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-="><a name="-=,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L122"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=="><a name="==,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="-="><a name="-=,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector32</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="=="><a name="==,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="-="><a name="-=,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L128"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L129"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*"><a name="*,CudaMatrix32[M,N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="-="><a name="-=,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector64</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L131"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L132"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*"><a name="*,CudaMatrix64[M,N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="-"><a name="-,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L137"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L141"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="+="><a name="+=,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="-"><a name="-,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L144"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-"><a name="-,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L148"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-"><a name="-,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L151"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L155"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="+="><a name="+=,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dt id="*"><a name="*,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L158"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
+<dt id="*"><a name="*,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L162"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L165"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L169"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L172"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L175"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L178"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L181"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L184"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L187"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L190"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaMatrix32[M,N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L197"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L200"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaMatrix64[M,N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L204"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L207"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaMatrix32[M,N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L211"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaDMatrix32,float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L214"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaMatrix64[M,N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L217"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*="><a name="*=,CudaDMatrix64,float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L220"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaMatrix32[M,N],float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L228"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix32,float32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L231"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaMatrix64[M,N],float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L234"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix64,float64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L237"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+="><a name="+=,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L252"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+="><a name="+=,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L255"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+="><a name="+=,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L259"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+="><a name="+=,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L262"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
 <dt id="+"><a name="+,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L161"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L271"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+"><a name="+,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L274"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="+"><a name="+,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L167"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L278"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="+"><a name="+,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L281"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="-="><a name="-=,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L173"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L285"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-="><a name="-=,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L288"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="-="><a name="-=,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L176"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L292"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-="><a name="-=,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L295"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="-"><a name="-,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L179"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L304"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-"><a name="-,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L307"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="-"><a name="-,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L185"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L311"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="-"><a name="-,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L314"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="*"><a name="*,CudaMatrix32[M,K],CudaMatrix32[K,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">,</span> <span class="Identifier">K</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">K</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">K</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span>
@@ -2811,7 +3244,15 @@ class="link-seesrc" target="_blank">Source</a>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L191"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L323"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L326"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="*"><a name="*,CudaMatrix64[M,K],CudaMatrix64[K,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">,</span> <span class="Identifier">K</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">K</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">K</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span> <span class="Other">{.</span>
@@ -2819,49 +3260,187 @@ class="link-seesrc" target="_blank">Source</a>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L197"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L330"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="*"><a name="*,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span>
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">CudaException</span><span class="Other">,</span> <span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L333"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="l_2"><a name="l_2,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L203"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L337"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L340"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="l_2"><a name="l_2,CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L206"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L343"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_2"><a name="l_2,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L346"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="l_1"><a name="l_1,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L209"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L349"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float32</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L352"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="l_1"><a name="l_1,CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L212"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L355"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="l_1"><a name="l_1,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span> <span class="Other">{.</span><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L358"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L361"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L364"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L367"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L370"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L373"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L376"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L379"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=="><a name="==,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L382"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaVector32[N],CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L397"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaDVector32,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
+    <span class="Identifier">CudaException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L399"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaVector64[N],CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L401"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaDVector64,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
+    <span class="Identifier">CudaException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L403"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="=~"><a name="=~,CudaMatrix32[M,N],CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L215"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L405"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaDMatrix32,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
+    <span class="Identifier">CudaException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L407"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="=~"><a name="=~,CudaMatrix64[M,N],CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L217"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L409"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="=~"><a name="=~,CudaDMatrix64,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span>
+    <span class="Identifier">CudaException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L411"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="$"><a name="$,CudaVector32[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
@@ -2871,11 +3450,53 @@ class="link-seesrc" target="_blank">Source</a>
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L15"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="$"><a name="$,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt id="$"><a name="$,CudaVector64[N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span><span class="Other">[</span><span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
 href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L17"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaMatrix32[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix32</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L19"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaMatrix64[M,N]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix64</span><span class="Other">[</span><span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L21"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaDVector32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L23"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaDVector64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaDVector64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L25"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaDMatrix32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L27"
+class="link-seesrc" target="_blank">Source</a>
+</dd>
+<dt id="$"><a name="$,CudaDMatrix64"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Other">{.</span><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">CublasException</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/display.nim#L29"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="makeVector"><a name="makeVector,,proc(int)"></a><pre><span class="Keyword">proc</span> <span class="Identifier">makeVector</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Keyword">or</span> <span class="Keyword">static</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
@@ -5627,53 +6248,59 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="17">
 <h1><a class="toc-backref" href="#17">Templates</a></h1>
 <dl class="item">
-<dt id="*"><a name="*.t,float32,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="*"><a name="*.t,float32,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">;</span>
+              <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix32</span> <span class="Keyword">or</span> <span class="Identifier">CudaDVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L143"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L240"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="*"><a name="*.t,float64,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="*"><a name="*.t,float64,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">;</span>
+              <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix64</span> <span class="Keyword">or</span> <span class="Identifier">CudaDVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L145"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L242"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="/"><a name="/.t,,float32"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="/"><a name="/.t,,float32"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix32</span> <span class="Keyword">or</span> <span class="Identifier">CudaDVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span>
+              <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L147"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L244"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="/"><a name="/.t,,float64"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="/"><a name="/.t,,float64"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix64</span> <span class="Keyword">or</span> <span class="Identifier">CudaDVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span>
+              <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L149"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L246"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="/="><a name="/=.t,,float32"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/=`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="/="><a name="/=.t,,float32"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/=`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix32</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector32</span> <span class="Keyword">or</span>
+    <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix32</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L151"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L248"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="/="><a name="/=.t,,float64"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/=`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
+<dt id="/="><a name="/=.t,,float64"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/=`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix64</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaDVector64</span> <span class="Keyword">or</span>
+    <span class="Keyword">var</span> <span class="Identifier">CudaDMatrix64</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">float64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">expr</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L153"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L250"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="!=~"><a name="!=~.t,,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`!=~`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaVector32</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix32</span> <span class="Keyword">or</span> <span class="Identifier">CudaVector64</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dt id="!=~"><a name="!=~.t,AnyCuda,AnyCuda"></a><pre><span class="Keyword">template</span> <span class="Identifier">`!=~`</span><span class="Other">[</span><span class="Identifier">AnyCuda</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">AnyCuda</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L219"
+href="https://github.com/unicredit/linear-algebra/blob/master/private/cuda/ops.nim#L413"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
 <dt id="[]"><a name="[].t,,int,int"></a><pre><span class="Keyword">template</span> <span class="Identifier">`[]`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix64</span> <span class="Keyword">or</span> <span class="Identifier">DMatrix64</span><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">,</span> <span class="Identifier">j</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">float64</span></pre></dt>
@@ -5802,7 +6429,7 @@ class="link-seesrc" target="_blank">Source</a>
 href="https://github.com/unicredit/linear-algebra/blob/master/private/ops.nim#L480"
 class="link-seesrc" target="_blank">Source</a>
 </dd>
-<dt id="!=~"><a name="!=~.t,,_2"></a><pre><span class="Keyword">template</span> <span class="Identifier">`!=~`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">Vector32</span> <span class="Keyword">or</span> <span class="Identifier">Vector64</span> <span class="Keyword">or</span> <span class="Identifier">DVector32</span> <span class="Keyword">or</span> <span class="Identifier">DVector64</span> <span class="Keyword">or</span> <span class="Identifier">Matrix32</span> <span class="Keyword">or</span>
+<dt id="!=~"><a name="!=~.t,,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`!=~`</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">Vector32</span> <span class="Keyword">or</span> <span class="Identifier">Vector64</span> <span class="Keyword">or</span> <span class="Identifier">DVector32</span> <span class="Keyword">or</span> <span class="Identifier">DVector64</span> <span class="Keyword">or</span> <span class="Identifier">Matrix32</span> <span class="Keyword">or</span>
     <span class="Identifier">Matrix64</span> <span class="Keyword">or</span> <span class="Identifier">DMatrix32</span> <span class="Keyword">or</span> <span class="Identifier">DMatrix64</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
@@ -5866,7 +6493,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2016-05-13 19:05:33 UTC</small>
+        <small>Made with Nim. Generated: 2016-05-26 12:12:50 UTC</small>
       </div>
     </div>
   </div>
