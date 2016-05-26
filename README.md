@@ -511,12 +511,8 @@ You will also need to explicitly add `linalg` support for CUDA with the flag
 
     -d:cublas
 
-Support is currently limited to 32-bit operations on static matrices and
-vectors, which is the most common case, but 64-bit and dynamic instances will
-also be implemented soon.
-
-If you have a 32-bit matrix or vector, you can move it on the GPU, and back
-like this
+If you have a matrix or vector, you can move it on the GPU, and back
+like this:
 
 ```nim
 let
@@ -529,7 +525,7 @@ Vectors and matrices on the GPU support linear-algebraic operations via cuBLAS,
 exactly like their CPU counterparts. A few operation - such as reading a single
 element - are not supported, as it does not make much sense to copy a single
 value back and forth from the GPU. Usually it is advisable to move vectors
-and matrices to the GPU, make as man computations as possible there, and
+and matrices to the GPU, make as many computations as possible there, and
 finally move the result back to the CPU.
 
 The following are all valid operations, assuming `v` and `w` are vectors on the
@@ -552,7 +548,6 @@ For more information, look at the tests in `tests/cuda`.
 * Add more functional interfaces (foldl, scanl)
 * Add more common operations (cumsum, mean, stdv...)
 * Use rewrite rules to optimize complex operations into a single BLAS call
-* 64-bit and dynamic GPU support
 * More specialized BLAS operations
 * Add operations from LAPACK
 * Support slicing/nonconstant steps
