@@ -56,7 +56,7 @@ so-called *dynamic* vectors and matrices, whose types are `DVector64` and
 and alias for `seq[float64]` (and similarly for 32-bit), which allows to
 perform linear algebra operations on standard Nim sequences.
 
-In all examples, types are inferred, and are shown just for explanatory purposes.
+**In all examples, types are inferred, and are shown just for explanatory purposes.**
 
 ##Initialization
 
