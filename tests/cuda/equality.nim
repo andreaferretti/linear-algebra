@@ -41,6 +41,34 @@ suite "vector and matrix equality":
     check m == n
     check n != p
 
+suite "dynamic vector and matrix equality":
+  test "strict 32-bit vector equality":
+    let
+      u = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
+      v = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
+      w = @[1'f32, 3'f32, 3'f32, 4'f32].gpu()
+    check u == v
+    check v != w
+  test "approximate 32-bit vector equality":
+    let
+      u = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
+      v = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
+      w = @[1'f32, 2'f32, 2.999999'f32, 4.000001'f32].gpu()
+      z = @[1'f32, 3'f32, 3'f32, 4'f32].gpu()
+    check u =~ v
+    check v =~ w
+    check v != w
+    check w !=~ z
+  test "strict 32-bit matrix equality":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float32 = (i + 3 * j).float32).gpu()
+      n = makeMatrix(M, N, proc(i, j: int): float32 = (i + 3 * j).float32).gpu()
+      p = makeMatrix(M, N, proc(i, j: int): float32 = (i - 2 * j).float32).gpu()
+    check m == n
+    check n != p
+
 suite "64-bit vector and matrix equality":
   test "strict 64-bit vector equality":
     let
@@ -64,5 +92,33 @@ suite "64-bit vector and matrix equality":
       m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64).gpu()
       n = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64).gpu()
       p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64).gpu()
+    check m == n
+    check n != p
+
+suite "dynamic 64-bit vector and matrix equality":
+  test "strict 64-bit vector equality":
+    let
+      u = @[1.0, 2.0, 3.0, 4.0].gpu()
+      v = @[1.0, 2.0, 3.0, 4.0].gpu()
+      w = @[1.0, 3.0, 3.0, 4.0].gpu()
+    check u == v
+    check v != w
+  test "approximate 64-bit vector equality":
+    let
+      u = @[1.0, 2.0, 3.0, 4.0].gpu()
+      v = @[1.0, 2.0, 3.0, 4.0].gpu()
+      w = @[1.0, 2.0, 2.999999, 4.000001].gpu()
+      z = @[1.0, 3.0, 3.0, 4.0].gpu()
+    check u =~ v
+    check v =~ w
+    check v != w
+    check w !=~ z
+  test "strict 64-bit matrix equality":
+    let
+      M = 3
+      N = 5
+      m = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64).gpu()
+      n = makeMatrix(M, N, proc(i, j: int): float64 = (i + 3 * j).float64).gpu()
+      p = makeMatrix(M, N, proc(i, j: int): float64 = (i - 2 * j).float64).gpu()
     check m == n
     check n != p
