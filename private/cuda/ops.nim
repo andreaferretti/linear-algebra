@@ -347,17 +347,24 @@ proc `-`*(a, b: CudaDMatrix64): CudaDMatrix64  {. inline .} =
   assert a.M == b.M and a.N == a.N
   matDiff(result, a, b, a.M, a.N)
 
-proc `*`*[M, N, K: static[int]](a: CudaMatrix32[M, K], b: CudaMatrix32[K, N]): CudaMatrix32[M, N] {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc32(M * N)
+template matMul(result, a, b, M, K, N: expr) =
+  initM(result, M, N)
   check cublasGemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
     a.fp, M, b.fp, K, 0, result.fp, M)
 
+proc `*`*[M, N, K: static[int]](a: CudaMatrix32[M, K], b: CudaMatrix32[K, N]): CudaMatrix32[M, N] {. inline .} =
+  matMul(result, a, b, M, K, N)
+
+proc `*`*(a: CudaDMatrix32, b: CudaDMatrix32): CudaDMatrix32 {. inline .} =
+  assert a.N == b.M
+  matMul(result, a, b, a.M, a.N, b.N)
+
 proc `*`*[M, N, K: static[int]](a: CudaMatrix64[M, K], b: CudaMatrix64[K, N]): CudaMatrix64[M, N] {. inline .} =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc64(M * N)
-  check cublasGemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
-    a.fp, M, b.fp, K, 0, result.fp, M)
+  matMul(result, a, b, M, K, N)
+
+proc `*`*(a: CudaDMatrix64, b: CudaDMatrix64): CudaDMatrix64 {. inline .} =
+  assert a.N == b.M
+  matMul(result, a, b, a.M, a.N, b.N)
 
 proc l_2*[M, N: static[int]](m: CudaMatrix32[M, N]): float32 {. inline .} =
   check cublasNrm2(handle, M * N, m.fp, 1, addr(result))

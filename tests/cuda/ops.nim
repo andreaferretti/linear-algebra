@@ -778,23 +778,23 @@ suite "dynamic matrix 32-bit operations":
       @[2.5'f32, 3.1'f32, -1.4'f32]
     ]).gpu()
     check l_1(m) == 21'f32
-  # test "matrix multiplication":
-  #   let
-  #     m1 = matrix([
-  #       [1'f32, 1'f32, 2'f32, -3'f32],
-  #       [3'f32, 0'f32, -7'f32, 2'f32]
-  #     ]).gpu()
-  #     m2 = matrix([
-  #       [1'f32, 1'f32, 2'f32],
-  #       [3'f32, 1'f32, -5'f32],
-  #       [-1'f32, -1'f32, 2'f32],
-  #       [4'f32, 2'f32, 3'f32]
-  #     ]).gpu()
-  #     m3 = matrix([
-  #       [-10'f32, -6'f32, -8'f32],
-  #       [18'f32, 14'f32, -2'f32]
-  #     ]).gpu()
-  #   check(m1 * m2 == m3)
+  test "matrix multiplication":
+    let
+      m1 = matrix(@[
+        @[1'f32, 1'f32, 2'f32, -3'f32],
+        @[3'f32, 0'f32, -7'f32, 2'f32]
+      ]).gpu()
+      m2 = matrix(@[
+        @[1'f32, 1'f32, 2'f32],
+        @[3'f32, 1'f32, -5'f32],
+        @[-1'f32, -1'f32, 2'f32],
+        @[4'f32, 2'f32, 3'f32]
+      ]).gpu()
+      m3 = matrix(@[
+        @[-10'f32, -6'f32, -8'f32],
+        @[18'f32, 14'f32, -2'f32]
+      ]).gpu()
+    check(m1 * m2 == m3)
 
 suite "dynamic matrix 64-bit operations":
   test "scalar matrix multiplication":
@@ -937,20 +937,20 @@ suite "dynamic matrix 64-bit operations":
       @[2.5, 3.1, -1.4]
     ]).gpu()
     check l_1(m) == 21.0
-  # test "matrix multiplication":
-  #   let
-  #     m1 = matrix([
-  #       [1.0, 1.0, 2.0, -3.0],
-  #       [3.0, 0.0, -7.0, 2.0]
-  #     ]).gpu()
-  #     m2 = matrix([
-  #       [1.0, 1.0, 2.0],
-  #       [3.0, 1.0, -5.0],
-  #       [-1.0, -1.0, 2.0],
-  #       [4.0, 2.0, 3.0]
-  #     ]).gpu()
-  #     m3 = matrix([
-  #       [-10.0, -6.0, -8.0],
-  #       [18.0, 14.0, -2.0]
-  #     ]).gpu()
-  #   check(m1 * m2 == m3)
+  test "matrix multiplication":
+    let
+      m1 = matrix(@[
+        @[1.0, 1.0, 2.0, -3.0],
+        @[3.0, 0.0, -7.0, 2.0]
+      ]).gpu()
+      m2 = matrix(@[
+        @[1.0, 1.0, 2.0],
+        @[3.0, 1.0, -5.0],
+        @[-1.0, -1.0, 2.0],
+        @[4.0, 2.0, 3.0]
+      ]).gpu()
+      m3 = matrix(@[
+        @[-10.0, -6.0, -8.0],
+        @[18.0, 14.0, -2.0]
+      ]).gpu()
+    check(m1 * m2 == m3)
