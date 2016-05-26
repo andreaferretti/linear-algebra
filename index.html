@@ -20,7 +20,9 @@
 
     <section class="main-content">
       <h1>
-<a id="linear-algebra-for-nim" class="anchor" href="#linear-algebra-for-nim" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linear Algebra for Nim</h1>
+<a id="linear-algebra-for-nim" class="anchor" href="#linear-algebra-for-nim" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Linear Algebra for Nim</h1>
+
+<p><a href="https://github.com/yglukhov/nimble-tag"><img src="https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png" alt="nimble"></a></p>
 
 <p>This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
@@ -35,7 +37,7 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 <p>A lot of examples are available in the tests.</p>
 
 <h2>
-<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of contents</h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of contents</h2>
 
 
 
@@ -60,7 +62,7 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 
 
 <h2>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
 
 <p>The library revolves around operations on vectors and matrices of floating
 point numbers. It allows to compute operations either on the CPU or on the
@@ -80,10 +82,10 @@ so-called <em>dynamic</em> vectors and matrices, whose types are <code>DVector64
 and alias for <code>seq[float64]</code> (and similarly for 32-bit), which allows to
 perform linear algebra operations on standard Nim sequences.</p>
 
-<p>In all examples, types are inferred, and are shown just for explanatory purposes.</p>
+<p><strong>In all examples, types are inferred, and are shown just for explanatory purposes.</strong></p>
 
 <h2>
-<a id="initialization" class="anchor" href="#initialization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initialization</h2>
+<a id="initialization" class="anchor" href="#initialization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Initialization</h2>
 
 <p>Here we show a few ways to create matrices and vectors. All matrices methods
 accept a parameter to define whether to store the matrix in row-major (that is,
@@ -175,7 +177,7 @@ or use the <code>toDynamic</code> proc to convert the static instances to dynami
 <span class="pl-c1">assert</span> v2.toDynamic == v1</pre></div>
 
 <h2>
-<a id="working-with-32-bit" class="anchor" href="#working-with-32-bit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with 32-bit</h2>
+<a id="working-with-32-bit" class="anchor" href="#working-with-32-bit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with 32-bit</h2>
 
 <p>One can also instantiate 32-bit matrices and vectors. Whenever possible, the
 API is identical. In cases that would be ambiguous (such as <code>zeros</code>), one can
@@ -242,7 +244,7 @@ differences in working with 32-bit or 64-bit. All examples that follow are for
 64-bit, but they would work as well for 32-bit.</p>
 
 <h2>
-<a id="accessors" class="anchor" href="#accessors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessors</h2>
+<a id="accessors" class="anchor" href="#accessors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Accessors</h2>
 
 <p>Vectors can be accessed as expected:</p>
 
@@ -273,7 +275,7 @@ least for now. One can also map vectors and matrices via a proc:</p>
 <p>Similar operations are available for dynamic matrices and vectors as well.</p>
 
 <h2>
-<a id="iterators" class="anchor" href="#iterators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Iterators</h2>
+<a id="iterators" class="anchor" href="#iterators" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Iterators</h2>
 
 <p>One can iterate over vector or matrix elements, as well as over rows and columns</p>
 
@@ -292,7 +294,7 @@ least for now. One can also map vectors and matrices via a proc:</p>
   <span class="pl-c1">echo</span> column[<span class="pl-c1">1</span>]</pre></div>
 
 <h2>
-<a id="equality" class="anchor" href="#equality" aria-hidden="true"><span class="octicon octicon-link"></span></a>Equality</h2>
+<a id="equality" class="anchor" href="#equality" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Equality</h2>
 
 <p>There are two kinds of equality. The usual <code>==</code> operator will compare the
 contents of vector and matrices exactly</p>
@@ -315,7 +317,7 @@ u == v <span class="pl-c"># false</span>
 u =~ v <span class="pl-c"># true</span></pre></div>
 
 <h2>
-<a id="pretty-print" class="anchor" href="#pretty-print" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pretty-print</h2>
+<a id="pretty-print" class="anchor" href="#pretty-print" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pretty-print</h2>
 
 <p>Both vectors and matrix have a pretty-print operation, so one can do</p>
 
@@ -330,7 +332,7 @@ u =~ v <span class="pl-c"># true</span></pre></div>
 </code></pre>
 
 <h2>
-<a id="operations" class="anchor" href="#operations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Operations</h2>
+<a id="operations" class="anchor" href="#operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Operations</h2>
 
 <p>A few linear algebra operations are available, wrapping BLAS libraries:</p>
 
@@ -352,7 +354,7 @@ echo m1 * m2 <span class="pl-c"># matrix-matrix product</span>
 <span class="pl-c1">echo</span> <span class="pl-c1">min</span>(v2)</pre></div>
 
 <h2>
-<a id="trivial-operations" class="anchor" href="#trivial-operations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trivial operations</h2>
+<a id="trivial-operations" class="anchor" href="#trivial-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Trivial operations</h2>
 
 <p>The following operations do not change the underlying memory layout of matrices
 and vectors. This means they run in very little time even on big matrices, but
@@ -376,7 +378,7 @@ matrix, a <code>clone</code> operation is available:</p>
 <div class="highlight highlight-source-nim"><pre><span class="pl-k">let</span> m5 = m1.clone</pre></div>
 
 <h2>
-<a id="universal-functions" class="anchor" href="#universal-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Universal functions</h2>
+<a id="universal-functions" class="anchor" href="#universal-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Universal functions</h2>
 
 <p>Universal functions are real-valued functions that are extended to vectors
 and matrices by working element-wise. There are many common functions that are
@@ -427,7 +429,7 @@ matrices, both static and dynamic.</p>
 <code>f</code>, there is the equivalent template <code>makeUniversalLocal</code>.</p>
 
 <h2>
-<a id="rewrite-rules" class="anchor" href="#rewrite-rules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rewrite rules</h2>
+<a id="rewrite-rules" class="anchor" href="#rewrite-rules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rewrite rules</h2>
 
 <p>A few rewrite rules allow to optimize a chain of linear algebra operations
 into a single BLAS call. For instance, if you try</p>
@@ -438,7 +440,7 @@ into a single BLAS call. For instance, if you try</p>
 is turned into a single function call.</p>
 
 <h2>
-<a id="type-safety-guarantees" class="anchor" href="#type-safety-guarantees" aria-hidden="true"><span class="octicon octicon-link"></span></a>Type safety guarantees</h2>
+<a id="type-safety-guarantees" class="anchor" href="#type-safety-guarantees" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Type safety guarantees</h2>
 
 <p>The library is designed with the use case of having dimensions known at compile
 time, and leverages the compiles to ensure that dimensions match when performing
@@ -452,7 +454,7 @@ operations do not compile!).</p>
 that vector of matrix is defined via <code>var</code> instead of <code>let</code>.</p>
 
 <h2>
-<a id="linking-blas-implementations" class="anchor" href="#linking-blas-implementations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linking BLAS implementations</h2>
+<a id="linking-blas-implementations" class="anchor" href="#linking-blas-implementations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Linking BLAS implementations</h2>
 
 <p>The library requires to link some BLAS implementation to perform the actual
 linear algebra operations. By default, it tries to link whatever is the default
@@ -477,8 +479,16 @@ On OSX, this should do the trick</p>
 <div class="highlight highlight-source-nim"><pre><span class="pl-c1">switch</span>(<span class="pl-s">"clibdir"</span>, <span class="pl-s">"/usr/local/opt/openblas/lib"</span>)
 <span class="pl-c1">switch</span>(<span class="pl-s">"cincludes"</span>, <span class="pl-s">"/usr/local/opt/openblas/include"</span>)</pre></div>
 
+<p>If you have problems with MKL, you may want to link it statically. Just pass
+the options</p>
+
+<div class="highlight highlight-source-nim"><pre><span class="pl-k">--</span>dynlibOverride:mkl_intel_lp64
+<span class="pl-k">--</span>passL:${PATH_TO_MKL}/libmkl_intel_lp64.a</pre></div>
+
+<p>to enable static linking.</p>
+
 <h2>
-<a id="gpu-support" class="anchor" href="#gpu-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>GPU support</h2>
+<a id="gpu-support" class="anchor" href="#gpu-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GPU support</h2>
 
 <p>It is possible to delegate work to the GPU using CUDA. The library has been
 tested to work with NVIDIA CUDA 7.0 and 7.5, but it is possible that earlier
@@ -495,12 +505,8 @@ globally set, you can pass suitable options to the Nim compiler, such as</p>
 <pre><code>-d:cublas
 </code></pre>
 
-<p>Support is currently limited to 32-bit operations on static matrices and
-vectors, which is the most common case, but 64-bit and dynamic instances will
-also be implemented soon.</p>
-
-<p>If you have a 32-bit matrix or vector, you can move it on the GPU, and back
-like this</p>
+<p>If you have a matrix or vector, you can move it on the GPU, and back
+like this:</p>
 
 <div class="highlight highlight-source-nim"><pre><span class="pl-k">let</span>
   v: Vector32[<span class="pl-c1">12</span>] = <span class="pl-c1">randomVector</span>(<span class="pl-c1">12</span>, max=<span class="pl-c1">1'f32</span>)
@@ -511,7 +517,7 @@ like this</p>
 exactly like their CPU counterparts. A few operation - such as reading a single
 element - are not supported, as it does not make much sense to copy a single
 value back and forth from the GPU. Usually it is advisable to move vectors
-and matrices to the GPU, make as man computations as possible there, and
+and matrices to the GPU, make as many computations as possible there, and
 finally move the result back to the CPU.</p>
 
 <p>The following are all valid operations, assuming <code>v</code> and <code>w</code> are vectors on the
@@ -527,14 +533,13 @@ m * n</pre></div>
 <p>For more information, look at the tests in <code>tests/cuda</code>.</p>
 
 <h2>
-<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO</h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
 
 <ul>
 <li>Add support for matrices and vector on the stack</li>
 <li>Add more functional interfaces (foldl, scanl)</li>
 <li>Add more common operations (cumsum, mean, stdv...)</li>
 <li>Use rewrite rules to optimize complex operations into a single BLAS call</li>
-<li>64-bit and dynamic GPU support</li>
 <li>More specialized BLAS operations</li>
 <li>Add operations from LAPACK</li>
 <li>Support slicing/nonconstant steps</li>
@@ -549,7 +554,7 @@ m * n</pre></div>
 </ul>
 
 <h2>
-<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
 
 <p>Every contribution is very much appreciated! This can range from:</p>
 
