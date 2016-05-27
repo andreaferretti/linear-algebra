@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import nimblas, linalg
+
 proc linearCombination[N: static[int]](a: float64, v, w: Vector64[N]): Vector64[N]  {. inline .} =
   new result
   copy(N, v.fp, 1, result.fp, 1)

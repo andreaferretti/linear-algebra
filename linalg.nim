@@ -26,6 +26,5 @@ include private/display
 include private/trivial_ops
 include private/ops
 include private/ufunc
-include private/rewrite
 
 export nimblas.OrderType

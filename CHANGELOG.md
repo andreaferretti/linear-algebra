@@ -36,3 +36,8 @@ Support for (static) 64-bit types on the GPU
 -----
 
 Support for dynamic types (32 or 64-bit) on the GPU
+
+0.4.1
+-----
+
+Moved term rewrites to a separate package

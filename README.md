@@ -438,9 +438,13 @@ to turn `f` into a (public) universal function. If you do not want to export
 ##Rewrite rules
 
 A few rewrite rules allow to optimize a chain of linear algebra operations
-into a single BLAS call. For instance, if you try
+into a single BLAS call. These live in a separate package `linalg/rewrites`.
+
+For instance, if you try
 
 ```nim
+import linalg/rewrites
+
 echo v1 + 5.3 * v2
 ```
 
