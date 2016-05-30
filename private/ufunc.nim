@@ -14,7 +14,8 @@
 
 
 template makeUniversal*(fname: expr) =
-  proc fname*(x: float32): float32 = fname(x.float64).float32
+  when not compiles(fname(0'f32)):
+    proc fname*(x: float32): float32 = fname(x.float64).float32 
 
   proc fname*[N: static[int]](v: Vector32[N]): Vector32[N] =
     new result
