@@ -20,6 +20,7 @@ Table of contents
 
 - [Introduction](#introduction)
 - [Initialization](#initialization)
+- [Working with 32-bit](#working-with-32-bit)
 - [Accessors](#accessors)
 - [Iterators](#iterators)
 - [Equality](#equality)
@@ -36,7 +37,7 @@ Table of contents
 
 <!-- /TOC -->
 
-##Introduction
+## Introduction
 
 The library revolves around operations on vectors and matrices of floating
 point numbers. It allows to compute operations either on the CPU or on the
@@ -58,7 +59,7 @@ perform linear algebra operations on standard Nim sequences.
 
 **In all examples, types are inferred, and are shown just for explanatory purposes.**
 
-##Initialization
+## Initialization
 
 Here we show a few ways to create matrices and vectors. All matrices methods
 accept a parameter to define whether to store the matrix in row-major (that is,
@@ -157,8 +158,7 @@ assert v1.toStatic(5) == v2
 assert v2.toDynamic == v1
 ```
 
-Working with 32-bit
--------------------
+## Working with 32-bit
 
 One can also instantiate 32-bit matrices and vectors. Whenever possible, the
 API is identical. In cases that would be ambiguous (such as `zeros`), one can
@@ -230,7 +230,7 @@ Once vectors and matrices are created, everything is inferred, so there are no
 differences in working with 32-bit or 64-bit. All examples that follow are for
 64-bit, but they would work as well for 32-bit.
 
-##Accessors
+## Accessors
 
 Vectors can be accessed as expected:
 
@@ -268,7 +268,7 @@ let
 
 Similar operations are available for dynamic matrices and vectors as well.
 
-##Iterators
+## Iterators
 
 One can iterate over vector or matrix elements, as well as over rows and columns
 
@@ -288,7 +288,7 @@ for column in m.columns:
   echo column[1]
 ```
 
-##Equality
+## Equality
 
 There are two kinds of equality. The usual `==` operator will compare the
 contents of vector and matrices exactly
@@ -314,7 +314,7 @@ u == v # false
 u =~ v # true
 ```
 
-##Pretty-print
+## Pretty-print
 
 Both vectors and matrix have a pretty-print operation, so one can do
 
@@ -329,7 +329,7 @@ and get something like
       [ 0.8225964245706265  0.01608615513584155 0.1442007939324697  0.7623388321096165  0.8419745686508193  0.08792951865247645 0.2902529012579151 ]
       [ 0.8488187232786935  0.422866666087792 0.1057975175658363  0.07968277822379832 0.7526946339452074  0.7698915909784674  0.02831893268471575 ] ]
 
-##Operations
+## Operations
 
 A few linear algebra operations are available, wrapping BLAS libraries:
 
@@ -352,7 +352,7 @@ echo max(m1)
 echo min(v2)
 ```
 
-##Trivial operations
+## Trivial operations
 
 The following operations do not change the underlying memory layout of matrices
 and vectors. This means they run in very little time even on big matrices, but
@@ -379,7 +379,7 @@ matrix, a `clone` operation is available:
 let m5 = m1.clone
 ```
 
-##Universal functions
+## Universal functions
 
 Universal functions are real-valued functions that are extended to vectors
 and matrices by working element-wise. There are many common functions that are
@@ -435,12 +435,10 @@ makeUniversal(f)
 to turn `f` into a (public) universal function. If you do not want to export
 `f`, there is the equivalent template `makeUniversalLocal`.
 
-##Rewrite rules
+## Rewrite rules
 
 A few rewrite rules allow to optimize a chain of linear algebra operations
-into a single BLAS call. These live in a separate package `linalg/rewrites`.
-
-For instance, if you try
+into a single BLAS call. For instance, if you try
 
 ```nim
 import linalg/rewrites
@@ -451,7 +449,7 @@ echo v1 + 5.3 * v2
 this is not implemented as a scalar multiplication followed by a sum, but it
 is turned into a single function call.
 
-##Type safety guarantees
+## Type safety guarantees
 
 The library is designed with the use case of having dimensions known at compile
 time, and leverages the compiles to ensure that dimensions match when performing
@@ -464,7 +462,7 @@ operations do not compile!).
 Also, operations that mutate a vector of matrix in place are only available if
 that vector of matrix is defined via `var` instead of `let`.
 
-##Linking BLAS implementations
+## Linking BLAS implementations
 
 The library requires to link some BLAS implementation to perform the actual
 linear algebra operations. By default, it tries to link whatever is the default
@@ -500,7 +498,7 @@ the options
 
 to enable static linking.
 
-##GPU support
+## GPU support
 
 It is possible to delegate work to the GPU using CUDA. The library has been
 tested to work with NVIDIA CUDA 7.0 and 7.5, but it is possible that earlier
@@ -546,7 +544,7 @@ m * n
 
 For more information, look at the tests in `tests/cuda`.
 
-##TODO
+## TODO
 
 * Add support for matrices and vector on the stack
 * Add more functional interfaces (foldl, scanl)
@@ -564,7 +562,7 @@ For more information, look at the tests in `tests/cuda`.
 * Improve documentation
 * Better pretty-print
 
-##Contributing
+## Contributing
 
 Every contribution is very much appreciated! This can range from:
 
