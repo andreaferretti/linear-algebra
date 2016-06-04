@@ -10,6 +10,9 @@ The library has been tested on Ubuntu Linux 14.10 through 15.10 64-bit using
 either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite. The
 GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.
 
+The library is currently aligned with latest Nim devel. For versions of Nim up
+to 0.13 use version 0.4.2 of linalg.
+
 API documentation is [here](http://unicredit.github.io/linear-algebra/api.html)
 
 A lot of examples are available in the tests.

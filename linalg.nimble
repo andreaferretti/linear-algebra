@@ -1,14 +1,14 @@
 mode = ScriptMode.Verbose
 
 packageName   = "linalg"
-version       = "0.4.2"
+version       = "0.4.3"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
 skipDirs      = @["tests", "bench"]
 skipFiles     = @["linalg.html"]
 
-requires "nim >= 0.11.2", "nimblas >= 0.1.1"
+requires "nim >= 0.13.1", "nimblas >= 0.1.1"
 
 --forceBuild
 
