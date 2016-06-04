@@ -32,6 +32,9 @@ develop a scientific ecosystem for Nim, much like Numpy does for Python.</p>
 either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite. The
 GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 
+<p>The library is currently aligned with latest Nim devel. For versions of Nim up
+to 0.13 use version 0.4.2 of linalg.</p>
+
 <p>API documentation is <a href="http://unicredit.github.io/linear-algebra/api.html">here</a></p>
 
 <p>A lot of examples are available in the tests.</p>
@@ -44,6 +47,7 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.</p>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#initialization">Initialization</a></li>
+<li><a href="#working-with-32-bit">Working with 32-bit</a></li>
 <li><a href="#accessors">Accessors</a></li>
 <li><a href="#iterators">Iterators</a></li>
 <li><a href="#equality">Equality</a></li>
@@ -434,7 +438,9 @@ matrices, both static and dynamic.</p>
 <p>A few rewrite rules allow to optimize a chain of linear algebra operations
 into a single BLAS call. For instance, if you try</p>
 
-<div class="highlight highlight-source-nim"><pre>echo v1 + <span class="pl-c1">5.3</span> * v2</pre></div>
+<div class="highlight highlight-source-nim"><pre><span class="pl-k">import</span> linalg/rewrites
+
+echo v1 + <span class="pl-c1">5.3</span> * v2</pre></div>
 
 <p>this is not implemented as a scalar multiplication followed by a sum, but it
 is turned into a single function call.</p>
