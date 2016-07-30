@@ -31,6 +31,7 @@ Table of contents
 - [Operations](#operations)
 - [Trivial operations](#trivial-operations)
 - [Universal functions](#universal-functions)
+- [Linear Algebra functions](#linear-algebra-functions)
 - [Rewrite rules](#rewrite-rules)
 - [Type safety guarantees](#type-safety-guarantees)
 - [Linking BLAS implementations](#linking-blas-implementations)
@@ -437,6 +438,16 @@ makeUniversal(f)
 
 to turn `f` into a (public) universal function. If you do not want to export
 `f`, there is the equivalent template `makeUniversalLocal`.
+
+## Linear Algebra functions
+
+Some linear algebraic functions are included, currently for solving systems of
+linear equations of the form Ax = b, for square matrices A. Functions to invert
+square invertible matrices are also provided. These throw floating-point errors
+in the case of non-invertible matrices.
+
+At the moment, only static matrices are supported for system solution and
+matrix inversion.
 
 ## Rewrite rules
 
