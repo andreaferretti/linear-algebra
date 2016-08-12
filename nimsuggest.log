@@ -1,6 +1,0 @@
-illformed AST: try:
-  let a = matrix(@ [@ [3.0'f64, 3.0'f64], @ [1.0'f64, 1.0'f64]], 2, 2)
-  let b = matrix(@ [@ [1.0'f64], @ [0.0'f64]], 2, 1)
-  let x = solve(a, b)
-  let expected = matrix(@ [@ [2.0'f64 / 7.0'f64], @ [1.0'f64 / 7.0'f64]], 2, 1)
-  check expected =~ x
