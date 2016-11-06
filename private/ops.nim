@@ -15,6 +15,7 @@
 template len(m: DMatrix32 or DMatrix64): int = m.M * m.N
 
 template initLike(r, m: typed) =
+  new r
   when m is DMatrix32:
     r.data = newSeq[float32](m.len)
   when m is DMatrix64:
@@ -421,6 +422,7 @@ template matrixMult(M, N, K, a, b, result: expr): auto =
     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
 
 template matrixMultD(a, b, result: expr): auto =
+  new result
   let
     M = a.M
     K = a.N

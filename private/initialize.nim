@@ -114,6 +114,7 @@ template makeSMatrixPrivate(M, N, f, order, result: expr) =
   makeMatrixPrivate(M, N, f, order, result)
 
 template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
+  new result
   result.data = newSeq[A](M * N)
   result.M = M
   result.N = N
@@ -152,6 +153,7 @@ template constantSMatrixPrivate(M, N, x, order, result: expr) =
     result.data[i] = x
 
 template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
+  new result
   result.data = newSeq[A](M * N)
   result.order = order
   result.M = M

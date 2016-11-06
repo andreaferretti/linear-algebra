@@ -34,10 +34,7 @@ template makeUniversal*(fname: expr) =
       result.data[i] = fname(m.data[i])
 
   proc fname*(m: DMatrix32): DMatrix32 =
-    result.data = newSeq[float32](m.len)
-    result.order = m.order
-    result.M = m.M
-    result.N = m.N
+    result = DMatrix32(data: newSeq[float32](m.len), order:m.order, M:m.M, N:m.N)
     for i in 0 .. < (m.len):
       result.data[i] = fname(m.data[i])
 
@@ -58,10 +55,7 @@ template makeUniversal*(fname: expr) =
       result.data[i] = fname(m.data[i])
 
   proc fname*(m: DMatrix64): DMatrix64 =
-    result.data = newSeq[float64](m.len)
-    result.order = m.order
-    result.M = m.M
-    result.N = m.N
+    result = DMatrix64(data: newSeq[float64](m.len), order:m.order, M:m.M, N:m.N)
     for i in 0 .. < (m.len):
       result.data[i] = fname(m.data[i])
 

@@ -17,6 +17,7 @@ template transposeS(a, result: expr) =
   result.data = a.data
 
 template transposeD(a, result: expr) =
+  new result
   result.M = a.N
   result.N = a.M
   result.order = if a.order == rowMajor: colMajor else: rowMajor
@@ -39,6 +40,7 @@ template reshapeS(M, N, A, B, m , result: expr) =
 
 template reshapeD(A, B, m , result: expr) =
   assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
+  new result
   result.M = A
   result.N = B
   result.order = m.order
@@ -61,6 +63,7 @@ template asMatrixS(N, A, B, v, order, result: expr) =
 
 template asMatrixD(A, B, v, order, result: expr) =
   assert(v.len == A * B, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(A) & ", B = " & $(B))
+  new result
   result.order = order
   shallowCopy(result.data, v)
   result.M = A
