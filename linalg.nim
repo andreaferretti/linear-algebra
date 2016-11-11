@@ -18,7 +18,6 @@ when defined(js):
   {.fatal: "linalg is only available for native backends".}
 
 include private/types
-include private/cublas
 include private/initialize
 include private/access
 include private/iterators
@@ -27,6 +26,7 @@ include private/trivial_ops
 include private/ops
 include private/ufunc
 include private/funcs
+include private/cublas
 # include private/rewrites
 
 export nimblas.OrderType

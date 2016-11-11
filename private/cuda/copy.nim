@@ -89,6 +89,7 @@ proc cpu*[M, N: static[int]](m: CudaMatrix64[M, N]): Matrix64[M, N] =
   check cublasGetMatrix(M, N, sizeof(float64), m.fp, M, result.fp, M)
 
 proc cpu*(m: CudaDMatrix32): DMatrix32 =
+  new result
   result.order = colMajor
   result.data = newSeq[float32](m.M * m.N)
   result.M = m.M
@@ -96,6 +97,7 @@ proc cpu*(m: CudaDMatrix32): DMatrix32 =
   check cublasGetMatrix(m.M, m.N, sizeof(float32), m.fp, m.M, result.fp, m.M)
 
 proc cpu*(m: CudaDMatrix64): DMatrix64 =
+  new result
   result.order = colMajor
   result.data = newSeq[float64](m.M * m.N)
   result.M = m.M
