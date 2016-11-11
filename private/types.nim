@@ -23,11 +23,11 @@ type
     data: ref array[M * N, float64]
   DVector32* = seq[float32]
   DVector64* = seq[float64]
-  DMatrix32* = object
+  DMatrix32* = ref object
     order: OrderType
     M, N: int
     data: seq[float32]
-  DMatrix64* = object
+  DMatrix64* = ref object
     order: OrderType
     M, N: int
     data: seq[float64]
@@ -112,31 +112,21 @@ proc to64*[M, N: static[int]](m: Matrix32[M, N]): Matrix64[M, N] =
   for i in 0 .. < (M * N):
     result.data[i] = m.data[i].float64
 
-proc to32*(v: DMatrix64): DMatrix32 =
-  result.order = v.order
-  result.M = v.M
-  result.N = v.N
-  result.data = v.data.mapIt(float32, it.float32)
+proc to32*(m: DMatrix64): DMatrix32 =
+  result = DMatrix32(data:m.data.mapIt(float32, it.float32), order:m.order, M:m.M, N:m.N)
 
-proc to64*(v: DMatrix32): DMatrix64 =
-  result.order = v.order
-  result.M = v.M
-  result.N = v.N
-  result.data = v.data.mapIt(float64, it.float64)
+proc to64*(m: DMatrix32): DMatrix64 =
+  result = DMatrix64(data:m.data.mapIt(float64, it.float64), order:m.order, M:m.M, N:m.N)
 
 proc toDynamic*[N: static[int]](v: Vector32[N] or Vector64[N]): auto = @(v[])
 
 proc toDynamic*[M, N: static[int]](m: Matrix32[M, N]): DMatrix32 =
-  result.data = @(m.data[])
-  result.order = m.order
-  result.M = M
-  result.N = N
+  let data = @(m.data[])
+  result = DMatrix32(data:data, order:m.order, M:m.M, N:m.N)
 
 proc toDynamic*[M, N: static[int]](m: Matrix64[M, N]): DMatrix64 =
-  result.data = @(m.data[])
-  result.order = m.order
-  result.M = M
-  result.N = N
+  let data = @(m.data[])
+  result = DMatrix64(data:data, order:m.order, M:m.M, N:m.N)
 
 proc toStatic*(v: DVector32, N: static[int]): Vector32[N] =
   new result

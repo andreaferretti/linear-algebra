@@ -172,16 +172,10 @@ proc clone*[M, N: static[int]](m: Matrix64[M, N]): Matrix64[M, N] =
   copyMem(result.fp, m.fp, M * N * sizeof(float64))
 
 proc clone*(m: DMatrix32): DMatrix32 =
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  result.data = m.data
+  result = DMatrix32(data:m.data, order:m.order, M:m.M, N:m.N)
 
 proc clone*(m: DMatrix64): DMatrix64 =
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  result.data = m.data
+  result = DMatrix64(data:m.data, order:m.order, M:m.M, N:m.N)
 
 proc map*[M, N: static[int]](m: Matrix32[M, N], f: proc(x: float32): float32): Matrix32[M, N] =
   result.order = m.order
@@ -196,17 +190,11 @@ proc map*[M, N: static[int]](m: Matrix64[M, N], f: proc(x: float64): float64): M
     result.data[i] = f(m.data[i])
 
 proc map*(m: DMatrix32, f: proc(x: float32): float32): DMatrix32 =
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  result.data = newSeq[float32](m.M * m.N)
+  result = DMatrix32(data:newSeq[float32](m.M * m.N), order:m.order, M:m.M, N:m.N)
   for i in 0 .. < (m.M * m.N):
     result.data[i] = f(m.data[i])
 
 proc map*(m: DMatrix64, f: proc(x: float64): float64): DMatrix64 =
-  result.order = m.order
-  result.M = m.M
-  result.N = m.N
-  result.data = newSeq[float64](m.M * m.N)
+  result = DMatrix64(data:newSeq[float64](m.M * m.N), order:m.order, M:m.M, N:m.N)
   for i in 0 .. < (m.M * m.N):
     result.data[i] = f(m.data[i])
