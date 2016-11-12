@@ -20,12 +20,12 @@ include private/types
 include private/initialize
 include private/access
 include private/iterators
-include private/collection
 include private/display
 include private/trivial_ops
 include private/ops
 include private/ufunc
 include private/funcs
+include private/collection
 include private/cublas
 include private/rewrites
 

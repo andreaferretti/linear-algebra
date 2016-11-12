@@ -36,7 +36,7 @@ proc mean*(v: Vector32 or DVector32): auto {.inline.} = sum(v) / v.len.float32
 
 proc mean*(v: Vector64 or DVector64): auto {.inline.} = sum(v) / v.len.float64
 
-proc variance*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
+proc variance*(v: AnyVector): auto =
   let m = v.mean
   result = v[0] - v[0]
   for x in v:
@@ -47,5 +47,13 @@ proc variance*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
   else:
     result /= v.len.float64
 
-template stddev*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
+template stddev*(v: AnyVector): auto =
   sqrt(variance(v))
+
+template sum*(m: AnyMatrix): auto = m.asVector.sum
+
+template mean*(m: AnyMatrix): auto = m.asVector.mean
+
+template variance*(m: AnyMatrix): auto = m.asVector.variance
+
+template stddev*(m: AnyMatrix): auto = m.asVector.stddev

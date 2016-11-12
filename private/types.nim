@@ -31,6 +31,8 @@ type
     order: OrderType
     M, N: int
     data: seq[float64]
+  AnyVector = Vector32 or Vector64 or DVector32 or DVector64
+  AnyMatrix = Matrix32 or Matrix64 or DMatrix32 or DMatrix64
 
 # Float pointers
 template fp(v: Vector32): ptr float32 = cast[ptr float32](addr(v[]))

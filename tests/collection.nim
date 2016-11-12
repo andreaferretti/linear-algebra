@@ -84,3 +84,27 @@ suite "collection operations":
   test "standard deviation over DVector64":
     let v = @[2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0]
     check v.stddev == 2.0
+  test "sum over Matrix32":
+    let m = matrix([[1'f32, 3.5'f32], [2'f32, 4.5'f32]])
+    check m.sum == 11'f32
+  test "sum over Matrix64":
+    let m = matrix([[1.0, 3.5], [2.0, 4.5]])
+    check m.sum == 11.0
+  test "sum over DMatrix32":
+    let m = matrix(@[@[1'f32, 3.5'f32], @[2'f32, 4.5'f32]])
+    check m.sum == 11'f32
+  test "sum over DMatrix64":
+    let m = matrix(@[@[1.0, 3.5], @[2.0, 4.5]])
+    check m.sum == 11.0
+  test "mean over Matrix32":
+    let m = matrix([[1'f32, 3.5'f32], [2'f32, 4.5'f32]])
+    check m.mean == 2.75'f32
+  test "mean over Matrix64":
+    let m = matrix([[1.0, 3.5], [2.0, 4.5]])
+    check m.mean == 2.75
+  test "mean over DMatrix32":
+    let m = matrix(@[@[1'f32, 3.5'f32], @[2'f32, 4.5'f32]])
+    check m.mean == 2.75'f32
+  test "mean over DMatrix64":
+    let m = matrix(@[@[1.0, 3.5], @[2.0, 4.5]])
+    check m.mean == 2.75
