@@ -26,3 +26,13 @@ suite "collection operations":
       v = vector([1.0, 3.5, 2.0, 4.5])
       w = cumsum(v)
     check w == vector([1.0, 4.5, 6.5, 11.0])
+  test "cumulative sum over DVector32":
+    let
+      v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+      w = cumsum(v)
+    check w == @[1'f32, 4.5'f32, 6.5'f32, 11'f32]
+  test "cumulative sum over DVector64":
+    let
+      v = @[1.0, 3.5, 2.0, 4.5]
+      w = cumsum(v)
+    check w == @[1.0, 4.5, 6.5, 11.0]
