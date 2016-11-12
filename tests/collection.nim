@@ -60,3 +60,27 @@ suite "collection operations":
   test "mean over DVector64":
     let v = @[1.0, 3.5, 2.0, 4.5]
     check v.mean == 2.75
+  test "variance over Vector32":
+    let v = vector([2'f32, 4'f32, 4'f32, 4'f32, 5'f32, 5'f32, 7'f32, 9'f32])
+    check v.variance == 4'f32
+  test "variance over Vector64":
+    let v = vector([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+    check v.variance == 4.0
+  test "variance over DVector32":
+    let v = @[2'f32, 4'f32, 4'f32, 4'f32, 5'f32, 5'f32, 7'f32, 9'f32]
+    check v.variance == 4'f32
+  test "variance over DVector64":
+    let v = @[2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0]
+    check v.variance == 4.0
+  test "standard deviation over Vector32":
+    let v = vector([2'f32, 4'f32, 4'f32, 4'f32, 5'f32, 5'f32, 7'f32, 9'f32])
+    check v.stddev == 2'f32
+  test "standard deviation over Vector64":
+    let v = vector([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+    check v.stddev == 2.0
+  test "standard deviation over DVector32":
+    let v = @[2'f32, 4'f32, 4'f32, 4'f32, 5'f32, 5'f32, 7'f32, 9'f32]
+    check v.stddev == 2'f32
+  test "standard deviation over DVector64":
+    let v = @[2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0]
+    check v.stddev == 2.0

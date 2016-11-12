@@ -1,7 +1,7 @@
 mode = ScriptMode.Verbose
 
 packageName   = "linalg"
-version       = "0.5.0"
+version       = "0.5.1"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"

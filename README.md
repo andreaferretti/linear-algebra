@@ -562,7 +562,6 @@ For more information, look at the tests in `tests/cuda`.
 
 * Add support for matrices and vector on the stack
 * Add more functional interfaces (foldl, scanl)
-* Add more common operations (stdv...)
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * More specialized BLAS operations
 * Add operations from LAPACK

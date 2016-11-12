@@ -32,6 +32,20 @@ proc cumsum*(v: DVector64): DVector64 =
 proc sum*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
   foldl(v, a + b)
 
-proc mean*(v: Vector32 or DVector32): auto = sum(v) / v.len.float32
+proc mean*(v: Vector32 or DVector32): auto {.inline.} = sum(v) / v.len.float32
 
-proc mean*(v: Vector64 or DVector64): auto = sum(v) / v.len.float64
+proc mean*(v: Vector64 or DVector64): auto {.inline.} = sum(v) / v.len.float64
+
+proc variance*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
+  let m = v.mean
+  result = v[0] - v[0]
+  for x in v:
+    let y = x - m
+    result += y * y
+  when v is Vector32 or v is DVector32:
+    result /= v.len.float32
+  else:
+    result /= v.len.float64
+
+template stddev*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
+  sqrt(variance(v))
