@@ -27,6 +27,6 @@ include private/ops
 include private/ufunc
 include private/funcs
 include private/cublas
-# include private/rewrites
+include private/rewrites
 
 export nimblas.OrderType
