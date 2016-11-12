@@ -11,23 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import math, nimblas, random, private/nimlapack
-from sequtils import mapIt
 
-when defined(js):
-  {.fatal: "linalg is only available for native backends".}
+import unittest, linalg
 
-include private/types
-include private/initialize
-include private/access
-include private/iterators
-include private/collection
-include private/display
-include private/trivial_ops
-include private/ops
-include private/ufunc
-include private/funcs
-include private/cublas
-include private/rewrites
 
-export nimblas.OrderType
+suite "collection operations":
+  test "cumulative sum over Vector32":
+    let
+      v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
+      w = cumsum(v)
+    check w == vector([1'f32, 4.5'f32, 6.5'f32, 11'f32])
+  test "cumulative sum over Vector64":
+    let
+      v = vector([1.0, 3.5, 2.0, 4.5])
+      w = cumsum(v)
+    check w == vector([1.0, 4.5, 6.5, 11.0])

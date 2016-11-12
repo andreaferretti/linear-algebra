@@ -11,23 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import math, nimblas, random, private/nimlapack
-from sequtils import mapIt
 
-when defined(js):
-  {.fatal: "linalg is only available for native backends".}
-
-include private/types
-include private/initialize
-include private/access
-include private/iterators
-include private/collection
-include private/display
-include private/trivial_ops
-include private/ops
-include private/ufunc
-include private/funcs
-include private/cublas
-include private/rewrites
-
-export nimblas.OrderType
+proc cumsum*[N: static[int]](v: Vector32[N] or Vector64[N]): type(v) =
+  new result
+  result[0] = v[0]
+  for i in 1 .. < N:
+    result[i] = result[i - 1] + v[i]
