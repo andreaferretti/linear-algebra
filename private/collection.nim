@@ -28,3 +28,10 @@ proc cumsum*(v: DVector32): DVector32 =
 proc cumsum*(v: DVector64): DVector64 =
   result = newSeq[float64](v.len)
   cumulate(v, result, v.len)
+
+proc sum*(v: Vector32 or Vector64 or DVector32 or DVector64): auto =
+  foldl(v, a + b)
+
+proc mean*(v: Vector32 or DVector32): auto = sum(v) / v.len.float32
+
+proc mean*(v: Vector64 or DVector64): auto = sum(v) / v.len.float64

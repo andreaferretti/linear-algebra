@@ -36,3 +36,27 @@ suite "collection operations":
       v = @[1.0, 3.5, 2.0, 4.5]
       w = cumsum(v)
     check w == @[1.0, 4.5, 6.5, 11.0]
+  test "sum over Vector32":
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
+    check v.sum == 11'f32
+  test "sum over Vector64":
+    let v = vector([1.0, 3.5, 2.0, 4.5])
+    check v.sum == 11.0
+  test "sum over DVector32":
+    let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+    check v.sum == 11'f32
+  test "sum over DVector64":
+    let v = @[1.0, 3.5, 2.0, 4.5]
+    check v.sum == 11.0
+  test "mean over Vector32":
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
+    check v.mean == 2.75'f32
+  test "mean over Vector64":
+    let v = vector([1.0, 3.5, 2.0, 4.5])
+    check v.mean == 2.75
+  test "mean over DVector32":
+    let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+    check v.mean == 2.75'f32
+  test "mean over DVector64":
+    let v = @[1.0, 3.5, 2.0, 4.5]
+    check v.mean == 2.75
