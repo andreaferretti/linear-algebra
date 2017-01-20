@@ -210,6 +210,7 @@ proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {.
   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
+  assert(a.N == v.len)
   result = newSeq[float32](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
@@ -220,6 +221,7 @@ proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: Vector64[N]): Vector64[M]  {.
   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
 proc `*`*(a: DMatrix64, v: DVector64): DVector64  {. inline .} =
+  assert(a.N == v.len)
   result = newSeq[float64](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
