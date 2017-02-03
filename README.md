@@ -348,10 +348,12 @@ v1 *= 2.3
 echo v1 + v2
 echo v1 - v2
 echo v1 * v2 # dot product
+echo v1 |*| v2 # Hadamard (component-wise) product
 echo l_1(v1) # l_1 norm
 echo l_2(v1) # l_2 norm
 echo m2 * v1 # matrix-vector product
 echo m1 * m2 # matrix-matrix product
+echo m1 |*| m2 # Hadamard (component-wise) product
 echo max(m1)
 echo min(v2)
 ```
