@@ -191,11 +191,17 @@ proc zeros*(M: int or static[int], N: int or static[int], order: OrderType = col
 proc zeros*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
   constantMatrix(M, N, 0'f32, order)
 
+proc zeros*(M: int or static[int], N: int or static[int], A: typedesc[float64], order: OrderType = colMajor): auto =
+  constantMatrix(M, N, 0'f64, order)
+
 proc ones*(M: int or static[int], N: int or static[int], order: OrderType = colMajor): auto =
   constantMatrix(M, N, 1'f64, order)
 
 proc ones*(M: int or static[int], N: int or static[int], A: typedesc[float32], order: OrderType = colMajor): auto =
   constantMatrix(M, N, 1'f32, order)
+
+proc ones*(M: int or static[int], N: int or static[int], A: typedesc[float64], order: OrderType = colMajor): auto =
+  constantMatrix(M, N, 1'f64, order)
 
 proc eye*(N: int or static[int], order: OrderType = colMajor): auto =
   result = zeros(N, N, order)

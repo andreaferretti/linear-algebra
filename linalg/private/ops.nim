@@ -493,6 +493,18 @@ template hadamardV(N, a, b: untyped, T: typedesc): auto =
     x[i] = a[i] * b[i]
   x
 
+template hadamardM(M, N, a, b: untyped, T: typedesc): auto =
+  var x = zeros(M, N, T)
+  if a.order == b.order:
+    x.order = a.order
+    for i in 0 .. < (M * N):
+      x.data[i] = a.data[i] * b.data[i]
+  else:
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        x[i, j] = a[i, j] * b[i, j]
+  x
+
 proc `|*|`*[N: static[int]](a, b: Vector32[N]): Vector32[N] =
   hadamardV(N, a, b, float32)
 
@@ -506,3 +518,37 @@ proc `|*|`*(a, b: DVector32): DVector32 =
 proc `|*|`*(a, b: DVector64): DVector64 =
   assert a.len == b.len
   hadamardV(a.len, a, b, float64)
+
+proc `|*|`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] =
+  # hadamardM(M, N, a, b, float32)
+  result = zeros(M, N, float32)
+  if a.order == b.order:
+    result.order = a.order
+    for i in 0 .. < (M * N):
+      result.data[i] = a.data[i] * b.data[i]
+  else:
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        result[i, j] = a[i, j] * b[i, j]
+
+proc `|*|`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N] =
+  # hadamardM(M, N, a, b, float64)
+  result = zeros(M, N)
+  if a.order == b.order:
+    result.order = a.order
+    for i in 0 .. < (M * N):
+      result.data[i] = a.data[i] * b.data[i]
+  else:
+    for i in 0 .. < M:
+      for j in 0 .. < N:
+        result[i, j] = a[i, j] * b[i, j]
+
+proc `|*|`*(a, b: DMatrix32): DMatrix32 =
+  assert a.dim == b.dim
+  let (m, n) = a.dim
+  return hadamardM(m, n, a, b, float32)
+
+proc `|*|`*(a, b: DMatrix64): DMatrix64 =
+  assert a.dim == b.dim
+  let (m, n) = a.dim
+  return hadamardM(m, n, a, b, float64)

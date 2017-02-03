@@ -164,6 +164,24 @@ suite "row-major matrix operations":
         [18.0, 14.0, -2.0]
       ], order = rowMajor)
     check(m1 * m2 == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix([
+        [1.0, 0.0, 2.0, -1.0],
+        [-1.0, 1.0, 3.0, 1.0],
+        [3.0, 2.0, 2.0, 4.0]
+      ], order = rowMajor)
+      m2 = matrix([
+        [3.0, 1.0, -1.0, 1.0],
+        [2.0, 1.0, -3.0, 0.0],
+        [4.0, 1.0, 2.0, 2.0]
+      ], order = rowMajor)
+      m3 = matrix([
+        [3.0, 0.0, -2.0, -1.0],
+        [-2.0, 1.0, -9.0, 0.0],
+        [12.0, 2.0, 4.0, 8.0]
+      ], order = rowMajor)
+    check((m1 |*| m2) == m3)
 
 suite "row-major dynamic matrix/vector operations":
   test "multiplication of matrix and vector":
@@ -315,3 +333,21 @@ suite "row-major dynamic matrix operations":
         @[18.0, 14.0, -2.0]
       ], order = rowMajor)
     check(m1 * m2 == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ], order = rowMajor)
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ], order = rowMajor)
+      m3 = matrix(@[
+        @[3.0, 0.0, -2.0, -1.0],
+        @[-2.0, 1.0, -9.0, 0.0],
+        @[12.0, 2.0, 4.0, 8.0]
+      ], order = rowMajor)
+    check((m1 |*| m2) == m3)

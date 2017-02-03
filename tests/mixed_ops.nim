@@ -124,6 +124,24 @@ suite "mixed matrix operations":
         [18.0, 14.0, -2.0]
       ])
     check(m1 * m2 == m3)
+  test "mixed matrix Hadamard multiplication":
+    let
+      m1 = matrix([
+        [1.0, 0.0, 2.0, -1.0],
+        [-1.0, 1.0, 3.0, 1.0],
+        [3.0, 2.0, 2.0, 4.0]
+      ])
+      m2 = matrix([
+        [3.0, 1.0, -1.0, 1.0],
+        [2.0, 1.0, -3.0, 0.0],
+        [4.0, 1.0, 2.0, 2.0]
+      ], order = rowMajor)
+      m3 = matrix([
+        [3.0, 0.0, -2.0, -1.0],
+        [-2.0, 1.0, -9.0, 0.0],
+        [12.0, 2.0, 4.0, 8.0]
+      ])
+    check((m1 |*| m2) == m3)
 
 suite "mixed dynamic matrix operations":
   test "mixed matrix sum":
@@ -234,3 +252,21 @@ suite "mixed dynamic matrix operations":
         @[18.0, 14.0, -2.0]
       ])
     check(m1 * m2 == m3)
+  test "mixed matrix Hadamard multiplication":
+    let
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ])
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ], order = rowMajor)
+      m3 = matrix(@[
+        @[3.0, 0.0, -2.0, -1.0],
+        @[-2.0, 1.0, -9.0, 0.0],
+        @[12.0, 2.0, 4.0, 8.0]
+      ])
+    check((m1 |*| m2) == m3)

@@ -320,6 +320,24 @@ suite "matrix operations":
         @[18.0, 14.0, -2.0]
       ], 2, 3)
     check((m1 * m2) == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix([
+        [1.0, 0.0, 2.0, -1.0],
+        [-1.0, 1.0, 3.0, 1.0],
+        [3.0, 2.0, 2.0, 4.0]
+      ])
+      m2 = matrix([
+        [3.0, 1.0, -1.0, 1.0],
+        [2.0, 1.0, -3.0, 0.0],
+        [4.0, 1.0, 2.0, 2.0]
+      ])
+      m3 = matrix([
+        [3.0, 0.0, -2.0, -1.0],
+        [-2.0, 1.0, -9.0, 0.0],
+        [12.0, 2.0, 4.0, 8.0]
+      ])
+    check((m1 |*| m2) == m3)
 
 suite "32-bit matrix operations":
   test "scalar matrix multiplication":
@@ -486,6 +504,24 @@ suite "32-bit matrix operations":
         [18'f32, 14'f32, -2'f32]
       ])
     check(m1 * m2 == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix([
+        [1'f32, 0'f32, 2'f32, -1'f32],
+        [-1'f32, 1'f32, 3'f32, 1'f32],
+        [3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = matrix([
+        [3'f32, 1'f32, -1'f32, 1'f32],
+        [2'f32, 1'f32, -3'f32, 0'f32],
+        [4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix([
+        [3'f32, 0'f32, -2'f32, -1'f32],
+        [-2'f32, 1'f32, -9'f32, 0'f32],
+        [12'f32, 2'f32, 4'f32, 8'f32]
+      ])
+    check((m1 |*| m2) == m3)
 
 suite "dynamic vector operations":
   test "scalar vector multiplication":
@@ -792,6 +828,24 @@ suite "dynamic matrix operations":
         @[18.0, 14.0, -2.0]
       ])
     check(m1 * m2 == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ])
+      m2 = matrix(@[
+        @[3.0, 1.0, -1.0, 1.0],
+        @[2.0, 1.0, -3.0, 0.0],
+        @[4.0, 1.0, 2.0, 2.0]
+      ])
+      m3 = matrix(@[
+        @[3.0, 0.0, -2.0, -1.0],
+        @[-2.0, 1.0, -9.0, 0.0],
+        @[12.0, 2.0, 4.0, 8.0]
+      ])
+    check((m1 |*| m2) == m3)
 
 suite "32-bit dynamic matrix operations":
   test "scalar matrix multiplication":
@@ -958,3 +1012,21 @@ suite "32-bit dynamic matrix operations":
         @[18'f32, 14'f32, -2'f32]
       ])
     check(m1 * m2 == m3)
+  test "matrix Hadamard multiplication":
+    let
+      m1 = matrix(@[
+        @[1'f32, 0'f32, 2'f32, -1'f32],
+        @[-1'f32, 1'f32, 3'f32, 1'f32],
+        @[3'f32, 2'f32, 2'f32, 4'f32]
+      ])
+      m2 = matrix(@[
+        @[3'f32, 1'f32, -1'f32, 1'f32],
+        @[2'f32, 1'f32, -3'f32, 0'f32],
+        @[4'f32, 1'f32, 2'f32, 2'f32]
+      ])
+      m3 = matrix(@[
+        @[3'f32, 0'f32, -2'f32, -1'f32],
+        @[-2'f32, 1'f32, -9'f32, 0'f32],
+        @[12'f32, 2'f32, 4'f32, 8'f32]
+      ])
+    check((m1 |*| m2) == m3)
