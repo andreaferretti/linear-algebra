@@ -26,7 +26,7 @@ when defined(windows):
 elif defined(macosx):
   const lapackSuffix = ".dylib"
 else:
-  const lapackSuffix = ".so"
+  const lapackSuffix = ".so.(|3|2|1|0)"
 
 const lapackPrefix = "liblapack"
 const lapackName = lapackPrefix & lapackSuffix
