@@ -12,6 +12,16 @@ requires "nim >= 0.13.1", "nimblas >= 0.1.2"
 
 --forceBuild
 
+when defined(nimdistros):
+  import distros
+  if detectOs(Ubuntu) or detectOs(Debian):
+    foreignDep "libblas-dev"
+    foreignDep "libopenblas-dev"
+    foreignDep "liblapack-dev"
+  else:
+    foreignDep "libblas"
+    foreignDep "liblapack"
+
 proc configForTests() =
   --hints: off
   --linedir: on
