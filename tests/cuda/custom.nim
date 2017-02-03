@@ -12,14 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-when defined(cublas):
-  {. passl: "-lcublas" passl: "-lcudart" .}
-  static: echo "--USING CUBLAS--"
+import unittest, linalg
 
-  include ./cuda/types
-  include ./cuda/cublas
-  include ./cuda/copy
-  include ./cuda/ops
-  include ./cuda/display
-  # when defined(cudacustom):
-  include ./cuda/custom
+
+suite "custom operations":
+  test "Hadamard product on CudaVector32":
+    let
+      v = @[1.0, 2.5, 3.2].to32()
+      w = @[3.0, 1.5, 3.0].to32()
+      vg = v.gpu()
+      wg = w.gpu()
+    check((v |*| w) == (vg |*| wg).cpu())
+  test "Hadamard product on CudaVector64":
+    let
+      v = @[1.0, 2.5, 3.2]
+      w = @[3.0, 1.5, 3.0]
+      vg = v.gpu()
+      wg = w.gpu()
+    check((v |*| w) == (vg |*| wg).cpu())

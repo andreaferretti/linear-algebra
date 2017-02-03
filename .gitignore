@@ -8,3 +8,4 @@ tests/all
 tests/cublas
 *.ndb
 nimsuggest.log
+*.so

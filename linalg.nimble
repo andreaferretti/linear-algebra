@@ -40,6 +40,7 @@ proc configForCuda() =
   switch("cincludes", "/usr/local/cuda/targets/x86_64-linux/include")
   switch("clibdir", "/usr/local/cuda/targets/x86_64-linux/lib")
   --define: cublas
+  # --define: cudacustom
 
 task test, "run standard tests":
   configForTests()
@@ -57,7 +58,7 @@ task testmkl, "run standard tests on mkl":
   --define: mkl
   setCommand "c", "tests/all.nim"
 
-task testcuda, "run tests for the cuda implementation":
+task testcuda, "run tests for the CUDA implementation":
   configForTests()
   configForCuda()
   setCommand "c", "tests/cublas.nim"
@@ -66,7 +67,7 @@ task bench, "run standard benchmarks":
   configForBenchmarks()
   setCommand "c", "bench/matrix_matrix_mult.nim"
 
-task benchcuda, "run benchmarks for the cuda implementation":
+task benchcuda, "run benchmarks for the CUDA implementation":
   configForBenchmarks()
   configForCuda()
   setCommand "c", "bench/cuda/matrix_vector_mult.nim"
@@ -75,3 +76,6 @@ task gendoc, "generate documentation":
   --define: cublas
   --docSeeSrcUrl: https://github.com/unicredit/linear-algebra/blob/master
   setCommand "doc2", "linalg.nim"
+
+task cudalib, "generate custom CUDA library":
+  exec "nvcc --ptxas-options=-v --compiler-options '-fPIC' -o liblinalg.so --shared cuda/linalg.cu"
