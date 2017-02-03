@@ -16,17 +16,35 @@ import unittest, linalg
 
 
 suite "custom operations":
-  test "Hadamard product on CudaVector32":
+  test "Hadamard product on CudaDVector32":
     let
       v = @[1.0, 2.5, 3.2].to32()
       w = @[3.0, 1.5, 3.0].to32()
       vg = v.gpu()
       wg = w.gpu()
     check((v |*| w) == (vg |*| wg).cpu())
-  test "Hadamard product on CudaVector64":
+  test "Hadamard product on CudaDVector64":
     let
       v = @[1.0, 2.5, 3.2]
       w = @[3.0, 1.5, 3.0]
       vg = v.gpu()
       wg = w.gpu()
     check((v |*| w) == (vg |*| wg).cpu())
+  test "Hadamard product on CudaDMatrix32":
+    let
+      M = 3
+      N = 5
+      m = randomMatrix(M, N, max=1'f32)
+      n = randomMatrix(M, N, max=1'f32)
+      mg = m.gpu()
+      ng = n.gpu()
+    check((m |*| n) == (mg |*| ng).cpu())
+  test "Hadamard product on CudaDMatrix64":
+    let
+      M = 3
+      N = 5
+      m = randomMatrix(M, N)
+      n = randomMatrix(M, N)
+      mg = m.gpu()
+      ng = n.gpu()
+    check((m |*| n) == (mg |*| ng).cpu())

@@ -13,3 +13,15 @@ proc `|*|`*(v, w: CudaDVector64): CudaDVector64 {. inline .} =
   assert(v.N == w.N)
   initDynamic(result, v.N)
   hadamard(v.fp, w.fp, result.fp, v.N.cint)
+
+proc `|*|`*(v, w: CudaDMatrix32): CudaDMatrix32 {. inline .} =
+  assert(v.dim == w.dim)
+  let (m, n) = v.dim
+  initMDynamic(result, m, n)
+  hadamard(v.fp, w.fp, result.fp, (m * n).cint)
+
+proc `|*|`*(v, w: CudaDMatrix64): CudaDMatrix64 {. inline .} =
+  assert(v.dim == w.dim)
+  let (m, n) = v.dim
+  initMDynamic(result, m, n)
+  hadamard(v.fp, w.fp, result.fp, (m * n).cint)

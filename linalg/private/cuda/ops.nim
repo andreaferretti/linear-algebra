@@ -411,3 +411,5 @@ proc `=~`*[M, N: static[int]](m, n: CudaMatrix64[M, N]): bool = compareApprox(m,
 proc `=~`*(v, w: CudaDMatrix64): bool = compareApprox(v, w)
 
 template `!=~`*(a, b: AnyCuda): bool = not (a =~ b)
+
+proc dim*(m: CudaDMatrix32 or CudaDMatrix64): auto = (m.M, m.N)
