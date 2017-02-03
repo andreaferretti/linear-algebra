@@ -33,6 +33,11 @@ suite "compilation errors":
       v = vector([1.0, 2.0, 3.0, 4.0])
     when compiles(u += v): fail()
     when compiles(u -= v): fail()
+  test "vector dimension should agree in a Hadamard product":
+    let
+      u = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+    when compiles(u |*| v): fail()
   test "in place sum should not work for immutable dynamic vectors":
     let
       u = @[1.0, 2.0, 3.0, 4.0]

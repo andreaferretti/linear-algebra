@@ -68,6 +68,11 @@ suite "vector operations":
     check maxIndex(v) == (3, 8.0)
     check min(v) == -2.0
     check minIndex(v) == (4, -2.0)
+  test "vector Hadamard multiplication":
+    let
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    check((v |*| w) == vector([2.0, -3.0, 4.0, 0.0, -8.0]))
 
 suite "32-bit vector operations":
   test "scalar vector multiplication":
@@ -122,6 +127,11 @@ suite "32-bit vector operations":
     check maxIndex(v) == (3, 8'f32)
     check min(v) == -2.0
     check minIndex(v) == (4, -2'f32)
+  test "vector Hadamard multiplication":
+    let
+      v = vector([1'f32, 3'f32, 2'f32, 8'f32, -2'f32])
+      w = vector([2'f32, -1'f32, 2'f32, 0'f32, 4'f32])
+    check((v |*| w) == vector([2'f32, -3'f32, 4'f32, 0'f32, -8'f32]))
 
 suite "matrix/vector operations":
   test "multiplication of matrix and vector":
@@ -530,6 +540,11 @@ suite "dynamic vector operations":
     check maxIndex(v) == (3, 8.0)
     check min(v) == -2.0
     check minIndex(v) == (4, -2.0)
+  test "vector Hadamard multiplication":
+    let
+      v = @[1.0, 3.0, 2.0, 8.0, -2.0]
+      w = @[2.0, -1.0, 2.0, 0.0, 4.0]
+    check((v |*| w) == @[2.0, -3.0, 4.0, 0.0, -8.0])
 
 suite "dynamic 32-bit vector operations":
   test "scalar vector multiplication":
@@ -584,6 +599,11 @@ suite "dynamic 32-bit vector operations":
     check maxIndex(v) == (3, 8'f32)
     check min(v) == -2'f32
     check minIndex(v) == (4, -2'f32)
+  test "vector Hadamard multiplication":
+    let
+      v = @[1'f32, 3'f32, 2'f32, 8'f32, -2'f32]
+      w = @[2'f32, -1'f32, 2'f32, 0'f32, 4'f32]
+    check((v |*| w) == @[2'f32, -3'f32, 4'f32, 0'f32, -8'f32])
 
 suite "dynamic matrix/vector operations":
   test "multiplication of matrix and vector":

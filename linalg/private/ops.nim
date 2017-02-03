@@ -485,3 +485,24 @@ template `=~`*(v, w: DMatrix64): bool = compareApprox(v, w)
 
 template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
   not (a =~ b)
+
+# Hadamard (component-wise) product
+template hadamardV(N, a, b: untyped, T: typedesc): auto =
+  var x = zeros(N, T)
+  for i in 0 .. < N:
+    x[i] = a[i] * b[i]
+  x
+
+proc `|*|`*[N: static[int]](a, b: Vector32[N]): Vector32[N] =
+  hadamardV(N, a, b, float32)
+
+proc `|*|`*[N: static[int]](a, b: Vector64[N]): Vector64[N] =
+  hadamardV(N, a, b, float64)
+
+proc `|*|`*(a, b: DVector32): DVector32 =
+  assert a.len == b.len
+  hadamardV(a.len, a, b, float32)
+
+proc `|*|`*(a, b: DVector64): DVector64 =
+  assert a.len == b.len
+  hadamardV(a.len, a, b, float64)

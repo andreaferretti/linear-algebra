@@ -78,9 +78,13 @@ proc zeros*(N: int or static[int]): auto = constantVector(N, 0'f64)
 
 proc zeros*(N: int or static[int], A: typedesc[float32]): auto = constantVector(N, 0'f32)
 
+proc zeros*(N: int or static[int], A: typedesc[float64]): auto = constantVector(N, 0'f64)
+
 proc ones*(N: int or static[int]): auto = constantVector(N, 1'f64)
 
 proc ones*(N: int or static[int], A: typedesc[float32]): auto = constantVector(N, 1'f32)
+
+proc ones*(N: int or static[int], A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
 type Array32[N: static[int]] = array[N, float32]
 type Array64[N: static[int]] = array[N, float64]
