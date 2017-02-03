@@ -16,8 +16,8 @@ when defined(cublas):
   {. passl: "-lcublas" passl: "-lcudart" .}
   static: echo "--USING CUBLAS--"
 
-  include cuda/types
-  include cuda/cublas
-  include cuda/copy
-  include cuda/ops
-  include cuda/display
+  include ./cuda/types
+  include ./cuda/cublas
+  include ./cuda/copy
+  include ./cuda/ops
+  include ./cuda/display

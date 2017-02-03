@@ -11,22 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import math, sequtils, nimblas, random, private/nimlapack
+import math, sequtils, nimblas, random, linalg/nimlapack
 
 when defined(js):
   {.fatal: "linalg is only available for native backends".}
 
-include private/types
-include private/initialize
-include private/access
-include private/iterators
-include private/display
-include private/trivial_ops
-include private/ops
-include private/ufunc
-include private/funcs
-include private/collection
-include private/cublas
-include private/rewrites
+include linalg/private/types
+include linalg/private/initialize
+include linalg/private/access
+include linalg/private/iterators
+include linalg/private/display
+include linalg/private/trivial_ops
+include linalg/private/ops
+include linalg/private/ufunc
+include linalg/private/funcs
+include linalg/private/collection
+include linalg/private/cublas
+include linalg/private/rewrites
 
 export nimblas.OrderType
