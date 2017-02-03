@@ -156,7 +156,7 @@ proc l_1*[N: static[int]](v: Vector32[N] or Vector64[N]): auto {. inline .} = as
 
 proc l_1*(v: DVector32 or DVector64): auto {. inline .} = asum(v.len, v.fp, 1)
 
-template maxIndexPrivate(N, v: expr): auto =
+template maxIndexPrivate(N, v: untyped): auto =
   var
     j = 0
     m = v[0]
@@ -180,7 +180,7 @@ proc maxIndex*(v: DVector64): tuple[i: int, val: float64] =
 
 template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
 
-template minIndexPrivate(N, v: expr): auto =
+template minIndexPrivate(N, v: untyped): auto =
   var
     j = 0
     m = v[0]
@@ -256,19 +256,19 @@ proc `*`*(m: DMatrix64, k: float64): DMatrix64  {. inline .} =
   copy(m.len, m.fp, 1, result.fp, 1)
   scal(m.len, k, result.fp, 1)
 
-template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32 or DMatrix32): expr = v * k
+template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32 or DMatrix32): untyped = v * k
 
-template `/`*(v: Vector32 or Matrix32 or DVector32 or DMatrix32, k: float32): expr = v * (1 / k)
+template `/`*(v: Vector32 or Matrix32 or DVector32 or DMatrix32, k: float32): untyped = v * (1 / k)
 
-template `/=`*(v: var Vector32 or var Matrix32 or var DVector32 or var DMatrix32, k: float32): expr = v *= (1 / k)
+template `/=`*(v: var Vector32 or var Matrix32 or var DVector32 or var DMatrix32, k: float32): untyped = v *= (1 / k)
 
-template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64 or DMatrix64): expr = v * k
+template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64 or DMatrix64): untyped = v * k
 
-template `/`*(v: Vector64 or Matrix64 or DVector64 or DMatrix64, k: float64): expr = v * (1 / k)
+template `/`*(v: Vector64 or Matrix64 or DVector64 or DMatrix64, k: float64): untyped = v * (1 / k)
 
-template `/=`*(v: var Vector64 or var Matrix64 or var DVector64 or var DMatrix64, k: float64): expr = v *= (1 / k)
+template `/=`*(v: var Vector64 or var Matrix64 or var DVector64 or var DMatrix64, k: float64): untyped = v *= (1 / k)
 
-template matrixAdd(M, N, a, b: expr, A: typedesc) =
+template matrixAdd(M, N, a, b: untyped, A: typedesc) =
   if a.order == b.order:
     axpy(M * N, 1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
@@ -286,7 +286,7 @@ template matrixAdd(M, N, a, b: expr, A: typedesc) =
       for j in 0 .. < N:
         a_data[i][j] += b_data[j][i]
 
-template matrixDAdd(a, b: expr) =
+template matrixDAdd(a, b: untyped) =
   assert a.M == b.M and a.N == a.N
   if a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
@@ -331,7 +331,7 @@ proc `+`*(a, b: DMatrix64): DMatrix64 {. inline .} =
   copy(a.len, a.fp, 1, result.fp, 1)
   result += b
 
-template matrixSub(M, N, a, b: expr, A: typedesc) =
+template matrixSub(M, N, a, b: untyped, A: typedesc) =
   if a.order == b.order:
     axpy(M * N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
@@ -349,7 +349,7 @@ template matrixSub(M, N, a, b: expr, A: typedesc) =
       for j in 0 .. < N:
         a_data[i][j] -= b_data[j][i]
 
-template matrixDSub(a, b: expr) =
+template matrixDSub(a, b: untyped) =
   assert a.M == b.M and a.N == a.N
   if a.order == b.order:
     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
@@ -408,7 +408,7 @@ template max*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = max(m.d
 
 template min*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = min(m.data)
 
-template matrixMult(M, N, K, a, b, result: expr): auto =
+template matrixMult(M, N, K, a, b, result: untyped): auto =
   new result.data
   if a.order == colMajor and b.order == colMajor:
     result.order = colMajor
@@ -423,7 +423,7 @@ template matrixMult(M, N, K, a, b, result: expr): auto =
     result.order = colMajor
     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
 
-template matrixMultD(a, b, result: expr): auto =
+template matrixMultD(a, b, result: untyped): auto =
   new result
   let
     M = a.M

@@ -55,11 +55,11 @@ template fp(m: DMatrix64): ptr float64 = cast[ptr float64](unsafeAddr(m.data[0])
 
 proc `==`*(u, v: Vector32 or Vector64): bool = u[] == v[]
 
-template elem(m, i, j: expr): auto =
+template elem(m, i, j: untyped): auto =
   if m.order == colMajor: m.data[j * m.M + i]
   else: m.data[i * m.N + j]
 
-template slowEqPrivate(m, n: expr) =
+template slowEqPrivate(m, n: untyped) =
   if m.M != n.M or m.N != n.N:
     return false
   for i in 0 .. < m.M:

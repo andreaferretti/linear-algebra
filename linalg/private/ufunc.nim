@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-template makeUniversal*(fname: expr) =
+template makeUniversal*(fname: untyped) =
   when not compiles(fname(0'f32)):
     proc fname*(x: float32): float32 = fname(x.float64).float32 
 
@@ -62,7 +62,7 @@ template makeUniversal*(fname: expr) =
   export fname
 
 
-template makeUniversalLocal*(fname: expr) =
+template makeUniversalLocal*(fname: untyped) =
   proc fname(x: float32): float32 = fname(x.float64).float32
 
   proc fname[N: static[int]](v: Vector32[N]): Vector32[N] =

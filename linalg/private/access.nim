@@ -35,7 +35,7 @@ proc map*[N: static[int]](v: Vector64[N], f: proc(x: float64): float64): Vector6
   for i in 0 .. < N:
     result[i] = f(v[i])
 
-template atPrivate(M, N, m, i, j: expr, A: typedesc): auto =
+template atPrivate(M, N, m, i, j: untyped, A: typedesc): auto =
   if m.order == colMajor:
     let data = cast[ref array[N, array[M, A]]](m.data)
     data[j][i]
@@ -43,7 +43,7 @@ template atPrivate(M, N, m, i, j: expr, A: typedesc): auto =
     let data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j]
 
-template atPrivateD(m, i, j: expr): auto =
+template atPrivateD(m, i, j: untyped): auto =
   if m.order == colMajor: m.data[j * m.M + i]
   else: m.data[i * m.N + j]
 
@@ -59,7 +59,7 @@ proc at*(m: DMatrix32, i, j: int): float32 {. inline .} = atPrivateD(m, i, j)
 
 template `[]`*(m: Matrix32 or DMatrix32, i, j: int): float32 = m.at(i, j)
 
-template putPrivate(M, N, m, i, j, val: expr, A: typedesc) =
+template putPrivate(M, N, m, i, j, val: untyped, A: typedesc) =
   if m.order == colMajor:
     var data = cast[ref array[N, array[M, A]]](m.data)
     data[j][i] = val
@@ -67,7 +67,7 @@ template putPrivate(M, N, m, i, j, val: expr, A: typedesc) =
     var data = cast[ref array[M, array[N, A]]](m.data)
     data[i][j] = val
 
-template putPrivateD(m, i, j, val: expr) =
+template putPrivateD(m, i, j, val: untyped) =
   if m.order == colMajor:
     m.data[j * m.M + i] = val
   else:

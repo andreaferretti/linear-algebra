@@ -16,12 +16,12 @@ template isStatic(a: typed): bool =
   compiles(proc() =
     const v = a)
 
-template makeSVectorPrivate(N, f, result: expr) =
+template makeSVectorPrivate(N, f, result: untyped) =
   new result
   for i in 0 .. < N:
     result[i] = f(i)
 
-template makeDVectorPrivate(N, f, T, result: expr) =
+template makeDVectorPrivate(N, f, T, result: untyped) =
   result = newSeq[T](N)
   for i in 0 .. < N:
     result[i] = f(i)
@@ -52,12 +52,12 @@ proc randomVector*(N: int or static[int], max: float64 = 1): auto =
 proc randomVector*(N: int or static[int], max: float32): auto =
   makeVector(N, proc(i: int): float32 = random(max).float32)
 
-template constantVectorPrivate(N, x, result: expr) =
+template constantVectorPrivate(N, x, result: untyped) =
   new result
   for i in 0 .. < N:
     result[i] = x
 
-template constantDVectorPrivate(N, x, T, result: expr) =
+template constantDVectorPrivate(N, x, T, result: untyped) =
   result = newSeq[T](N)
   for i in 0 .. < N:
     result[i] = x
@@ -97,7 +97,7 @@ proc vector*[N: static[int]](xs: Array64[N]): Vector64[N] =
   for i in 0 .. < N:
     result[i] = xs[i]
 
-template makeMatrixPrivate(M, N, f, order, result: expr) =
+template makeMatrixPrivate(M, N, f, order, result: untyped) =
   result.order = order
   if order == colMajor:
     for i in 0 .. < M:
@@ -108,12 +108,12 @@ template makeMatrixPrivate(M, N, f, order, result: expr) =
       for j in 0 .. < N:
         result.data[i * N + j] = f(i, j)
 
-template makeSMatrixPrivate(M, N, f, order, result: expr) =
+template makeSMatrixPrivate(M, N, f, order, result: untyped) =
   new result.data
   result.order = order
   makeMatrixPrivate(M, N, f, order, result)
 
-template makeDMatrixPrivate(M, N, f, order, result: expr, A: typedesc) =
+template makeDMatrixPrivate(M, N, f, order, result: untyped, A: typedesc) =
   new result
   result.data = newSeq[A](M * N)
   result.M = M
@@ -146,13 +146,13 @@ proc randomMatrix*(M: int or static[int], N: int or static[int], max: float64 = 
 proc randomMatrix*(M: int or static[int], N: int or static[int], max: float32, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float32 = random(max).float32, order)
 
-template constantSMatrixPrivate(M, N, x, order, result: expr) =
+template constantSMatrixPrivate(M, N, x, order, result: untyped) =
   new result.data
   result.order = order
   for i in 0 .. < (M * N):
     result.data[i] = x
 
-template constantDMatrixPrivate(M, N, x, order, result: expr, A: typedesc) =
+template constantDMatrixPrivate(M, N, x, order, result: untyped, A: typedesc) =
   new result
   result.data = newSeq[A](M * N)
   result.order = order

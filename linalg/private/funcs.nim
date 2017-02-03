@@ -14,7 +14,7 @@
 
 #####TODO: Add template and corresponding procedures for dynamic matrices/vectors
 
-template MatrixSolve(M, N, a, b: expr, A: typedesc): auto =
+template MatrixSolve(M, N, a, b: untyped, A: typedesc): auto =
   var ipvt: array[M, int32]
   var ipvt_ptr = cast[ptr int32](addr(ipvt))
   var info: cint
@@ -33,7 +33,7 @@ template MatrixSolve(M, N, a, b: expr, A: typedesc): auto =
   if info > 0:
     raise newException( FloatingPointError, "Left hand matrix is singular or factorization failed")
 
-template MatrixVectorSolve(M, a, b: expr, A: typedesc): auto =
+template MatrixVectorSolve(M, a, b: untyped, A: typedesc): auto =
   var ipvt: array[M, int32]
   var ipvt_ptr = cast[ptr int32](addr(ipvt))
   var info: cint

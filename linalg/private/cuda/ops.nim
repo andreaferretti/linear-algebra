@@ -14,7 +14,7 @@
 
 let handle {.global.} = cublasCreate()
 
-template initDynamic(v, n: expr) =
+template initDynamic(v, n: untyped) =
   new v.data, freeDeviceMemory
   when v is CudaDVector32:
     v.data[] = cudaMalloc32(n)
@@ -22,14 +22,14 @@ template initDynamic(v, n: expr) =
     v.data[] = cudaMalloc64(n)
   v.N = n
 
-template initStatic(v, n: expr) =
+template initStatic(v, n: untyped) =
   new v, freeDeviceMemory
   when v is CudaVector32:
     v[] = cudaMalloc32(n)
   when result is CudaVector64:
     v[] = cudaMalloc64(n)
 
-template initMDynamic(v, m, n: expr) =
+template initMDynamic(v, m, n: untyped) =
   new v.data, freeDeviceMemory
   when v is CudaDMatrix32:
     v.data[] = cudaMalloc32(m * n)
@@ -38,20 +38,20 @@ template initMDynamic(v, m, n: expr) =
   v.M = m
   v.N = n
 
-template initMStatic(v, m, n: expr) =
+template initMStatic(v, m, n: untyped) =
   new v.data, freeDeviceMemory
   when v is CudaMatrix32:
     v.data[] = cudaMalloc32(m * n)
   when result is CudaMatrix64:
     v.data[] = cudaMalloc64(m * n)
 
-template init(v, N: expr) =
+template init(v, N: untyped) =
   when v is CudaDVector32 or v is CudaDVector64:
     initDynamic(v, N)
   when v is CudaVector32 or v is CudaVector64:
     initStatic(v, N)
 
-template initM(v, M, N: expr) =
+template initM(v, M, N: untyped) =
   when v is CudaDMatrix32 or v is CudaDMatrix64:
     initMDynamic(v, M, N)
   when v is CudaMatrix32 or v is CudaMatrix64:
@@ -69,7 +69,7 @@ proc `*=`*[N: static[int]](v: var CudaVector64[N], k: float64) {. inline .} =
 proc `*=`*(v: var CudaDVector64, k: float64) {. inline .} =
   check cublasScal(handle, v.N, k, v.fp)
 
-template multiply(result, v, k, N: expr) =
+template multiply(result, v, k, N: untyped) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasScal(handle, N, k, result.fp)
@@ -100,7 +100,7 @@ proc `+=`*(v: var CudaDVector64, w: CudaDVector64) {. inline .} =
   assert(v.N == w.N)
   check cublasAxpy(handle, v.N, 1, w.fp, v.fp)
 
-template sum(result, v, w, N: expr) =
+template sum(result, v, w, N: untyped) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasAxpy(handle, N, 1, w.fp, result.fp)
@@ -133,7 +133,7 @@ proc `-=`*(v: var CudaDVector64, w: CudaDVector64) {. inline .} =
   assert(v.N == w.N)
   check cublasAxpy(handle, v.N, -1, w.fp, v.fp)
 
-template diff(result, v, w, N: expr) =
+template diff(result, v, w, N: untyped) =
   init(result, N)
   check cublasCopy(handle, N, v.fp, 1, result.fp, 1)
   check cublasAxpy(handle, N, -1, w.fp, result.fp)
@@ -190,7 +190,7 @@ proc l_1*[N: static[int]](v: CudaVector64[N]): float64 {. inline .} =
 proc l_1*(v: CudaDVector64): float64 {. inline .} =
   check cublasAsum(handle, v.N, v.fp, 1, addr(result))
 
-template matVec(result, a, v, M, N: expr) =
+template matVec(result, a, v, M, N: untyped) =
   init(result, M)
   check cublasGemv(handle, cuNoTranspose, M, N, 1, a.fp, M, v.fp, 1, 0, result.fp, 1)
 
@@ -220,7 +220,7 @@ proc `*=`*[M, N: static[int]](m: var CudaMatrix64[M, N], k: float64) {. inline .
 proc `*=`*(m: var CudaDMatrix64, k: float64) {. inline .} =
   check cublasScal(handle, m.M * m.N, k, m.fp)
 
-template matScal(result, m, k, M, N: expr) =
+template matScal(result, m, k, M, N: untyped) =
   initM(result, M, N)
   check cublasCopy(handle, M * N, m.fp, 1, result.fp, 1)
   check cublasScal(handle, M * N, k, result.fp)
@@ -237,17 +237,17 @@ proc `*`*[M, N: static[int]](m: CudaMatrix64[M, N], k: float64): CudaMatrix64[M,
 proc `*`*(m: CudaDMatrix64, k: float64): CudaDMatrix64  {. inline .} =
   matScal(result, m, k, m.M, m.N)
 
-template `*`*(k: float32, v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32): expr = v * k
+template `*`*(k: float32, v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32): untyped = v * k
 
-template `*`*(k: float64, v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64): expr = v * k
+template `*`*(k: float64, v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64): untyped = v * k
 
-template `/`*(v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32, k: float32): expr = v * (1 / k)
+template `/`*(v: CudaVector32 or CudaMatrix32 or CudaDVector32 or CudaDMatrix32, k: float32): untyped = v * (1 / k)
 
-template `/`*(v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64, k: float64): expr = v * (1 / k)
+template `/`*(v: CudaVector64 or CudaMatrix64 or CudaDVector64 or CudaDMatrix64, k: float64): untyped = v * (1 / k)
 
-template `/=`*(v: var CudaVector32 or var CudaMatrix32 or var CudaDVector32 or var CudaDMatrix32, k: float32): expr = v *= (1 / k)
+template `/=`*(v: var CudaVector32 or var CudaMatrix32 or var CudaDVector32 or var CudaDMatrix32, k: float32): untyped = v *= (1 / k)
 
-template `/=`*(v: var CudaVector64 or var CudaMatrix64 or var CudaDVector64 or var CudaDMatrix64, k: float64): expr = v *= (1 / k)
+template `/=`*(v: var CudaVector64 or var CudaMatrix64 or var CudaDVector64 or var CudaDMatrix64, k: float64): untyped = v *= (1 / k)
 
 proc `+=`*[M, N: static[int]](a: var CudaMatrix32[M, N], b: CudaMatrix32[M, N]) {. inline .} =
   check cublasAxpy(handle, M * N, 1, b.fp, a.fp)
@@ -263,7 +263,7 @@ proc `+=`*(a: var CudaDMatrix64, b: CudaDMatrix64) {. inline .} =
   assert a.M == b.M and a.N == a.N
   check cublasAxpy(handle, a.M * a.N, 1, b.fp, a.fp)
 
-template matSum(result, a, b, M, N: expr) =
+template matSum(result, a, b, M, N: untyped) =
   initM(result, M, N)
   check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasAxpy(handle, M * N, 1, b.fp, result.fp)
@@ -296,7 +296,7 @@ proc `-=`*(a: var CudaDMatrix64, b: CudaDMatrix64) {. inline .} =
   assert a.M == b.M and a.N == a.N
   check cublasAxpy(handle, a.M * a.N, -1, b.fp, a.fp)
 
-template matDiff(result, a, b, M, N: expr) =
+template matDiff(result, a, b, M, N: untyped) =
   initM(result, M, N)
   check cublasCopy(handle, M * N, a.fp, 1, result.fp, 1)
   check cublasAxpy(handle, M * N, -1, b.fp, result.fp)
@@ -315,7 +315,7 @@ proc `-`*(a, b: CudaDMatrix64): CudaDMatrix64  {. inline .} =
   assert a.M == b.M and a.N == a.N
   matDiff(result, a, b, a.M, a.N)
 
-template matMul(result, a, b, M, K, N: expr) =
+template matMul(result, a, b, M, K, N: untyped) =
   initM(result, M, N)
   check cublasGemm(handle, cuNoTranspose, cuNoTranspose, M, N, K, 1,
     a.fp, M, b.fp, K, 0, result.fp, M)

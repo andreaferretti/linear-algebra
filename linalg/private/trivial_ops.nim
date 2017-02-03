@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template transposeS(a, result: expr) =
+template transposeS(a, result: untyped) =
   result.order = if a.order == rowMajor: colMajor else: rowMajor
   result.data = a.data
 
-template transposeD(a, result: expr) =
+template transposeD(a, result: untyped) =
   new result
   result.M = a.N
   result.N = a.M
@@ -33,12 +33,12 @@ proc t*[M, N: static[int]](a: Matrix64[M, N]): Matrix64[N, M] =
 
 proc t*(a: DMatrix64): DMatrix64 = transposeD(a, result)
 
-template reshapeS(M, N, A, B, m , result: expr) =
+template reshapeS(M, N, A, B, m , result: untyped) =
   static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = m.order
   result.data = m.data
 
-template reshapeD(A, B, m , result: expr) =
+template reshapeD(A, B, m , result: untyped) =
   assert(m.M * m.N == A * B, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(A) & ", B = " & $(B))
   new result
   result.M = A
@@ -56,12 +56,12 @@ proc reshape*[M, N: static[int]](m: Matrix64[M, N], A, B: static[int]): Matrix64
 
 proc reshape*(m: DMatrix64, A, B: int): DMatrix64 = reshapeD(A, B, m, result)
 
-template asMatrixS(N, A, B, v, order, result: expr) =
+template asMatrixS(N, A, B, v, order, result: untyped) =
   static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
   result.order = order
   result.data = v
 
-template asMatrixD(A, B, v, order, result: expr) =
+template asMatrixD(A, B, v, order, result: untyped) =
   assert(v.len == A * B, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(A) & ", B = " & $(B))
   new result
   result.order = order
