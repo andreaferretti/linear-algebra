@@ -571,7 +571,7 @@ For more information, look at the tests in `tests/cuda`.
 * Make `row` and `column` operations non-copying
 * Better types to avoid out of bounds exceptions when statically checkable
 * Add a fallback Nim implementation, that is valid over other rings
-* Move BLAS and CUBLAS to separate libraries required via nimble
+* Move CUBLAS and LAPACK to separate libraries required via nimble
 * Try on more platforms/configurations
 * Make a proper benchmark
 * Improve documentation
