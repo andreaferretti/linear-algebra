@@ -8,7 +8,7 @@ license       = "Apache2"
 skipDirs      = @["tests", "bench"]
 skipFiles     = @["linalg.html"]
 
-requires "nim >= 0.13.1", "nimblas >= 0.1.3"
+requires "nim >= 0.13.1", "nimblas >= 0.1.4"
 
 --forceBuild
 
