@@ -172,11 +172,11 @@ template makeMatrixIJD*(M1, N1: int, f: untyped, ord = colMajor): auto =
   when f is float64:
     var result: DMatrix64
     new result
-    result.data = newSeq[float64](M * N)
+    result.data = newSeq[float64](M1 * N1)
   else:
     var result: DMatrix32
     new result
-    result.data = newSeq[float32](M * N)
+    result.data = newSeq[float32](M1 * N1)
   result.M = M1
   result.N = N1
   result.order = ord
