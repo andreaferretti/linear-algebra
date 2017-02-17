@@ -83,3 +83,7 @@ Minor fix
 ## 0.6.4
 
 Fixed weird scoping with new templates to generate vectors and matrices
+
+## 0.6.5
+
+Had to restore previous version with broken scoping

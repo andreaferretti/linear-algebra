@@ -46,18 +46,9 @@ proc makeVector*(N: int or static[int], f: proc (i: int): float32): auto =
   when N.isStatic: makeSVector(N, f)
   else: makeDVector(N, f)
 
-template isFloat64I(f: untyped): bool =
-  var isIt: bool
-  block:
-    let i {.inject.} = 0
-    when f is float64:
-      isIt = true
-    else:
-      isIt = false
-  isIt
-
 template makeVectorID*(N: int, f: untyped): auto =
-  when isFloat64I(f):
+  let i {.inject.} = 0
+  when f is float64:
     var result = newSeq[float64](N)
   else:
     var result = newSeq[float32](N)
@@ -66,7 +57,8 @@ template makeVectorID*(N: int, f: untyped): auto =
   result
 
 template makeVectorI*(N: static[int], f: untyped): auto =
-  when isFloat64I(f):
+  let i {.inject.} = 0
+  when f is float64:
     var result: Vector64[N]
   else:
     var result: Vector32[N]
@@ -173,20 +165,11 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
   else: makeDMatrix(M, N, f, order)
 
-template isFloat64IJ(f: untyped): bool =
-  var isIt: bool
-  block:
-    let
-      i {.inject.} = 0
-      j {.inject.} = 0
-    when f is float64:
-      isIt = true
-    else:
-      isIt = false
-  isIt
-
 template makeMatrixIJD*(M1, N1: int, f: untyped, ord = colMajor): auto =
-  when isFloat64IJ(f):
+  let
+    i {.inject.} = 0
+    j {.inject.} = 0
+  when f is float64:
     var result: DMatrix64
     new result
     result.data = newSeq[float64](M1 * N1)
