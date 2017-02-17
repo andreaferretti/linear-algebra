@@ -79,3 +79,7 @@ Minor fix
 ## 0.6.3
 
 Minor fix
+
+## 0.6.4
+
+Fixed weird scoping with new templates to generate vectors and matrices
