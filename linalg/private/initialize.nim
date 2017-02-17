@@ -46,6 +46,27 @@ proc makeVector*(N: int or static[int], f: proc (i: int): float32): auto =
   when N.isStatic: makeSVector(N, f)
   else: makeDVector(N, f)
 
+template makeVectorID*(N: int, f: untyped): auto =
+  let i {.inject.} = 0
+  when f is float64:
+    var result = newSeq[float64](N)
+  else:
+    var result = newSeq[float32](N)
+  for i {.inject.} in 0 .. < N:
+    result[i] = f
+  result
+
+template makeVectorI*(N: static[int], f: untyped): auto =
+  let i {.inject.} = 0
+  when f is float64:
+    var result: Vector64[N]
+  else:
+    var result: Vector32[N]
+  new result
+  for i {.inject.} in 0 .. < N:
+    result[i] = f
+  result
+
 proc randomVector*(N: int or static[int], max: float64 = 1): auto =
   makeVector(N, proc(i: int): float64 = random(max))
 
