@@ -71,3 +71,7 @@ Minor fix
 ## 0.6.1
 
 Added templates to generate vectors and matrices more efficiently
+
+## 0.6.2
+
+Minor fix

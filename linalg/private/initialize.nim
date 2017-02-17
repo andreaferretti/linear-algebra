@@ -165,7 +165,7 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
   else: makeDMatrix(M, N, f, order)
 
-template makeMatrixIJD*(M, N: int, f: untyped, ord = colMajor): auto =
+template makeMatrixIJD*(M1, N1: int, f: untyped, ord = colMajor): auto =
   let
     i {.inject.} = 0
     j {.inject.} = 0
@@ -177,17 +177,17 @@ template makeMatrixIJD*(M, N: int, f: untyped, ord = colMajor): auto =
     var result: DMatrix32
     new result
     result.data = newSeq[float32](M * N)
-  result.M = M
-  result.N = N
+  result.M = M1
+  result.N = N1
   result.order = ord
   if ord == colMajor:
-    for i {.inject.} in 0 .. < M:
-      for j {.inject.} in 0 .. < N:
-        result.data[j * M + i] = f
+    for i {.inject.} in 0 .. < M1:
+      for j {.inject.} in 0 .. < N1:
+        result.data[j * M1 + i] = f
   else:
-    for i {.inject.} in 0 .. < M:
-      for j {.inject.} in 0 .. < N:
-        result.data[i * N + j] = f
+    for i {.inject.} in 0 .. < M1:
+      for j {.inject.} in 0 .. < N1:
+        result.data[i * N1 + j] = f
   result
 
 template makeMatrixIJ*(M, N: static[int], f: untyped, ord = colMajor): auto =
