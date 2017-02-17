@@ -67,3 +67,7 @@ Minor fix
 * Fixed various deprecations
 * Improved dependencies
 * Added Hadamard products
+
+## 0.6.1
+
+Added templates to generate vectors and matrices more efficiently

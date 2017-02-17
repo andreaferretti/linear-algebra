@@ -165,6 +165,51 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
   else: makeDMatrix(M, N, f, order)
 
+template makeMatrixIJD*(M, N: int, f: untyped, ord = colMajor): auto =
+  let
+    i {.inject.} = 0
+    j {.inject.} = 0
+  when f is float64:
+    var result: DMatrix64
+    new result
+    result.data = newSeq[float64](M * N)
+  else:
+    var result: DMatrix32
+    new result
+    result.data = newSeq[float32](M * N)
+  result.M = M
+  result.N = N
+  result.order = ord
+  if ord == colMajor:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[j * M + i] = f
+  else:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[i * N + j] = f
+  result
+
+template makeMatrixIJ*(M, N: static[int], f: untyped, ord = colMajor): auto =
+  let
+    i {.inject.} = 0
+    j {.inject.} = 0
+  when f is float64:
+    var result: Matrix64[M, N]
+  else:
+    var result: Matrix32[M, N]
+  new result.data
+  result.order = ord
+  if ord == colMajor:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[j * M + i] = f
+  else:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[i * N + j] = f
+  result
+
 proc randomMatrix*(M: int or static[int], N: int or static[int], max: float64 = 1, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)
 
