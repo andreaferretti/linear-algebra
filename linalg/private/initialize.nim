@@ -46,6 +46,27 @@ proc makeVector*(N: int or static[int], f: proc (i: int): float32): auto =
   when N.isStatic: makeSVector(N, f)
   else: makeDVector(N, f)
 
+template makeVectorID*(N: int, f: untyped): auto =
+  let i {.inject.} = 0
+  when f is float64:
+    var result = newSeq[float64](N)
+  else:
+    var result = newSeq[float32](N)
+  for i {.inject.} in 0 .. < N:
+    result[i] = f
+  result
+
+template makeVectorI*(N: static[int], f: untyped): auto =
+  let i {.inject.} = 0
+  when f is float64:
+    var result: Vector64[N]
+  else:
+    var result: Vector32[N]
+  new result
+  for i {.inject.} in 0 .. < N:
+    result[i] = f
+  result
+
 proc randomVector*(N: int or static[int], max: float64 = 1): auto =
   makeVector(N, proc(i: int): float64 = random(max))
 
@@ -143,6 +164,51 @@ proc makeDMatrix(M, N: int, f: proc (i, j: int): float64, order: OrderType): DMa
 proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: int): float64, order: OrderType = colMajor): auto =
   when M.isStatic and N.isStatic: makeSMatrix(M, N, f, order)
   else: makeDMatrix(M, N, f, order)
+
+template makeMatrixIJD*(M1, N1: int, f: untyped, ord = colMajor): auto =
+  let
+    i {.inject.} = 0
+    j {.inject.} = 0
+  when f is float64:
+    var result: DMatrix64
+    new result
+    result.data = newSeq[float64](M1 * N1)
+  else:
+    var result: DMatrix32
+    new result
+    result.data = newSeq[float32](M1 * N1)
+  result.M = M1
+  result.N = N1
+  result.order = ord
+  if ord == colMajor:
+    for i {.inject.} in 0 .. < M1:
+      for j {.inject.} in 0 .. < N1:
+        result.data[j * M1 + i] = f
+  else:
+    for i {.inject.} in 0 .. < M1:
+      for j {.inject.} in 0 .. < N1:
+        result.data[i * N1 + j] = f
+  result
+
+template makeMatrixIJ*(M, N: static[int], f: untyped, ord = colMajor): auto =
+  let
+    i {.inject.} = 0
+    j {.inject.} = 0
+  when f is float64:
+    var result: Matrix64[M, N]
+  else:
+    var result: Matrix32[M, N]
+  new result.data
+  result.order = ord
+  if ord == colMajor:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[j * M + i] = f
+  else:
+    for i {.inject.} in 0 .. < M:
+      for j {.inject.} in 0 .. < N:
+        result.data[i * N + j] = f
+  result
 
 proc randomMatrix*(M: int or static[int], N: int or static[int], max: float64 = 1, order: OrderType = colMajor): auto =
   makeMatrix(M, N, proc(i, j: int): float64 = random(max), order)

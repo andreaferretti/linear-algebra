@@ -67,3 +67,23 @@ Minor fix
 * Fixed various deprecations
 * Improved dependencies
 * Added Hadamard products
+
+## 0.6.1
+
+Added templates to generate vectors and matrices more efficiently
+
+## 0.6.2
+
+Minor fix
+
+## 0.6.3
+
+Minor fix
+
+## 0.6.4
+
+Fixed weird scoping with new templates to generate vectors and matrices
+
+## 0.6.5
+
+Had to restore previous version with broken scoping
