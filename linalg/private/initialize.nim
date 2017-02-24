@@ -47,11 +47,12 @@ proc makeVector*(N: int or static[int], f: proc (i: int): float32): auto =
   else: makeDVector(N, f)
 
 template makeVectorID*(N: int, f: untyped): auto =
-  let i {.inject.} = 0
-  when f is float64:
-    var result = newSeq[float64](N)
-  else:
-    var result = newSeq[float32](N)
+  var result = (block:
+    let i {.inject.} = 0
+    when f is float64:
+      newSeq[float64](N)
+    else:
+      newSeq[float32](N))
   for i {.inject.} in 0 .. < N:
     result[i] = f
   result
@@ -166,17 +167,19 @@ proc makeMatrix*(M: int or static[int], N: int or static[int], f: proc (i, j: in
   else: makeDMatrix(M, N, f, order)
 
 template makeMatrixIJD*(M1, N1: int, f: untyped, ord = colMajor): auto =
-  let
-    i {.inject.} = 0
-    j {.inject.} = 0
-  when f is float64:
-    var result: DMatrix64
-    new result
-    result.data = newSeq[float64](M1 * N1)
-  else:
-    var result: DMatrix32
-    new result
-    result.data = newSeq[float32](M1 * N1)
+  var result = (block:
+    let
+      i {.inject.} = 0
+      j {.inject.} = 0
+    when f is float64:
+      var x: DMatrix64
+      x
+    else:
+      var x: DMatrix32
+      x
+    )
+  new result
+  result.data = newSeq[type(result.data[0])](M1 * N1)
   result.M = M1
   result.N = N1
   result.order = ord

@@ -87,3 +87,7 @@ Fixed weird scoping with new templates to generate vectors and matrices
 ## 0.6.5
 
 Had to restore previous version with broken scoping
+
+## 0.6.5
+
+Fixed template scoping again
