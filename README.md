@@ -1,6 +1,13 @@
-#Linear Algebra for Nim
+  #Linear Algebra for Nim
 
 [![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://github.com/yglukhov/nimble-tag)
+
+**This library is not mantained anymore. It still works fine, but new
+development happens on [Neo](https://unicredit.github.io/neo/). The main
+difference between the two libraries is that Neo only focuses in what we call
+here dynamic vectors and matrices. Using static types to encode dimensions
+was a nice experiment, but it turned out to be one more dimension to support
+(along with 32 vs 64 bit, CPU vs GPU, dense vs sparse...).**
 
 This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
