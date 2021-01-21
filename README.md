@@ -3,7 +3,7 @@
 [![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://github.com/yglukhov/nimble-tag)
 
 **This library is not mantained anymore. It still works fine, but new
-development happens on [Neo](https://unicredit.github.io/neo/). The main
+development happens on [Neo](https://andreaferretti.github.io/neo/). The main
 difference between the two libraries is that Neo only focuses in what we call
 here dynamic vectors and matrices. Using static types to encode dimensions
 was a nice experiment, but it turned out to be one more dimension to support
@@ -20,7 +20,7 @@ GPU support has been tested using NVIDIA CUDA 7.0 and 7.5.
 The library is currently aligned with latest Nim devel. For versions of Nim up
 to 0.13 use version 0.4.2 of linalg.
 
-API documentation is [here](http://unicredit.github.io/linear-algebra/api.html)
+API documentation is [here](http://andreaferretti.github.io/linear-algebra/api.html)
 
 A lot of examples are available in the tests.
 
