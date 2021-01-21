@@ -73,5 +73,5 @@ task benchcuda, "run benchmarks for the cuda implementation":
 
 task gendoc, "generate documentation":
   --define: cublas
-  --docSeeSrcUrl: https://github.com/unicredit/linear-algebra/blob/master
+  --docSeeSrcUrl: https://github.com/andreaferretti/linear-algebra/blob/master
   setCommand "doc2", "linalg.nim"
